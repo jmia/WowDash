@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VueCliMiddleware;
 
 namespace wow_dashboard
 {
@@ -26,7 +27,7 @@ namespace wow_dashboard
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "ClientApp/dist";
             });
         }
 
@@ -44,7 +45,6 @@ namespace wow_dashboard
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -63,7 +63,11 @@ namespace wow_dashboard
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    // run npm process with client app
+                    spa.UseVueCli(npmScript: "serve", port: 8080);
+                    // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
+                    // app should be already running before starting a .NET client:
+                    // spa.UseProxyToSpaDevelopmentServer("http://localhost:8080"); // your Vue app port
                 }
             });
         }
