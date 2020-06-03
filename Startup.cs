@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using VueCliMiddleware;
 
 namespace wow_dashboard
@@ -21,10 +20,11 @@ namespace wow_dashboard
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
             services.AddControllersWithViews();
 
-            // In production, the React files will be served from this directory
+            // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -32,7 +32,7 @@ namespace wow_dashboard
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -45,10 +45,15 @@ namespace wow_dashboard
                 app.UseHsts();
             }
 
+            dbContext.Database.EnsureCreated();
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            // TODO: Should this use MVC?
+            // app.UseMvc();
 
             app.UseEndpoints(endpoints =>
             {
