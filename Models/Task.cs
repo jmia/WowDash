@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace wow_dashboard.Models
 {
     public class Task
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public ICollection<GameDataReference> GameDataReferences { get; set; }
         public bool IsTodaysGoal { get; set; }
         public bool IsFavourite { get; set; }
