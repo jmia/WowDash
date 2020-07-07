@@ -17,11 +17,7 @@ namespace wow_dashboard
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.DefaultCharacter)
-                .WithOne(c => c.User);
-            
+        {   
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Characters)
                 .WithOne(c => c.User);
@@ -30,13 +26,26 @@ namespace wow_dashboard
                 .HasMany(u => u.Tasks)
                 .WithOne(t => t.User);
 
-            modelBuilder.Entity<Character>()
-                .HasMany(c => c.TaskCharacters)
-                .WithOne(tc => tc.Character);
+            modelBuilder.Entity<TaskCharacter>()
+                .HasKey(tc => new { tc.CharacterId, tc.TaskId });
 
-            modelBuilder.Entity<Task>()
-                .HasMany(t => t.TaskCharacters)
-                .WithOne(tc => tc.Task);
+            modelBuilder.Entity<TaskCharacter>()
+                .HasOne(tc => tc.Character)
+                .WithMany(c => c.TaskCharacters)
+                .HasForeignKey(tc => tc.CharacterId);
+
+            modelBuilder.Entity<TaskCharacter>()
+                .HasOne(tc => tc.Task)
+                .WithMany(t => t.TaskCharacters)
+                .HasForeignKey(tc => tc.TaskId);
+
+            //modelBuilder.Entity<Character>()
+            //    .HasMany(c => c.TaskCharacters)
+            //    .WithOne(tc => tc.Character);
+
+            //modelBuilder.Entity<Task>()
+            //    .HasMany(t => t.TaskCharacters)
+            //    .WithOne(tc => tc.Task);
 
             // TODO - Configure "owned" entity types?
         }
