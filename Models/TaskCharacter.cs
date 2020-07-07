@@ -8,6 +8,7 @@ namespace wow_dashboard.Models
     /// </summary>
     public class TaskCharacter
     {
+        public Guid Id { get; set; }
         public Guid TaskId { get; set; }
         public Task Task { get; set; }
         public Guid CharacterId { get; set; }
