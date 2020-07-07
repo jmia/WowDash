@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using VueCliMiddleware;
+using wow_dashboard.Data;
 
 namespace wow_dashboard
 {
@@ -20,8 +21,9 @@ namespace wow_dashboard
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllersWithViews();
 
             // In production, the Vue files will be served from this directory
@@ -45,7 +47,7 @@ namespace wow_dashboard
                 app.UseHsts();
             }
 
-            dbContext.Database.EnsureCreated();
+            dbContext.Database.Migrate();
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

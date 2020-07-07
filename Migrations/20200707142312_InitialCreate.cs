@@ -77,7 +77,7 @@ namespace wow_dashboard.Migrations
                 {
                     CharacterId = table.Column<Guid>(nullable: false),
                     Id1 = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -95,7 +95,7 @@ namespace wow_dashboard.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TaskId = table.Column<Guid>(nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
@@ -139,7 +139,7 @@ namespace wow_dashboard.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TaskId = table.Column<Guid>(nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },

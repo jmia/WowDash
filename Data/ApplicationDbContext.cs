@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using wow_dashboard.Models;
 
-namespace wow_dashboard
+namespace wow_dashboard.Data
 {
     public class ApplicationDbContext : DbContext
     {
