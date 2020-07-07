@@ -28,26 +28,30 @@ namespace wow_dashboard.Models
 
     }
 
-    /// <summary>
-    /// The type of collectible to track.
-    /// Used for xrefs during sort & filter.
-    /// </summary>
-    [Owned]
-    public class CollectionType : Enumeration
+    public enum Priority
     {
-        public static readonly CollectionType Item
-            = new CollectionType(0, "Items (Gear, Weapons)");
-        public static readonly CollectionType ItemSet
-            = new CollectionType(1, "Item Sets");
-        public static readonly CollectionType Pet
-            = new CollectionType(2, "Battle Pets");
-        public static readonly CollectionType Recipe
-            = new CollectionType(3, "Recipes");
-        public static readonly CollectionType Toy
-            = new CollectionType(4, "Toys");
+        Lowest,
+        Low,
+        Medium,
+        High,
+        Highest
+    }
 
-        private CollectionType() { }
-        private CollectionType(int value, string displayName) : base(value, displayName) { }
+    public enum RefreshDuration
+    {
+        Never,
+        Daily,
+        Weekly,
+        Custom  // Do we really want to go down this road?
+    }
+
+    public enum TaskType
+    {
+        Achievement,
+        Appearance,
+        Collectible,
+        Reputation,
+        General
     }
 
     /// <summary>
@@ -72,69 +76,6 @@ namespace wow_dashboard.Models
         }
 
     }
-
-
-    /// <summary>
-    /// The priority of the task.
-    /// </summary>
-    public enum Priority
-    {
-        Lowest,
-        Low,
-        Medium,
-        High,
-        Highest
-    }
-
-
-    /// <summary>
-    /// How often the task should recur.
-    /// </summary>
-    public enum RefreshDuration
-    {
-        Never,
-        Daily,
-        Weekly,
-        Custom  // Do we really want to go down this road?
-    }
-
-
-    /// <summary>
-    /// The source of the item (where you can buy it or find it).
-    /// Used to streamline the form.
-    /// </summary>
-    [Owned]
-    public class Source : Enumeration
-    {
-        public static readonly Source Dungeon
-            = new Source(0, "Dungeon");
-        public static readonly Source Quest
-            = new Source(1, "Quest");
-        public static readonly Source Vendor
-            = new Source(2, "Vendor");
-        public static readonly Source WorldDrop
-            = new Source(3, "World Drop");
-        public static readonly Source Other
-            = new Source(4, "Other");
-
-        private Source() { }
-        private Source(int value, string displayName) : base(value, displayName) { }
-    }
-
-
-    /// <summary>
-    /// The type of task.
-    /// Used to streamline the form and for sort & filter.
-    /// </summary>
-    public enum TaskType
-    {
-        Achievement,
-        Appearance,
-        Collectible,
-        Reputation,
-        General
-    }
-
 
     /// <summary>
     /// The user will retrieve these manually from Wowhead.
@@ -161,10 +102,42 @@ namespace wow_dashboard.Models
 
     }
 
+    [Owned]
+    public class CollectionType : Enumeration
+    {
+        public static readonly CollectionType Item
+            = new CollectionType(0, "Items (Gear, Weapons)");
+        public static readonly CollectionType ItemSet
+            = new CollectionType(1, "Item Sets");
+        public static readonly CollectionType Pet
+            = new CollectionType(2, "Battle Pets");
+        public static readonly CollectionType Recipe
+            = new CollectionType(3, "Recipes");
+        public static readonly CollectionType Toy
+            = new CollectionType(4, "Toys");
 
-    /// <summary>
-    /// The difficulty of the related dungeon.
-    /// </summary>
+        private CollectionType() { }
+        private CollectionType(int value, string displayName) : base(value, displayName) { }
+    }
+
+    [Owned]
+    public class Source : Enumeration
+    {
+        public static readonly Source Dungeon
+            = new Source(0, "Dungeon");
+        public static readonly Source Quest
+            = new Source(1, "Quest");
+        public static readonly Source Vendor
+            = new Source(2, "Vendor");
+        public static readonly Source WorldDrop
+            = new Source(3, "World Drop");
+        public static readonly Source Other
+            = new Source(4, "Other");
+
+        private Source() { }
+        private Source(int value, string displayName) : base(value, displayName) { }
+    }
+
     [Owned]
     public class ZoneDifficulty : Enumeration
     {

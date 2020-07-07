@@ -21,9 +21,11 @@ namespace wow_dashboard
             modelBuilder.Entity<User>()
                 .HasOne(u => u.DefaultCharacter)
                 .WithOne(c => c.User);
+            
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Characters)
                 .WithOne(c => c.User);
+            
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Tasks)
                 .WithOne(t => t.User);
@@ -36,7 +38,7 @@ namespace wow_dashboard
                 .HasMany(t => t.TaskCharacters)
                 .WithOne(tc => tc.Task);
 
-            // TODO - Add "Owned" entity types?
+            // TODO - Configure "owned" entity types?
         }
     }
 }

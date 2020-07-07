@@ -5,6 +5,9 @@ using wow_dashboard.Utilities;
 
 namespace wow_dashboard.Models
 {
+    /// <summary>
+    /// Represents a playable character in a user's roster.
+    /// </summary>
     public class Character
     {
         public Guid Id { get; set; }
@@ -27,9 +30,6 @@ namespace wow_dashboard.Models
         Female
     }
 
-    /// <summary>
-    /// A list of classes assigned to their Blizzard API IDs.
-    /// </summary>
     [Owned]
     public class PlayableClass : Enumeration
     {
@@ -62,9 +62,6 @@ namespace wow_dashboard.Models
         private PlayableClass(int value, string displayName) : base(value, displayName) { }
     }
 
-    /// <summary>
-    /// A list of professions assigned to their Blizzard API IDs.
-    /// </summary>
     [Owned]
     public class Profession : Enumeration
     {
