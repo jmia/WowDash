@@ -8,6 +8,7 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <RootNamespace>wow_dashboard</RootNamespace>
+    <UserSecretsId>31055502-e5fb-4209-a155-6dcf07bc4012</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

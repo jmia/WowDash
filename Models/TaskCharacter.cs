@@ -1,0 +1,16 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace wow_dashboard.Models
+{
+    /// <summary>
+    /// This is a joining/bridging class for tasks & characters.
+    /// </summary>
+    public class TaskCharacter
+    {
+        public Guid TaskId { get; set; }
+        public Task Task { get; set; }
+        public Guid CharacterId { get; set; }
+        public Character Character { get; set; }
+    }
+}
