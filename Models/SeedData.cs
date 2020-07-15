@@ -15,42 +15,58 @@ namespace wow_dashboard.Models
                 serviceProvider.GetRequiredService<
                     DbContextOptions<ApplicationDbContext>>()))
             {
+                Guid defaultUser;
 
-                if (context.Characters.Any())
+                if (!context.Users.Any())
                 {
-                    return;   // DB has been seeded
+                    var result = context.Users.Add(
+                        new User()
+                        {
+                            DisplayName = "Jen"
+                        }
+                    );
+                    defaultUser = result.Entity.Id;
+                } else
+                {
+                    defaultUser = context.Users.FirstOrDefault().Id;
                 }
 
-                context.Characters.AddRange(
-                    new Character
-                    {
-                        Name = "Scully",
-                        Gender = CharacterGender.Female,
-                        Realm = "area-52",
-                        Class = PlayableClass.Hunter,
-                        Professions = new List<Profession>()
+                if (!context.Characters.Any())
+                {
+                    context.Characters.AddRange(
+                        new Character
                         {
-                            Profession.Leatherworking,
-                            Profession.Skinning,
-                            Profession.Cooking,
-                            Profession.Fishing,
-                            Profession.Archaeology
-                        }
-                    },
-                    new Character
-                    {
-                        Name = "Chakwas",
-                        Gender = CharacterGender.Female,
-                        Realm = "area-52",
-                        Class = PlayableClass.Druid,
-                        Professions = new List<Profession>()
+                            Name = "Scully",
+                            Gender = CharacterGender.Female,
+                            Realm = "area-52",
+                            Class = PlayableClass.Hunter,
+                            Professions = new List<Profession>()
+                            {
+                                Profession.Leatherworking,
+                                Profession.Skinning,
+                                Profession.Cooking,
+                                Profession.Fishing,
+                                Profession.Archaeology
+                            },
+                            UserId = defaultUser
+                        },
+                        new Character
                         {
-                            Profession.Inscription,
-                            Profession.Herbalism,
-                            Profession.Fishing
+                            Name = "Chakwas",
+                            Gender = CharacterGender.Female,
+                            Realm = "area-52",
+                            Class = PlayableClass.Druid,
+                            Professions = new List<Profession>()
+                            {
+                                Profession.Inscription,
+                                Profession.Herbalism,
+                                Profession.Fishing
+                            },
+                            UserId = defaultUser
                         }
-                    }
-                );
+                    );
+                }
+
                 context.SaveChanges();
             }
         }

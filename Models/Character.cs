@@ -13,13 +13,13 @@ namespace wow_dashboard.Models
         public Guid Id { get; set; }
         public User User { get; set; }
         public Guid UserId { get; set; }
-        public int GameId { get; set; }
+        public int? GameId { get; set; }
         public ICollection<Profession> Professions { get; set; }
         public ICollection<TaskCharacter> TaskCharacters { get; set; }
         public string Name { get; set; }
         public string Realm { get; set; }
         public PlayableClass Class { get; set; }
-        public int PlayableRaceGameId { get; set; } // Growing too quickly to be stored locally
+        public int? PlayableRaceGameId { get; set; } // Growing too quickly to be stored locally
         public CharacterGender Gender { get; set; }
         public int Level { get; set; }
     }
