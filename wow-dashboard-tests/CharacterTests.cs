@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace wow_dashboard_tests
 {
-    public class Tests
+    public class CharacterTests
     {
         [SetUp]
         public void Setup()
