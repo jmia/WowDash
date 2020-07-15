@@ -32,22 +32,14 @@ namespace wow_dashboard.Data
             modelBuilder.Entity<TaskCharacter>()
                 .HasOne(tc => tc.Character)
                 .WithMany(c => c.TaskCharacters)
-                .HasForeignKey(tc => tc.CharacterId);
+                .HasForeignKey(tc => tc.CharacterId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TaskCharacter>()
                 .HasOne(tc => tc.Task)
                 .WithMany(t => t.TaskCharacters)
-                .HasForeignKey(tc => tc.TaskId);
-
-            //modelBuilder.Entity<Character>()
-            //    .HasMany(c => c.TaskCharacters)
-            //    .WithOne(tc => tc.Character);
-
-            //modelBuilder.Entity<Task>()
-            //    .HasMany(t => t.TaskCharacters)
-            //    .WithOne(tc => tc.Task);
-
-            // TODO - Configure "owned" entity types?
+                .HasForeignKey(tc => tc.TaskId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
