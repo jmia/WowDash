@@ -19,7 +19,7 @@ namespace wow_dashboard.Models
         public string Name { get; set; }
         public string Realm { get; set; }
         public PlayableClass Class { get; set; }
-        public int? PlayableRaceGameId { get; set; } // Growing too quickly to be stored locally
+        public int? PlayableRaceGameId { get; set; } // Growing too quickly to be cached in DB
         public CharacterGender Gender { get; set; }
         public int Level { get; set; }
     }
@@ -59,7 +59,12 @@ namespace wow_dashboard.Models
             = new PlayableClass(12, "Demon Hunter");
 
         private PlayableClass() { }
-        private PlayableClass(int value, string displayName) : base(value, displayName) { }
+        /// <summary>
+        /// Represents a character's class.
+        /// </summary>
+        /// <param name="id">The Blizzard API ID of the class.</param>
+        /// <param name="displayName">The name of the class.</param>
+        private PlayableClass(int id, string displayName) : base(id, displayName) { }
     }
 
     [Owned]
@@ -95,6 +100,11 @@ namespace wow_dashboard.Models
             = new Profession(794, "Archaeology");
 
         private Profession() { }
-        private Profession(int value, string displayName) : base(value, displayName) { }
+        /// <summary>
+        /// Represents one of a character's professions.
+        /// </summary>
+        /// <param name="id">The Blizzard API ID of the profession.</param>
+        /// <param name="displayName">The name of the profession.</param>
+        private Profession(int id, string displayName) : base(id, displayName) { }
     }
 }

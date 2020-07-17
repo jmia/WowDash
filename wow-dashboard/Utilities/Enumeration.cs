@@ -19,9 +19,9 @@ namespace wow_dashboard.Utilities
         {
         }
 
-        protected Enumeration(int value, string displayName)
+        protected Enumeration(int id, string displayName)
         {
-            Id = value;
+            Id = id;
             DisplayName = displayName;
         }
 

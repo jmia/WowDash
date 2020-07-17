@@ -10,8 +10,8 @@ using wow_dashboard.Data;
 namespace wow_dashboard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200715170622_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20200717184436_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,7 @@ namespace wow_dashboard.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GameId")
+                    b.Property<int?>("GameId")
                         .HasColumnType("int");
 
                     b.Property<int>("Gender")
@@ -39,7 +39,7 @@ namespace wow_dashboard.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlayableRaceGameId")
+                    b.Property<int?>("PlayableRaceGameId")
                         .HasColumnType("int");
 
                     b.Property<string>("Realm")
@@ -73,7 +73,7 @@ namespace wow_dashboard.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<int>("RefreshDuration")
+                    b.Property<int>("RefreshFrequency")
                         .HasColumnType("int");
 
                     b.Property<int>("TaskType")
@@ -95,9 +95,6 @@ namespace wow_dashboard.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CharacterId", "TaskId");
@@ -146,6 +143,9 @@ namespace wow_dashboard.Migrations
                             b1.Property<Guid>("CharacterId")
                                 .HasColumnType("uniqueidentifier");
 
+                            b1.Property<int>("Id")
+                                .HasColumnType("int");
+
                             b1.HasKey("CharacterId");
 
                             b1.ToTable("Characters");
@@ -159,12 +159,10 @@ namespace wow_dashboard.Migrations
                             b1.Property<Guid>("CharacterId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<int>("Id1")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                            b1.Property<int>("Id")
+                                .HasColumnType("int");
 
-                            b1.HasKey("CharacterId", "Id1");
+                            b1.HasKey("CharacterId", "Id");
 
                             b1.ToTable("Profession");
 
@@ -181,7 +179,7 @@ namespace wow_dashboard.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("wow_dashboard.Models.CollectionType", "CollectionType", b1 =>
+                    b.OwnsOne("wow_dashboard.Models.CollectibleType", "CollectibleType", b1 =>
                         {
                             b1.Property<Guid>("TaskId")
                                 .HasColumnType("uniqueidentifier");
@@ -200,9 +198,10 @@ namespace wow_dashboard.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("Type")
                                 .HasColumnType("int");
@@ -234,9 +233,10 @@ namespace wow_dashboard.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("Type")
                                 .HasColumnType("int");
@@ -244,19 +244,6 @@ namespace wow_dashboard.Migrations
                             b1.HasKey("TaskId", "Id");
 
                             b1.ToTable("WowheadDataReference");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TaskId");
-                        });
-
-                    b.OwnsOne("wow_dashboard.Models.ZoneDifficulty", "ZoneDifficulty", b1 =>
-                        {
-                            b1.Property<Guid>("TaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("TaskId");
-
-                            b1.ToTable("Tasks");
 
                             b1.WithOwner()
                                 .HasForeignKey("TaskId");

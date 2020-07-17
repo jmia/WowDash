@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace wow_dashboard.Migrations
 {
-    public partial class InitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,10 +29,11 @@ namespace wow_dashboard.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    GameId = table.Column<int>(nullable: false),
+                    GameId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Realm = table.Column<string>(nullable: true),
-                    PlayableRaceGameId = table.Column<int>(nullable: false),
+                    Class_Id = table.Column<int>(nullable: true),
+                    PlayableRaceGameId = table.Column<int>(nullable: true),
                     Gender = table.Column<int>(nullable: false),
                     Level = table.Column<int>(nullable: false)
                 },
@@ -58,7 +59,7 @@ namespace wow_dashboard.Migrations
                     Notes = table.Column<string>(nullable: true),
                     TaskType = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
-                    RefreshDuration = table.Column<int>(nullable: false)
+                    RefreshFrequency = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,13 +76,12 @@ namespace wow_dashboard.Migrations
                 name: "Profession",
                 columns: table => new
                 {
-                    CharacterId = table.Column<Guid>(nullable: false),
-                    Id1 = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    Id = table.Column<int>(nullable: false),
+                    CharacterId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Profession", x => new { x.CharacterId, x.Id1 });
+                    table.PrimaryKey("PK_Profession", x => new { x.CharacterId, x.Id });
                     table.ForeignKey(
                         name: "FK_Profession_Characters_CharacterId",
                         column: x => x.CharacterId,
@@ -94,10 +94,10 @@ namespace wow_dashboard.Migrations
                 name: "GameDataReference",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     TaskId = table.Column<Guid>(nullable: false),
-                    Type = table.Column<int>(nullable: false)
+                    Type = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,8 +115,7 @@ namespace wow_dashboard.Migrations
                 columns: table => new
                 {
                     TaskId = table.Column<Guid>(nullable: false),
-                    CharacterId = table.Column<Guid>(nullable: false),
-                    Id = table.Column<Guid>(nullable: false)
+                    CharacterId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,10 +136,10 @@ namespace wow_dashboard.Migrations
                 name: "WowheadDataReference",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     TaskId = table.Column<Guid>(nullable: false),
-                    Type = table.Column<int>(nullable: false)
+                    Type = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

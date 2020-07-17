@@ -6,7 +6,7 @@ using wow_dashboard.Utilities;
 namespace wow_dashboard.Models
 {
     /// <summary>
-    /// Represents a one-off or recurring task or goal.
+    /// Represents a singular or recurring task or goal.
     /// </summary>
     public class Task
     {
@@ -20,11 +20,10 @@ namespace wow_dashboard.Models
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
         public TaskType TaskType { get; set; }
-        public CollectionType CollectionType { get; set; }
+        public CollectibleType CollectibleType { get; set; }
         public Source Source { get; set; }
-        public ZoneDifficulty ZoneDifficulty { get; set; }
         public Priority Priority { get; set; }
-        public RefreshDuration RefreshDuration { get; set; }
+        public RefreshFrequency RefreshFrequency { get; set; }
 
     }
 
@@ -37,26 +36,25 @@ namespace wow_dashboard.Models
         Highest
     }
 
-    public enum RefreshDuration
+    public enum RefreshFrequency
     {
         Never,
         Daily,
-        Weekly,
-        Custom  // Do we really want to go down this road?
-    }
-
-    public enum TaskType
-    {
-        Achievement,
-        Appearance,
-        Collectible,
-        Reputation,
-        General
+        Weekly
     }
 
     /// <summary>
-    /// These will be pulled from the Blizzard API.
-    /// Quest areas and reputations can be cross-referenced for Wowhead Tooltip.
+    /// The type of collectible. Used for sorting, filtering, and form field generation.
+    /// </summary>
+    public enum TaskType
+    {
+        General,
+        Achievement,
+        Collectible,
+    }
+
+    /// <summary>
+    /// A collection of references to Blizzard API data.
     /// </summary>
     [Owned]
     public class GameDataReference
@@ -66,21 +64,23 @@ namespace wow_dashboard.Models
         /// </summary>
         public int Id { get; set; }
         public GameDataType Type { get; set; }
+        public string Description { get; set; }
 
         public enum GameDataType
         {
+            // Quest areas can be cross-referenced for Wowhead Tooltips
+            // with the key "zone."
             JournalInstance,    // Dungeon or Raid
             JournalEncounter,   // Boss
-            QuestArea,          // Zone (e.g. Grizzly Hills)
-            ReputationFaction
+            QuestArea           // Zone
         }
 
     }
 
     /// <summary>
-    /// The user will retrieve these manually from Wowhead.
-    /// They will be used to generate useful tooltips.
-    /// All but NPC ID's can be matched 1:1 with Blizzard API IDs.
+    /// A collection of references to Wowhead data.
+    /// Used to generate useful tooltips and Wowhead links.
+    /// All but NPC IDs can be matched 1:1 with Blizzard API IDs.
     /// </summary>
     [Owned]
     public class WowheadDataReference
@@ -90,34 +90,45 @@ namespace wow_dashboard.Models
         /// </summary>
         public int Id { get; set; }
         public WowheadDataType Type { get; set; }
+        public string Description { get; set; }
 
         public enum WowheadDataType
         {
+            // NPC, Achievement, and Quest IDs will need to be manually
+            // retrieved from Wowhead by the user. The datasets are too
+            // large to be cached and type-ahead searched.
             Achievement,
             Item,       // Recipes, mounts, gear
             ItemSet,    // Transmog sets, dungeon sets
-            Npc,        // Boss, vendor, battle pet, monster
+            Npc,        // Boss, vendor, monster
             Quest
         }
 
     }
 
     [Owned]
-    public class CollectionType : Enumeration
+    public class CollectibleType : Enumeration
     {
-        public static readonly CollectionType Item
-            = new CollectionType(0, "Items (Gear, Weapons)");
-        public static readonly CollectionType ItemSet
-            = new CollectionType(1, "Item Sets");
-        public static readonly CollectionType Pet
-            = new CollectionType(2, "Battle Pets");
-        public static readonly CollectionType Recipe
-            = new CollectionType(3, "Recipes");
-        public static readonly CollectionType Toy
-            = new CollectionType(4, "Toys");
+        public static readonly CollectibleType Item
+            = new CollectibleType(0, "Weapons and Armour");
+        public static readonly CollectibleType ItemSet
+            = new CollectibleType(1, "Armour Sets");
+        public static readonly CollectibleType Mount
+            = new CollectibleType(1, "Mounts");
+        public static readonly CollectibleType Pet
+            = new CollectibleType(2, "Battle Pets");
+        public static readonly CollectibleType Recipe
+            = new CollectibleType(3, "Recipes");
+        public static readonly CollectibleType Toy
+            = new CollectibleType(4, "Toys");
 
-        private CollectionType() { }
-        private CollectionType(int value, string displayName) : base(value, displayName) { }
+        private CollectibleType() { }
+        /// <summary>
+        /// The type of collectible associated with the task.
+        /// </summary>
+        /// <param name="id">The ID of the collectible type.</param>
+        /// <param name="displayName">The display name of the collectible type.</param>
+        private CollectibleType(int id, string displayName) : base(id, displayName) { }
     }
 
     [Owned]
@@ -135,30 +146,11 @@ namespace wow_dashboard.Models
             = new Source(4, "Other");
 
         private Source() { }
-        private Source(int value, string displayName) : base(value, displayName) { }
-    }
-
-    [Owned]
-    public class ZoneDifficulty : Enumeration
-    {
-        public static readonly ZoneDifficulty Normal
-            = new ZoneDifficulty(0, "Normal");
-        public static readonly ZoneDifficulty Heroic
-            = new ZoneDifficulty(1, "Heroic");
-        public static readonly ZoneDifficulty RaidFinder
-            = new ZoneDifficulty(2, "Raid Finder (LFR)");
-        public static readonly ZoneDifficulty Mythic
-            = new ZoneDifficulty(3, "Mythic");
-        public static readonly ZoneDifficulty TenPlayer
-            = new ZoneDifficulty(4, "10 Player");
-        public static readonly ZoneDifficulty TenPlayerHeroic
-            = new ZoneDifficulty(5, "10 Player (Heroic)");
-        public static readonly ZoneDifficulty TwentyFivePlayer
-            = new ZoneDifficulty(6, "25 Player");
-        public static readonly ZoneDifficulty TwentyFivePlayerHeroic
-            = new ZoneDifficulty(7, "25 Player (Heroic)");
-
-        private ZoneDifficulty() { }
-        private ZoneDifficulty(int value, string displayName) : base(value, displayName) { }
+        /// <summary>
+        /// The source of an associated collectible.
+        /// </summary>
+        /// <param name="id">The ID of the source.</param>
+        /// <param name="displayName">The display name of the source.</param>
+        private Source(int id, string displayName) : base(id, displayName) { }
     }
 }
