@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace wow_dashboard.Controllers
 {
+
+    // TODO - Remove this file
+
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

@@ -8,7 +8,7 @@ namespace wow_dashboard.Utilities
     /// <summary>
     /// This abstract class marries the easy-to-read enum with the easy-to-use value object type.
     /// Borrowed from: https://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/
-    /// to take all the switch statements out from everywhere.
+    /// to reduce the need for switch statements.
     /// </summary>
     public abstract class Enumeration : IComparable
     {

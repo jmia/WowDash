@@ -2,6 +2,9 @@ using System;
 
 namespace wow_dashboard
 {
+
+    // TODO - Remove this file
+
     public class WeatherForecast
     {
         public DateTime Date { get; set; }
