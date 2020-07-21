@@ -23,8 +23,12 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="Data\CachedData\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="Data\CachedData\**" />
+    <EmbeddedResource Remove="Data\CachedData\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="Data\CachedData\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -33,10 +37,6 @@
     <Compile Remove="Migrations\20200717183845_InitialCreate.Designer.cs" />
     <Compile Remove="Migrations\20200717184156_InitialCreate.cs" />
     <Compile Remove="Migrations\20200717184156_InitialCreate.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\CachedData\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
