@@ -16,10 +16,10 @@ namespace wow_dashboard.Models.BlizzardData
 
         public class Encounter
         {
-            [JsonPropertyName("name")]
-            public string Name { get; set; }
             [JsonPropertyName("id")]
             public int Id { get; set; }
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
         }
 
         public class ModeWrapper
