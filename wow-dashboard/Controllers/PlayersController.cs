@@ -12,48 +12,48 @@ namespace wow_dashboard.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class PlayersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public UsersController(ApplicationDbContext context)
+        public PlayersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Users
+        // GET: api/Players
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Players.ToListAsync();
         }
 
-        // GET: api/Users/5
+        // GET: api/Players/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<ActionResult<Player>> GetPlayer(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var player = await _context.Players.FindAsync(id);
 
-            if (user == null)
+            if (player == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return player;
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Players/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
+        public async Task<IActionResult> PutPlayer(Guid id, Player player)
         {
-            if (id != user.Id)
+            if (id != player.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(player).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace wow_dashboard.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!PlayerExists(id))
                 {
                     return NotFound();
                 }
@@ -74,37 +74,37 @@ namespace wow_dashboard.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/Players
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
-            _context.Users.Add(user);
+            _context.Players.Add(player);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Players/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(Guid id)
+        public async Task<ActionResult<Player>> DeletePlayer(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.Players.Remove(player);
             await _context.SaveChangesAsync();
 
-            return user;
+            return player;
         }
 
-        private bool UserExists(Guid id)
+        private bool PlayerExists(Guid id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.Players.Any(e => e.Id == id);
         }
     }
 }

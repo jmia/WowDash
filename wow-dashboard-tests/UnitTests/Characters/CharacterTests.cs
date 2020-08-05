@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
 using wow_dashboard.Models;
 using wow_dashboard_tests.Common;
@@ -17,21 +16,18 @@ namespace wow_dashboard_tests.UnitTests.Characters
         public void AddCharacter_ValidCharacter_AddsToDatabase()
         {
             // Arrange
-            Assume.That(Context.Users.Any(), "The testing database needs at least one user.");
+            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
 
-            var defaultUser = Context.Users.First();
-            var newCharacter = new Character()
+            var defaultUser = Context.Players.First();
+            var newCharacter = new Character
             {
                 Name = "Meraddison",
-                Class = PlayableClass.Warlock,
-                PlayableRaceGameId = 5,
+                Gender = CharacterGender.Female,
+                Realm = "area-52",
+                Class = "Warlock",
+                Race = "Undead",
                 Level = 120,
-                Professions = new List<Profession>
-                {
-                    Profession.Tailoring,
-                    Profession.Enchanting
-                },
-                UserId = defaultUser.Id
+                PlayerId = defaultUser.Id
             };
 
             // Act
@@ -39,7 +35,7 @@ namespace wow_dashboard_tests.UnitTests.Characters
             var foundCharacter = Context.Characters.Find(result.Entity.Id);
 
             // Assert
-            Assert.That(foundCharacter.Professions.Contains(Profession.Tailoring));
+            Assert.That(foundCharacter.Class.Equals("Warlock"));
         }
     }
 }
