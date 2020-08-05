@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wow-dashboard", "wow-dashboard.csproj", "{771F9E24-A768-4DB7-8542-6975CD8C06B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wow-dashboard-tests", "..\wow-dashboard-tests\wow-dashboard-tests.csproj", "{D661B63A-2F13-4A61-BE53-60F337AACCD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wow-dashboard-tests", "..\wow-dashboard-tests\wow-dashboard-tests.csproj", "{D661B63A-2F13-4A61-BE53-60F337AACCD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

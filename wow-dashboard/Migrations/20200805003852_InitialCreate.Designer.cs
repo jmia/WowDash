@@ -10,14 +10,14 @@ using wow_dashboard.Data;
 namespace wow_dashboard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200717184436_InitialCreate")]
+    [Migration("20200805003852_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -27,32 +27,64 @@ namespace wow_dashboard.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Class")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("GameId")
                         .HasColumnType("int");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<int>("Level")
+                    b.Property<int?>("Level")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PlayableRaceGameId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Race")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Realm")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("Characters");
+                });
+
+            modelBuilder.Entity("wow_dashboard.Models.Player", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BlizzardId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DefaultRealm")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DefaultTaskType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoogleId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Characters");
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("wow_dashboard.Models.Task", b =>
@@ -60,6 +92,9 @@ namespace wow_dashboard.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CollectibleType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsFavourite")
                         .HasColumnType("bit");
@@ -70,21 +105,24 @@ namespace wow_dashboard.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("RefreshFrequency")
                         .HasColumnType("int");
 
+                    b.Property<int>("Source")
+                        .HasColumnType("int");
+
                     b.Property<int>("TaskType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PlayerId");
 
                     b.ToTable("Tasks");
                 });
@@ -104,93 +142,22 @@ namespace wow_dashboard.Migrations
                     b.ToTable("TaskCharacters");
                 });
 
-            modelBuilder.Entity("wow_dashboard.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("BlizzardId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DefaultRealm")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DefaultTaskType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GoogleId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("wow_dashboard.Models.Character", b =>
                 {
-                    b.HasOne("wow_dashboard.Models.User", "User")
+                    b.HasOne("wow_dashboard.Models.Player", "Player")
                         .WithMany("Characters")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("wow_dashboard.Models.PlayableClass", "Class", b1 =>
-                        {
-                            b1.Property<Guid>("CharacterId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .HasColumnType("int");
-
-                            b1.HasKey("CharacterId");
-
-                            b1.ToTable("Characters");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CharacterId");
-                        });
-
-                    b.OwnsMany("wow_dashboard.Models.Profession", "Professions", b1 =>
-                        {
-                            b1.Property<Guid>("CharacterId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .HasColumnType("int");
-
-                            b1.HasKey("CharacterId", "Id");
-
-                            b1.ToTable("Profession");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CharacterId");
-                        });
                 });
 
             modelBuilder.Entity("wow_dashboard.Models.Task", b =>
                 {
-                    b.HasOne("wow_dashboard.Models.User", "User")
+                    b.HasOne("wow_dashboard.Models.Player", "Player")
                         .WithMany("Tasks")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("wow_dashboard.Models.CollectibleType", "CollectibleType", b1 =>
-                        {
-                            b1.Property<Guid>("TaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("TaskId");
-
-                            b1.ToTable("Tasks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TaskId");
-                        });
 
                     b.OwnsMany("wow_dashboard.Models.GameDataReference", "GameDataReferences", b1 =>
                         {
@@ -198,10 +165,15 @@ namespace wow_dashboard.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Id")
-                                .HasColumnType("int");
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                             b1.Property<string>("Description")
                                 .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int?>("GameId")
+                                .HasColumnType("int");
 
                             b1.Property<int>("Type")
                                 .HasColumnType("int");
@@ -209,41 +181,6 @@ namespace wow_dashboard.Migrations
                             b1.HasKey("TaskId", "Id");
 
                             b1.ToTable("GameDataReference");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TaskId");
-                        });
-
-                    b.OwnsOne("wow_dashboard.Models.Source", "Source", b1 =>
-                        {
-                            b1.Property<Guid>("TaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("TaskId");
-
-                            b1.ToTable("Tasks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TaskId");
-                        });
-
-                    b.OwnsMany("wow_dashboard.Models.WowheadDataReference", "WowheadDataReferences", b1 =>
-                        {
-                            b1.Property<Guid>("TaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Description")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<int>("Type")
-                                .HasColumnType("int");
-
-                            b1.HasKey("TaskId", "Id");
-
-                            b1.ToTable("WowheadDataReference");
 
                             b1.WithOwner()
                                 .HasForeignKey("TaskId");
