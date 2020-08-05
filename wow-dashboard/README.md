@@ -2,29 +2,21 @@
 
 http://localhost:8080
 
-#### Powershell Scripts
+### This application is built with:
+- [.Net Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
+- Entity Framework
+- [Vue 2.6](https://vuejs.org/v2/guide/)
+- [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
+- JavaScript
 
-```powershell
-dotnet run
-```
+### This application is tested with:
+- [NUnit](https://docs.nunit.org/)
+- [EF Core In Memory Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/testing-sample)
+- [Moq](https://github.com/Moq/moq4/wiki/Quickstart)
 
-Start the application. Must be `cd`ed into the directory where the application lives.
+-----
 
-##### Execution Policies
-
-[Why should I care?](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7) Because the `vue-cli` doesn't want to run in Powershell unless you've handled this, my friend.
-
-```powershell
-Get-ExecutionPolicy -List
-```
-
-Brings up the configuration for running scripts on Powershell for this machine.
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
-```
-
-Sets Powershell's policy for the current session to unrestricted.
+### Stuff For Me
 
 #### Helpful Links
 
@@ -52,8 +44,11 @@ Sets Powershell's policy for the current session to unrestricted.
 ##### C# Stuff
 
 - `.NetCoreApp` 3.1
-- `EntityFrameworkCore.Sqlite` 3.1.4
+- `EntityFrameworkCore.SqlServer` & `Tools` 3.1.5
+- `EntityFrameworkCore.InMemory` 3.1.6
 - `VueCliMiddleware` 3.3.1
+- `NUnit` 3.12.0
+- `Moq` 4.14.5
 
 ##### npm
 
