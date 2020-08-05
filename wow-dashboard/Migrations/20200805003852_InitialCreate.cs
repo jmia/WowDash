@@ -8,19 +8,20 @@ namespace wow_dashboard.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Players",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    DisplayName = table.Column<string>(nullable: true),
                     GoogleId = table.Column<string>(nullable: true),
                     BlizzardId = table.Column<string>(nullable: true),
-                    DisplayName = table.Column<string>(nullable: true),
                     DefaultTaskType = table.Column<int>(nullable: false),
                     DefaultRealm = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Players", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -28,22 +29,22 @@ namespace wow_dashboard.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
+                    PlayerId = table.Column<Guid>(nullable: false),
                     GameId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    Realm = table.Column<string>(nullable: true),
-                    Class_Id = table.Column<int>(nullable: true),
-                    PlayableRaceGameId = table.Column<int>(nullable: true),
                     Gender = table.Column<int>(nullable: false),
-                    Level = table.Column<int>(nullable: false)
+                    Level = table.Column<int>(nullable: true),
+                    Class = table.Column<string>(nullable: true),
+                    Race = table.Column<string>(nullable: true),
+                    Realm = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Characters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Characters_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        name: "FK_Characters_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -53,11 +54,13 @@ namespace wow_dashboard.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
+                    PlayerId = table.Column<Guid>(nullable: false),
                     IsTodaysGoal = table.Column<bool>(nullable: false),
                     IsFavourite = table.Column<bool>(nullable: false),
                     Notes = table.Column<string>(nullable: true),
                     TaskType = table.Column<int>(nullable: false),
+                    CollectibleType = table.Column<int>(nullable: false),
+                    Source = table.Column<int>(nullable: false),
                     Priority = table.Column<int>(nullable: false),
                     RefreshFrequency = table.Column<int>(nullable: false)
                 },
@@ -65,27 +68,9 @@ namespace wow_dashboard.Migrations
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Profession",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    CharacterId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Profession", x => new { x.CharacterId, x.Id });
-                    table.ForeignKey(
-                        name: "FK_Profession_Characters_CharacterId",
-                        column: x => x.CharacterId,
-                        principalTable: "Characters",
+                        name: "FK_Tasks_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -94,8 +79,10 @@ namespace wow_dashboard.Migrations
                 name: "GameDataReference",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TaskId = table.Column<Guid>(nullable: false),
+                    GameId = table.Column<int>(nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },
@@ -132,30 +119,10 @@ namespace wow_dashboard.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "WowheadDataReference",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    TaskId = table.Column<Guid>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WowheadDataReference", x => new { x.TaskId, x.Id });
-                    table.ForeignKey(
-                        name: "FK_WowheadDataReference_Tasks_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Characters_UserId",
+                name: "IX_Characters_PlayerId",
                 table: "Characters",
-                column: "UserId");
+                column: "PlayerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskCharacters_TaskId",
@@ -163,9 +130,9 @@ namespace wow_dashboard.Migrations
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_UserId",
+                name: "IX_Tasks_PlayerId",
                 table: "Tasks",
-                column: "UserId");
+                column: "PlayerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -174,13 +141,7 @@ namespace wow_dashboard.Migrations
                 name: "GameDataReference");
 
             migrationBuilder.DropTable(
-                name: "Profession");
-
-            migrationBuilder.DropTable(
                 name: "TaskCharacters");
-
-            migrationBuilder.DropTable(
-                name: "WowheadDataReference");
 
             migrationBuilder.DropTable(
                 name: "Characters");
@@ -189,7 +150,7 @@ namespace wow_dashboard.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Players");
         }
     }
 }

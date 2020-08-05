@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using wow_dashboard.Data;
 using wow_dashboard.Models;
 
@@ -18,45 +17,35 @@ namespace wow_dashboard_tests.Common
 
             context.Database.EnsureCreated();
 
-			var defaultUser = new User() { DisplayName = "Jen", DefaultRealm = "area-52" };
+            var defaultUser = new Player { DisplayName = "Jen", DefaultRealm = "area-52" };
 
-			var scully = new Character
-			{
-				Name = "Scully",
-				Gender = CharacterGender.Female,
-				Realm = "area-52",
-				Class = PlayableClass.Hunter,
-				Professions = new List<Profession>()
-					{
-					Profession.Leatherworking,
-					Profession.Skinning,
-					Profession.Cooking,
-					Profession.Fishing,
-					Profession.Archaeology
-					},
-				UserId = defaultUser.Id
-			};
+            var scully = new Character
+            {
+                Name = "Scully",
+                Gender = CharacterGender.Female,
+                Realm = "area-52",
+                Class = "Hunter",
+                Race = "Blood Elf",
+                Level = 120,
+                PlayerId = defaultUser.Id
+            };
 
-			var chakwas = new Character
-			{
-				Name = "Chakwas",
-				Gender = CharacterGender.Female,
-				Realm = "area-52",
-				Class = PlayableClass.Druid,
-				Professions = new List<Profession>()
-					{
-						Profession.Inscription,
-						Profession.Herbalism,
-						Profession.Fishing
-					},
-				UserId = defaultUser.Id
-			};
+            var chakwas = new Character
+            {
+                Name = "Chakwas",
+                Gender = CharacterGender.Female,
+                Realm = "area-52",
+                Class = "Druid",
+                Race = "Highmountain Tauren",
+                Level = 120,
+                PlayerId = defaultUser.Id
+            };
 
-			context.Users.Add(defaultUser);
+            context.Players.Add(defaultUser);
 
-			context.Characters.AddRange(new[] { scully, chakwas });
+            context.Characters.AddRange(new[] { scully, chakwas });
 
-			context.SaveChanges();
+            context.SaveChanges();
 
             return context;
         }
