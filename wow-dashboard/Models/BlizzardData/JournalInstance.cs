@@ -2,7 +2,10 @@
 
 namespace wow_dashboard.Models.BlizzardData
 {
-
+    /// <summary>
+    /// Represents a JSON object for a dungeon
+    /// returned from a Blizzard API GET request.
+    /// </summary>
     public class JournalInstance
     {
         [JsonPropertyName("id")]
@@ -16,10 +19,10 @@ namespace wow_dashboard.Models.BlizzardData
 
         public class Encounter
         {
-            [JsonPropertyName("name")]
-            public string Name { get; set; }
             [JsonPropertyName("id")]
             public int Id { get; set; }
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
         }
 
         public class ModeWrapper

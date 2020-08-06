@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,77 +17,36 @@ namespace wow_dashboard.Controllers
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<string> GetAccessTokenAsync()
-        {
-
-            var clientId = "";
-            var clientSecret = "";
-
-            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://us.battle.net/oauth/token"))
-            {
-                var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
-                request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
-
-                request.Content = new StringContent("grant_type=client_credentials");
-                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
-
-                try
-                {
-                    var response = await client.SendAsync(request);
-
-                    if (response != null)
-                    {
-                        var content = response.Content.ReadAsStreamAsync();
-                        var tokenResponse = await JsonSerializer.DeserializeAsync<AccessTokenResponse>(await content);
-
-                        return tokenResponse.Token;
-                    }
-                    else
-                    {
-                        throw new Exception("The response was empty.");
-                    }
-                }
-                catch (Exception ex)
-                {
-
-                    throw new Exception("There was an error with your request: " + ex.Message);
-                }
-            }
-
-        }
-
-
         [HttpGet("{id}")]
         public async Task<ActionResult<JournalInstance>> GetJournalInstance(int id)
         {
             var access_token = await GetAccessTokenAsync();
 
-            using (var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-instance/" + id + "?namespace=static-us&locale=en_US"))
+            using var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/journal-instance/" + id +
+                "?namespace=static-us&locale=en_US");
+
+            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+            var response = await client.SendAsync(request);
+
+            try
             {
-                request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
-
-                var response = await client.SendAsync(request);
-
-                try
+                if (response != null)
                 {
-                    if (response != null)
-                    {
-                        var content = response.Content.ReadAsStreamAsync();
-                        var journalInstance = await JsonSerializer.DeserializeAsync<JournalInstance>(await content);
+                    var content = response.Content.ReadAsStreamAsync();
+                    var journalInstance = await JsonSerializer.DeserializeAsync<JournalInstance>(await content);
 
-                        return journalInstance;
-                    }
-                    else
-                    {
-                        throw new Exception("The response was empty.");
-                    }
+                    return journalInstance;
                 }
-                catch (Exception ex)
+                else
                 {
-                    throw new Exception("There was an error with your request: " + ex.Message);
+                    throw new Exception("The response was empty.");
                 }
-
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("There was an error with your request: " + ex.Message);
             }
         }
 
@@ -95,41 +55,71 @@ namespace wow_dashboard.Controllers
         {
             var access_token = await GetAccessTokenAsync();
 
-            using (var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-instance/index?namespace=static-us&locale=en_US"))
-            {
-                request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+            using var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/journal-instance/index?" +
+                "namespace=static-us&locale=en_US");
 
+            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+            var response = await client.SendAsync(request);
+
+            try
+            {
+                if (response != null)
+                {
+                    var content = response.Content.ReadAsStreamAsync();
+
+                    var index = await JsonSerializer.DeserializeAsync<JournalInstanceIndex>(await content);
+
+                    return index.Instances.ToList();
+                }
+                else
+                {
+                    throw new Exception("The response was empty.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("There was an error with your request: " + ex.Message);
+            }
+        }
+
+        internal async Task<string> GetAccessTokenAsync()
+        {
+
+            var clientId = "";
+            var clientSecret = "";
+
+            using var request = new HttpRequestMessage(new HttpMethod("POST"), "https://us.battle.net/oauth/token");
+
+            var base64authorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
+            
+            request.Headers.TryAddWithoutValidation("Authorization", $"Basic {base64authorization}");
+
+            request.Content = new StringContent("grant_type=client_credentials");
+            request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/x-www-form-urlencoded");
+
+            try
+            {
                 var response = await client.SendAsync(request);
 
-                try
+                if (response != null)
                 {
-                    if (response != null)
-                    {
-                        var content = response.Content.ReadAsStreamAsync();
+                    var content = response.Content.ReadAsStreamAsync();
+                    var tokenResponse = await JsonSerializer.DeserializeAsync<AccessTokenResponse>(await content);
 
-                        // TODO - This doesn't omit nulls from nested objects
-                        var options = new JsonSerializerOptions
-                        {
-                            IgnoreNullValues = true
-                        };
-
-                        var index = await JsonSerializer.DeserializeAsync<JournalInstanceIndex>(await content, options);
-
-                        return index.Instances;
-                    }
-                    else
-                    {
-                        throw new Exception("The response was empty.");
-                    }
+                    return tokenResponse.Token;
                 }
-                catch (Exception ex)
+                else
                 {
-
-                    throw new Exception("There was an error with your request: " + ex.Message);
+                    throw new Exception("The response was empty.");
                 }
-
             }
+            catch (Exception ex)
+            {
+                throw new Exception("There was an error with your request: " + ex.Message);
+            }
+
         }
 
     }
