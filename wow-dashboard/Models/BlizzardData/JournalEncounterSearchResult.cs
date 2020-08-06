@@ -1,31 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace wow_dashboard.Models.BlizzardData
 {
 
-    // TODO - Rename these properties, trim the fat
+    // TODO - Could make this more generic
+    // Or could rename the classes to be endpoint specific and keep the mapped JsonPropertyNames
+    // Depends on how much data I need
 
+    /// <summary>
+    /// Represents a JSON object for a collection of boss fights
+    /// returned from a Blizzard API search.
+    /// </summary>
     public class JournalEncounterSearchResult
     {
-        public int page { get; set; }
-        public int pageSize { get; set; }
-        public int maxPageSize { get; set; }
-        public int pageCount { get; set; }
-        public Result[] results { get; set; }
+        [JsonPropertyName("page")]
+        public int Page { get; set; }
+        [JsonPropertyName("pageSize")]
+        public int PageSize { get; set; }
+        [JsonPropertyName("maxPageSize")]
+        public int MaxPageSize { get; set; }
+        [JsonPropertyName("pageCount")]
+        public int PageCount { get; set; }
+        [JsonPropertyName("results")]
+        public Result[] Results { get; set; }
     }
 
     public class Result
     {
-        public Data data { get; set; }
+        [JsonPropertyName("data")]
+        public Data Data { get; set; }
     }
 
     public class Data
     {
-        public Name name { get; set; }
-        public int id { get; set; }
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+        [JsonPropertyName("name")]
+        public Name Name { get; set; }
     }
 
     public class Name
