@@ -9,7 +9,9 @@ namespace wow_dashboard.Models.BlizzardData
         public int Id { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; }
+        [JsonPropertyName("items")]
         public ItemWrapper[] Items { get; set; }
+        [JsonPropertyName("instance")]
         public Instance Instance { get; set; }
     }
 

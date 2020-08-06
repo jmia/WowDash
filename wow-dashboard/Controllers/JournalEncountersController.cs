@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,7 +17,7 @@ namespace wow_dashboard.Controllers
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<string> GetAccessTokenAsync()
+        internal async Task<string> GetAccessTokenAsync()
         {
 
             var clientId = "";
@@ -57,7 +58,7 @@ namespace wow_dashboard.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<JournalEncounter>> GetJournalInstance(int id)
+        public async Task<ActionResult<JournalEncounter>> GetJournalEncounter(int id)
         {
             var access_token = await GetAccessTokenAsync();
 
@@ -91,12 +92,12 @@ namespace wow_dashboard.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JournalEncounter>>> GetJournalInstances()
+        public async Task<ActionResult<IEnumerable<JournalEncounter>>> GetJournalEncounters()
         {
             var access_token = await GetAccessTokenAsync();
 
             using (var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-instance/index?namespace=static-us&locale=en_US"))
+                "https://us.api.blizzard.com/data/wow/journal-encounter/index?namespace=static-us&locale=en_US"))
             {
                 request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
 
@@ -108,15 +109,9 @@ namespace wow_dashboard.Controllers
                     {
                         var content = response.Content.ReadAsStreamAsync();
 
-                        // TODO - This doesn't omit nulls from nested objects
-                        var options = new JsonSerializerOptions
-                        {
-                            IgnoreNullValues = true
-                        };
+                        var index = await JsonSerializer.DeserializeAsync<JournalEncounterIndex>(await content);
 
-                        var index = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content, options);
-
-                        // TODO - Return stuff
+                        return index.Encounters.ToList();
                     }
                     else
                     {
@@ -131,6 +126,81 @@ namespace wow_dashboard.Controllers
 
             }
         }
+
+
+        [HttpGet("search/instance/{name}")]
+        public async Task<ActionResult<IEnumerable<JournalEncounter>>> SearchJournalEncountersByInstanceName(string name)
+        {
+            var access_token = await GetAccessTokenAsync();
+
+            using (var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/search/journal-encounter?namespace=static-us&locale=en_US&instance.name.en_US=" + name + "&orderby=instance.name.en_US&_pageSize=50&_page=1"))
+            {
+                request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+                var response = await client.SendAsync(request);
+
+                try
+                {
+                    if (response != null)
+                    {
+                        var content = response.Content.ReadAsStreamAsync();
+
+                        var searchResult = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content);
+
+                        return searchResult.results.Select(r => new JournalEncounter { Id = r.data.id, Name = r.data.name.en_US }).ToList();
+                    }
+                    else
+                    {
+                        throw new Exception("The response was empty.");
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There was an error with your request: " + ex.Message);
+                }
+
+            }
+        }
+
+        [HttpGet("search/boss/{name}")]
+        public async Task<ActionResult<IEnumerable<JournalEncounter>>> SearchJournalEncountersByBossName(string name)
+        {
+            var access_token = await GetAccessTokenAsync();
+
+            using (var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/search/journal-encounter?namespace=static-us&locale=en_US&name.en_US=" + name + "&orderby=instance.name.en_US&_pageSize=50&_page=1"))
+            {
+                request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+                var response = await client.SendAsync(request);
+
+                try
+                {
+                    if (response != null)
+                    {
+                        var content = response.Content.ReadAsStreamAsync();
+
+                        var searchResult = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content);
+
+                        return searchResult.results.Select(r => new JournalEncounter { Id = r.data.id, Name = r.data.name.en_US }).ToList();
+                    }
+                    else
+                    {
+                        throw new Exception("The response was empty.");
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There was an error with your request: " + ex.Message);
+                }
+
+            }
+        }
+
+
 
     }
 }

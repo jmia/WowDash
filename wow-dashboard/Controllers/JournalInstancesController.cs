@@ -16,7 +16,7 @@ namespace wow_dashboard.Controllers
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<string> GetAccessTokenAsync()
+        internal async Task<string> GetAccessTokenAsync()
         {
 
             var clientId = "";
