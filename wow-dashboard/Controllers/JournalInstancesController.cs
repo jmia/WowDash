@@ -15,11 +15,18 @@ namespace wow_dashboard.Controllers
     [ApiController]
     public class JournalInstancesController : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
+        private readonly IHttpClientFactory _clientFactory;
+
+        public JournalInstancesController(IHttpClientFactory clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<JournalInstance>> GetJournalInstance(int id)
         {
+            var client = _clientFactory.CreateClient();
+
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
@@ -53,6 +60,8 @@ namespace wow_dashboard.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JournalInstance>>> GetJournalInstances()
         {
+            var client = _clientFactory.CreateClient();
+
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
@@ -86,6 +95,7 @@ namespace wow_dashboard.Controllers
 
         internal async Task<string> GetAccessTokenAsync()
         {
+            var client = _clientFactory.CreateClient();
 
             var clientId = "";
             var clientSecret = "";

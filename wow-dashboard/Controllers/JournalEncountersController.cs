@@ -15,11 +15,18 @@ namespace wow_dashboard.Controllers
     [ApiController]
     public class JournalEncountersController : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
+        private readonly IHttpClientFactory _clientFactory;
+
+        public JournalEncountersController(IHttpClientFactory clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<JournalEncounter>> GetJournalEncounter(int id)
         {
+            var client = _clientFactory.CreateClient();
+
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
@@ -53,6 +60,8 @@ namespace wow_dashboard.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JournalEncounter>>> GetJournalEncounters()
         {
+            var client = _clientFactory.CreateClient();
+
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
@@ -88,6 +97,8 @@ namespace wow_dashboard.Controllers
         [HttpGet("search/instance/{name}")]
         public async Task<ActionResult<IEnumerable<JournalEncounter>>> SearchJournalEncountersByInstanceName(string name)
         {
+            var client = _clientFactory.CreateClient();
+
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
@@ -124,6 +135,8 @@ namespace wow_dashboard.Controllers
         [HttpGet("search/boss/{name}")]
         public async Task<ActionResult<IEnumerable<JournalEncounter>>> SearchJournalEncountersByBossName(string name)
         {
+            var client = _clientFactory.CreateClient();
+
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
@@ -159,6 +172,7 @@ namespace wow_dashboard.Controllers
 
         internal async Task<string> GetAccessTokenAsync()
         {
+            var client = _clientFactory.CreateClient();
 
             var clientId = "";
             var clientSecret = "";
