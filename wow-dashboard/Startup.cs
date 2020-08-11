@@ -24,6 +24,8 @@ namespace wow_dashboard
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddHttpClient();
+
             services.AddControllersWithViews();
 
             // In production, the Vue files will be served from this directory
