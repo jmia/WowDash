@@ -11,25 +11,25 @@ using wow_dashboard.Models.BlizzardData;
 
 namespace wow_dashboard.Controllers
 {
-    [Route("api/JournalInstances")]
+    [Route("api/QuestAreas")]
     [ApiController]
-    public class JournalInstancesController : BaseBlizzardApiController
+    public class QuestAreasController : BaseBlizzardApiController
     {
-        public JournalInstancesController(IHttpClientFactory clientFactory, IConfiguration configuration)
+        public QuestAreasController(IHttpClientFactory clientFactory, IConfiguration configuration)
             : base(clientFactory, configuration) { }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<JournalInstance>>> GetJournalInstances()
+        public async Task<ActionResult<IEnumerable<QuestArea>>> GetQuestAreas()
         {
             var client = _clientFactory.CreateClient();
 
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-instance/index?" +
+                "https://us.api.blizzard.com/data/wow/quest/area/index?" +
                 "namespace=static-us&locale=en_US");
 
             request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
@@ -47,9 +47,9 @@ namespace wow_dashboard.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = response.Content.ReadAsStreamAsync();
-                    var index = await JsonSerializer.DeserializeAsync<JournalInstanceIndex>(await content);
+                    var index = await JsonSerializer.DeserializeAsync<QuestAreaIndex>(await content);
 
-                    return Ok(index.Instances.ToList());
+                    return Ok(index.Areas.Select(a => new QuestArea { Id = a.Id, Area = a.Name }).ToList());
                 }
                 else
                 {
@@ -58,22 +58,23 @@ namespace wow_dashboard.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("Unhandled status code from 'GetJournalInstances': " + ex.Message);
+                throw new Exception("Unhandled status code from 'GetQuestAreas': " + ex.Message);
             }
+
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JournalInstance>> GetJournalInstance(int id)
+        public async Task<ActionResult<QuestArea>> GetQuestArea(int id)
         {
             var client = _clientFactory.CreateClient();
 
             var access_token = await GetAccessTokenAsync();
 
             using var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-instance/" + id +
+                "https://us.api.blizzard.com/data/wow/quest/area/" + id + 
                 "?namespace=static-us&locale=en_US");
 
             request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
@@ -91,9 +92,9 @@ namespace wow_dashboard.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = response.Content.ReadAsStreamAsync();
-                    var journalInstance = await JsonSerializer.DeserializeAsync<JournalInstance>(await content);
+                    var questArea = await JsonSerializer.DeserializeAsync<QuestArea>(await content);
 
-                    return Ok(journalInstance);
+                    return Ok(questArea);
                 }
                 else
                 {
@@ -102,8 +103,9 @@ namespace wow_dashboard.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("Unhandled status code from 'GetJournalInstance': " + ex.Message);
+                throw new Exception("Unhandled status code from 'GetQuestArea': " + ex.Message);
             }
+
         }
     }
 }

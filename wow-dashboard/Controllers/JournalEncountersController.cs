@@ -18,50 +18,6 @@ namespace wow_dashboard.Controllers
         public JournalEncountersController(IHttpClientFactory clientFactory, IConfiguration configuration) 
             : base(clientFactory, configuration) { }
 
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JournalEncounter>> GetJournalEncounter(int id)
-        {
-            var client = _clientFactory.CreateClient();
-
-            var access_token = await GetAccessTokenAsync();
-
-            using var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-encounter/" + id + 
-                "?namespace=static-us&locale=en_US");
-
-            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
-
-            try
-            {
-                var response = await client.SendAsync(request);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var journalEncounter = await JsonSerializer.DeserializeAsync<JournalEncounter>(await content);
-
-                    return journalEncounter;
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'GetJournalEncounter': " + ex.Message);
-            }
-        }
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -93,7 +49,7 @@ namespace wow_dashboard.Controllers
                     var content = response.Content.ReadAsStreamAsync();
                     var index = await JsonSerializer.DeserializeAsync<JournalEncounterIndex>(await content);
 
-                    return index.Encounters.ToList();
+                    return Ok(index.Encounters.ToList());
                 }
                 else
                 {
@@ -107,6 +63,49 @@ namespace wow_dashboard.Controllers
 
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<JournalEncounter>> GetJournalEncounter(int id)
+        {
+            var client = _clientFactory.CreateClient();
+
+            var access_token = await GetAccessTokenAsync();
+
+            using var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/journal-encounter/" + id +
+                "?namespace=static-us&locale=en_US");
+
+            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+            try
+            {
+                var response = await client.SendAsync(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    return NotFound();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return Unauthorized();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStreamAsync();
+                    var journalEncounter = await JsonSerializer.DeserializeAsync<JournalEncounter>(await content);
+
+                    return Ok(journalEncounter);
+                }
+                else
+                {
+                    throw new Exception("The response was status code " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unhandled status code from 'GetJournalEncounter': " + ex.Message);
+            }
+        }
 
         [HttpGet("search/instance/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -140,8 +139,8 @@ namespace wow_dashboard.Controllers
                     var content = response.Content.ReadAsStreamAsync();
                     var searchResult = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content);
 
-                    return searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
-                                               .ToList();
+                    return Ok(searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
+                                               .ToList());
                 }
                 else
                 {
@@ -186,8 +185,8 @@ namespace wow_dashboard.Controllers
                     var content = response.Content.ReadAsStreamAsync();
                     var searchResult = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content);
 
-                    return searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
-                                               .ToList();
+                    return Ok(searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
+                                               .ToList());
                 }
                 else
                 {
