@@ -18,50 +18,6 @@ namespace wow_dashboard.Controllers
         public JournalInstancesController(IHttpClientFactory clientFactory, IConfiguration configuration)
             : base(clientFactory, configuration) { }
 
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JournalInstance>> GetJournalInstance(int id)
-        {
-            var client = _clientFactory.CreateClient();
-
-            var access_token = await GetAccessTokenAsync();
-
-            using var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/journal-instance/" + id +
-                "?namespace=static-us&locale=en_US");
-
-            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
-
-            try
-            {
-                var response = await client.SendAsync(request);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var journalInstance = await JsonSerializer.DeserializeAsync<JournalInstance>(await content);
-
-                    return Ok(journalInstance);
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
-            }
-            catch(Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'GetJournalInstance': " + ex.Message);
-            }
-        }
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -103,6 +59,50 @@ namespace wow_dashboard.Controllers
             catch (Exception ex)
             {
                 throw new Exception("Unhandled status code from 'GetJournalInstances': " + ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<JournalInstance>> GetJournalInstance(int id)
+        {
+            var client = _clientFactory.CreateClient();
+
+            var access_token = await GetAccessTokenAsync();
+
+            using var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/journal-instance/" + id +
+                "?namespace=static-us&locale=en_US");
+
+            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+            try
+            {
+                var response = await client.SendAsync(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    return NotFound();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return Unauthorized();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStreamAsync();
+                    var journalInstance = await JsonSerializer.DeserializeAsync<JournalInstance>(await content);
+
+                    return Ok(journalInstance);
+                }
+                else
+                {
+                    throw new Exception("The response was status code " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unhandled status code from 'GetJournalInstance': " + ex.Message);
             }
         }
     }
