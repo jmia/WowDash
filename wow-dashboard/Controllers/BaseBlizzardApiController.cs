@@ -21,6 +21,7 @@ namespace wow_dashboard.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet]
         internal async Task<string> GetAccessTokenAsync()
         {
             var client = _clientFactory.CreateClient();
