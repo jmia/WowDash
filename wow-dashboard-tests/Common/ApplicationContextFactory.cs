@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using wow_dashboard.Data;
-using wow_dashboard.Models;
+using wow_dashboard.ApplicationCore.Models;
+using wow_dashboard.Infrastructure;
 
 namespace wow_dashboard_tests.Common
 {

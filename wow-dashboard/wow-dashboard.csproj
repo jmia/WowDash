@@ -5,7 +5,7 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
-    <SpaRoot>ClientApp\</SpaRoot>
+    <SpaRoot>WebUI\ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <RootNamespace>wow_dashboard</RootNamespace>
     <UserSecretsId>31055502-e5fb-4209-a155-6dcf07bc4012</UserSecretsId>
@@ -24,13 +24,14 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Compile Remove="Data\CachedData\**" />
     <Content Remove="$(SpaRoot)**" />
-    <Content Remove="Data\CachedData\**" />
-    <EmbeddedResource Remove="Data\CachedData\**" />
     <None Remove="$(SpaRoot)**" />
-    <None Remove="Data\CachedData\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="WebUI\ClientApp\package-lock.json" />
+    <None Include="WebUI\ClientApp\package.json" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

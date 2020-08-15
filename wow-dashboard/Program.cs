@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using wow_dashboard.Models;
+using wow_dashboard.Infrastructure;
 
-namespace wow_dashboard
+namespace wow_dashboard.WebUI
 {
     public class Program
     {

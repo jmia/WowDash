@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using System.Linq;
-using wow_dashboard.Models;
+using wow_dashboard.ApplicationCore.Models;
 using wow_dashboard_tests.Common;
 
 namespace wow_dashboard_tests.UnitTests.Characters

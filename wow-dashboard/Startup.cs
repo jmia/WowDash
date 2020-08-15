@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using VueCliMiddleware;
-using wow_dashboard.Data;
+using wow_dashboard.Infrastructure;
 
-namespace wow_dashboard
+namespace wow_dashboard.WebUI
 {
     public class Startup
     {
@@ -31,7 +31,7 @@ namespace wow_dashboard
             // In production, the Vue files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "WebUI/ClientApp/dist";
             });
         }
 
@@ -68,7 +68,7 @@ namespace wow_dashboard
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "WebUI/ClientApp";
 
                 if (env.IsDevelopment())
                 {

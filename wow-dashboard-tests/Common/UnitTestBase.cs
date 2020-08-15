@@ -1,5 +1,5 @@
 ﻿using System;
-using wow_dashboard.Data;
+using wow_dashboard.Infrastructure;
 
 namespace wow_dashboard_tests.Common
 {
