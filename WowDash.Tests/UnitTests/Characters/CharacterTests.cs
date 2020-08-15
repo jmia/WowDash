@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using System.Linq;
-using WowDash.ApplicationCore.Models;
+using WowDash.ApplicationCore.Entities;
 using WowDash.Tests.Common;
 
 namespace WowDash.Tests.UnitTests.Characters

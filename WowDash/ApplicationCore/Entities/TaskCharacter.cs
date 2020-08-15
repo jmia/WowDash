@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WowDash.ApplicationCore.Models
+namespace WowDash.ApplicationCore.Entities
 {
     /// <summary>
     /// This is a joining/bridging class for tasks & characters.

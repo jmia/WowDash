@@ -21,14 +21,14 @@ namespace wow_dashboar.WebUId.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WowDash.ApplicationCore.Models.Task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<WowDash.ApplicationCore.Entities.Task>>> GetTasks()
         {
             return await _context.Tasks.ToListAsync();
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<WowDash.ApplicationCore.Models.Task>> GetTask(Guid id)
+        public async Task<ActionResult<WowDash.ApplicationCore.Entities.Task>> GetTask(Guid id)
         {
             var task = await _context.Tasks.FindAsync(id);
 
@@ -44,7 +44,7 @@ namespace wow_dashboar.WebUId.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(Guid id, WowDash.ApplicationCore.Models.Task task)
+        public async Task<IActionResult> PutTask(Guid id, WowDash.ApplicationCore.Entities.Task task)
         {
             if (id != task.Id)
             {
@@ -76,7 +76,7 @@ namespace wow_dashboar.WebUId.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<WowDash.ApplicationCore.Models.Task>> PostTask(WowDash.ApplicationCore.Models.Task task)
+        public async Task<ActionResult<WowDash.ApplicationCore.Entities.Task>> PostTask(WowDash.ApplicationCore.Entities.Task task)
         {
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
@@ -86,7 +86,7 @@ namespace wow_dashboar.WebUId.Controllers
 
         // DELETE: api/Tasks/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<WowDash.ApplicationCore.Models.Task>> DeleteTask(Guid id)
+        public async Task<ActionResult<WowDash.ApplicationCore.Entities.Task>> DeleteTask(Guid id)
         {
             var task = await _context.Tasks.FindAsync(id);
             if (task == null)

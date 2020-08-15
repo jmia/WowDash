@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace WowDash.ApplicationCore.Models
+namespace WowDash.ApplicationCore.Entities
 {
     /// <summary>
     /// Represents a singular or recurring task or goal.
