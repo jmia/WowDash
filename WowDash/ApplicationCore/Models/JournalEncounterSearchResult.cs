@@ -18,25 +18,36 @@ namespace WowDash.ApplicationCore.Models
         public int PageCount { get; set; }
         [JsonPropertyName("results")]
         public Result[] Results { get; set; }
-    }
 
-    public class Result
-    {
-        [JsonPropertyName("data")]
-        public Data Data { get; set; }
-    }
+        /// <summary>
+        /// A wrapper class for a list of boss name
+        /// search results.
+        /// </summary>
+        public class Result
+        {
+            [JsonPropertyName("data")]
+            public Data Data { get; set; }
+        }
 
-    public class Data
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-        [JsonPropertyName("name")]
-        public Name Name { get; set; }
-    }
+        /// <summary>
+        /// A data item in a search result.
+        /// The key here is 'name' is class Name, to
+        /// get the localization property out.
+        /// </summary>
+        public class Data
+        {
+            [JsonPropertyName("id")]
+            public int Id { get; set; }
+            [JsonPropertyName("name")]
+            public Name Name { get; set; }
+        }
 
-    public class Name
-    {
-        public string en_US { get; set; }
+        /// <summary>
+        /// The localized name of the search result.
+        /// </summary>
+        public class Name
+        {
+            public string en_US { get; set; }
+        }
     }
-
 }
