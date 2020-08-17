@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using WowDash.ApplicationCore.Models.BlizzardData;
+using WowDash.ApplicationCore.Models;
 
 namespace WowDash.WebUI.Controllers
 {

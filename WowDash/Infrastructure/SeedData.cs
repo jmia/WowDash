@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
-using WowDash.ApplicationCore.Models;
+using WowDash.ApplicationCore.Entities;
 
 namespace WowDash.Infrastructure
 {

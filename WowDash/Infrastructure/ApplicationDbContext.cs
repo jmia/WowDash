@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WowDash.ApplicationCore.Models;
+using WowDash.ApplicationCore.Entities;
 
 namespace WowDash.Infrastructure
 {

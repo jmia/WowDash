@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WowDash.ApplicationCore.Models
+namespace WowDash.ApplicationCore.Entities
 {
     /// <summary>
     /// Represents a user of the application.

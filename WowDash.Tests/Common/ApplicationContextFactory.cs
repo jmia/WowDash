@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using WowDash.ApplicationCore.Models;
+using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
 namespace WowDash.Tests.Common

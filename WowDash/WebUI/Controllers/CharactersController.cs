@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WowDash.ApplicationCore.Models;
+using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
 namespace WowDash.WebUI.Controllers

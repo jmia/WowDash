@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WowDash.ApplicationCore.Models.BlizzardData
+namespace WowDash.ApplicationCore.Models
 {
     public class AccessTokenResponse
     {

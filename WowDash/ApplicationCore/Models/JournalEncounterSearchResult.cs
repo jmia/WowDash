@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WowDash.ApplicationCore.Models.BlizzardData
+namespace WowDash.ApplicationCore.Models
 {
     /// <summary>
     /// Represents a JSON object for a collection of boss fights
