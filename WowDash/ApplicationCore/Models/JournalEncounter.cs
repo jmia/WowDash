@@ -15,28 +15,17 @@ namespace WowDash.ApplicationCore.Models
         [JsonPropertyName("items")]
         public ItemWrapper[] Items { get; set; }
         [JsonPropertyName("instance")]
-        public Instance Instance { get; set; }
-    }
+        public JournalInstance Instance { get; set; }
 
-    public class Instance
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-    }
-
-    public class ItemWrapper
-    {
-        [JsonPropertyName("item")]
-        public Item Item { get; set; }
-    }
-
-    public class Item
-    {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
+        /// <summary>
+        /// A wrapper class for a collection of items.
+        /// These return objects are nested and can't be accessed
+        /// by calling Item[].
+        /// </summary>
+        public class ItemWrapper
+        {
+            [JsonPropertyName("item")]
+            public Item Item { get; set; }
+        }
     }
 }
