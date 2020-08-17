@@ -20,8 +20,6 @@ namespace WowDash.ApplicationCore.Models
 
     public class AchievementCriteria
     {
-        [JsonPropertyName("description")]
-        public string Description { get; set; }
         [JsonPropertyName("child_criteria")]
         public ChildCriteria[] ChildCriteria { get; set; }
     }
