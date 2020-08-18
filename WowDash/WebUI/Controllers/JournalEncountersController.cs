@@ -137,7 +137,7 @@ namespace WowDash.WebUI.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = response.Content.ReadAsStreamAsync();
-                    var searchResult = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content);
+                    var searchResult = await JsonSerializer.DeserializeAsync<BlizzardSearchResult>(await content);
 
                     return Ok(searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
                                                .ToList());
@@ -183,7 +183,7 @@ namespace WowDash.WebUI.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = response.Content.ReadAsStreamAsync();
-                    var searchResult = await JsonSerializer.DeserializeAsync<JournalEncounterSearchResult>(await content);
+                    var searchResult = await JsonSerializer.DeserializeAsync<BlizzardSearchResult>(await content);
 
                     return Ok(searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
                                                .ToList());
