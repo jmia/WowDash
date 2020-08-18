@@ -3,10 +3,10 @@
 namespace WowDash.ApplicationCore.Models
 {
     /// <summary>
-    /// Represents a JSON object for a collection of boss fights
+    /// Represents a JSON object for a collection of results
     /// returned from a Blizzard API search.
     /// </summary>
-    public class JournalEncounterSearchResult
+    public class BlizzardSearchResult
     {
         [JsonPropertyName("page")]
         public int Page { get; set; }
@@ -20,8 +20,7 @@ namespace WowDash.ApplicationCore.Models
         public Result[] Results { get; set; }
 
         /// <summary>
-        /// A wrapper class for a list of boss name
-        /// search results.
+        /// A wrapper class for a list of search results.
         /// </summary>
         public class Result
         {
