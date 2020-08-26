@@ -11,5 +11,6 @@ namespace WowDash.ApplicationCore.Entities
         public Task Task { get; set; }
         public Guid CharacterId { get; set; }
         public Character Character { get; set; }
+        public bool IsActive { get; set; }
     }
 }
