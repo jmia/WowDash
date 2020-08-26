@@ -18,6 +18,12 @@ http://localhost:8080
 
 ### Stuff For Me
 
+#### Scripts
+
+```
+Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
+```
+
 #### Helpful Links
 
 ##### EF Core
