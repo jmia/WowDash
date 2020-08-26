@@ -13,9 +13,9 @@ namespace WowDash.ApplicationCore.Entities
         public Guid Id { get; set; }
         public Player Player { get; set; }
         public Guid PlayerId { get; set; }
+        public string Description { get; set; }
         public ICollection<GameDataReference> GameDataReferences { get; set; }
         public ICollection<TaskCharacter> TaskCharacters { get; set; }
-        public bool IsTodaysGoal { get; set; }
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
         public TaskType TaskType { get; set; }
@@ -28,6 +28,11 @@ namespace WowDash.ApplicationCore.Entities
         {
             GameDataReferences = new List<GameDataReference>();
             TaskCharacters = new List<TaskCharacter>();
+        }
+
+        public Task(Guid playerId) : base()
+        {
+            PlayerId = playerId;
         }
 
     }
@@ -50,6 +55,10 @@ namespace WowDash.ApplicationCore.Entities
         /// The type or category (i.e. endpoint) of data reference.
         /// </summary>
         public GameDataType Type { get; set; }
+        /// <summary>
+        /// The subclass of the reference (e.g. toy, weapon)
+        /// </summary>
+        public string Subclass { get; set; }
         /// <summary>
         /// A string display of the data.
         /// </summary>
