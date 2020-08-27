@@ -29,8 +29,7 @@ Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 
 ##### EF Core
 
-- [Owned Entity Types](https://docs.microsoft.com/en-us/ef/core/modeling/owned-entities)
-- [Enumeration Abstract Class](https://lostechies.com/jimmybogard/2008/08/12/enumeration-classes/)
+- 
 
 ##### Vue + .NET Core
 
@@ -45,6 +44,11 @@ Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 ##### Git
 
 - [Git Command Line Cheatsheet](https://github.com/joshnh/Git-Commands)
+
+##### API Stuff
+
+- [curl to C# Converter](https://curl.olsh.me/)
+- [Querying Blizzard APIs](https://www.reddit.com/r/wowgoblins/comments/bz9zth/c_tutorial_how_to_query_information_from_blizzard/)
 
 #### Version Numbers
 
