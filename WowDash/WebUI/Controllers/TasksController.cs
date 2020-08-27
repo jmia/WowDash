@@ -6,7 +6,7 @@ using WowDash.Infrastructure;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tasks")]
     [ApiController]
     public class TasksController : ControllerBase
     {
@@ -17,14 +17,31 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
-        public Guid InitializeTask(InitializeTaskRequest request)
+        [HttpPost]
+        public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
         {
             var task = new Task(request.PlayerId, request.TaskType);
 
             _context.Tasks.Add(task);
 
+            _context.SaveChanges();
+
             return task.Id;
         }
 
+        [HttpPost]
+        public ActionResult<Guid> SetGeneralTaskDetails(SetGeneralTaskDetailsRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return BadRequest();
+
+            task.Description = request.Description;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
     }
 }

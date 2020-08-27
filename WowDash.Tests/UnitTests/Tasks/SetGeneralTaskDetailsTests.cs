@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using WowDash.ApplicationCore.DTO;
+using System.Text;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Tests.Common;
 using WowDash.WebUI.Controllers;
@@ -9,7 +11,7 @@ using WowDash.WebUI.Controllers;
 namespace WowDash.Tests.UnitTests.Tasks
 {
     [TestFixture]
-    public class InitializeTaskTests : UnitTestBase
+    public class SetGeneralTaskDetailsTests : UnitTestBase
     {
         private Player _defaultPlayer;
         private TasksController _controller;
@@ -23,33 +25,22 @@ namespace WowDash.Tests.UnitTests.Tasks
         }
 
         [Test]
-        public void GivenValidUser_AddsTaskToDatabase()
+        public void GivenAValidDescription_UpdatesTaskInDatabase()
         {
             // Arrange
-            var dto = new InitializeTaskRequest(_defaultPlayer.Id);
+            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            Context.Tasks.Add(task);
+            Context.SaveChanges();
+
+            var description = "Reach exalted reputation with The Defilers";
+            var dto = new SetGeneralTaskDetailsRequest(task.Id, description);
 
             // Act
-            var result = _controller.InitializeTask(dto);
+            var result = _controller.SetGeneralTaskDetails(dto);
 
             // Assert
             var foundTask = Context.Tasks.Find(result.Value);
-
-            foundTask.PlayerId.Should().Be(dto.PlayerId);
-        }
-
-        [Test]
-        public void GivenAValidTaskType_AddsTaskToDatabase()
-        {
-            // Arrange
-            var dto = new InitializeTaskRequest(_defaultPlayer.Id, TaskType.Collectible);
-
-            // Act
-            var result = _controller.InitializeTask(dto);
-
-            // Assert
-            var foundTask = Context.Tasks.Find(result.Value);
-
-            foundTask.TaskType.Should().Be(dto.TaskType);
+            foundTask.Description.Should().Be(description);
         }
     }
 }
