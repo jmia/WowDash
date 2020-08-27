@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
+using static WowDash.ApplicationCore.Common.Enums;
 
-namespace wow_dashboar.WebUId.Controllers
+namespace WowDash.WebUI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tasks")]
     [ApiController]
     public class TasksController : ControllerBase
     {
@@ -19,90 +19,65 @@ namespace wow_dashboar.WebUId.Controllers
             _context = context;
         }
 
-        // GET: api/Tasks
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<WowDash.ApplicationCore.Entities.Task>>> GetTasks()
-        {
-            return await _context.Tasks.ToListAsync();
-        }
-
-        // GET: api/Tasks/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<WowDash.ApplicationCore.Entities.Task>> GetTask(Guid id)
-        {
-            var task = await _context.Tasks.FindAsync(id);
-
-            if (task == null)
-            {
-                return NotFound();
-            }
-
-            return task;
-        }
-
-        // PUT: api/Tasks/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(Guid id, WowDash.ApplicationCore.Entities.Task task)
-        {
-            if (id != task.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(task).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Tasks
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<WowDash.ApplicationCore.Entities.Task>> PostTask(WowDash.ApplicationCore.Entities.Task task)
+        public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
         {
+            var task = new Task(request.PlayerId, request.TaskType);
+
             _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return CreatedAtAction("GetTask", new { id = task.Id }, task);
+            return task.Id;
         }
 
-        // DELETE: api/Tasks/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<WowDash.ApplicationCore.Entities.Task>> DeleteTask(Guid id)
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetGeneralTaskDetails(SetGeneralTaskDetailsRequest request)
         {
-            var task = await _context.Tasks.FindAsync(id);
-            if (task == null)
-            {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
                 return NotFound();
-            }
 
-            _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
+            task.Description = request.Description;
+            task.RefreshFrequency = request.RefreshFrequency;
+            task.Priority = request.Priority;
 
-            return task;
+            _context.SaveChanges();
+
+            return task.Id;
         }
 
-        private bool TaskExists(Guid id)
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetAchievementTaskDetails(SetAchievementTaskDetailsRequest request)
         {
-            return _context.Tasks.Any(e => e.Id == id);
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.Description = request.Description;
+            task.Priority = request.Priority;
+
+            // Achievements never recur
+            task.RefreshFrequency = RefreshFrequency.Never;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TaskCharacter> AddCharacterToTask(AddCharacterToTaskRequest request)
+        {
+            var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
+
+            _context.TaskCharacters.Add(taskCharacter);
+            _context.SaveChanges();
+
+            return taskCharacter;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.Entities
 {
@@ -12,29 +12,25 @@ namespace WowDash.ApplicationCore.Entities
     {
         public Guid Id { get; set; }
         public Player Player { get; set; }
-        public Guid PlayerId { get; set; }
+        public Guid PlayerId { get; private set; }
         public string Description { get; set; }
         public ICollection<GameDataReference> GameDataReferences { get; set; }
         public ICollection<TaskCharacter> TaskCharacters { get; set; }
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
-        public TaskType TaskType { get; set; }
+        public TaskType TaskType { get; private set; }
         public CollectibleType CollectibleType { get; set; }
         public Source Source { get; set; }
         public Priority Priority { get; set; }
         public RefreshFrequency RefreshFrequency { get; set; }
 
-        public Task()
+        public Task(Guid playerId, TaskType taskType)
         {
+            PlayerId = playerId;
+            TaskType = taskType;
             GameDataReferences = new List<GameDataReference>();
             TaskCharacters = new List<TaskCharacter>();
         }
-
-        public Task(Guid playerId) : base()
-        {
-            PlayerId = playerId;
-        }
-
     }
 
     /// <summary>
@@ -77,65 +73,5 @@ namespace WowDash.ApplicationCore.Entities
             QuestArea           // Zone
         }
 
-    }
-
-    /// <summary>
-    /// The type of collectible associated with the task.
-    /// </summary>
-    public enum CollectibleType
-    {
-        [Description("Gear and Items")]
-        Item,
-        [Description("Dungeon Sets")]
-        ItemSet,
-        [Description("Mounts")]
-        Mount,
-        [Description("Battle Pets")]
-        Pet
-    }
-
-    public enum Priority
-    {
-        Lowest,
-        Low,
-        Medium,
-        High,
-        Highest
-    }
-
-    public enum RefreshFrequency
-    {
-        Never,
-        Daily,
-        Weekly
-    }
-
-    /// <summary>
-    /// The source of the collectible. 
-    /// Used for sorting, filtering, and form field generation.
-    /// </summary>
-    public enum Source
-    {
-        [Description("Dungeon")]
-        Dungeon,
-        [Description("Quest")]
-        Quest,
-        [Description("Vendor")]
-        Vendor,
-        [Description("World Drop")]
-        WorldDrop,
-        [Description("Other")]
-        Other
-    }
-
-    /// <summary>
-    /// The type of collectible. 
-    /// Used for sorting, filtering, and form field generation.
-    /// </summary>
-    public enum TaskType
-    {
-        General,
-        Achievement,
-        Collectible
     }
 }
