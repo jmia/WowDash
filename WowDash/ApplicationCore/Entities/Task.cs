@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.Entities
 {
@@ -35,7 +35,6 @@ namespace WowDash.ApplicationCore.Entities
             PlayerId = playerId;
             TaskType = taskType;
         }
-
     }
 
     /// <summary>
@@ -78,65 +77,5 @@ namespace WowDash.ApplicationCore.Entities
             QuestArea           // Zone
         }
 
-    }
-
-    /// <summary>
-    /// The type of collectible associated with the task.
-    /// </summary>
-    public enum CollectibleType
-    {
-        [Description("Gear and Items")]
-        Item,
-        [Description("Dungeon Sets")]
-        ItemSet,
-        [Description("Mounts")]
-        Mount,
-        [Description("Battle Pets")]
-        Pet
-    }
-
-    public enum Priority
-    {
-        Lowest,
-        Low,
-        Medium,
-        High,
-        Highest
-    }
-
-    public enum RefreshFrequency
-    {
-        Never,
-        Daily,
-        Weekly
-    }
-
-    /// <summary>
-    /// The source of the collectible. 
-    /// Used for sorting, filtering, and form field generation.
-    /// </summary>
-    public enum Source
-    {
-        [Description("Dungeon")]
-        Dungeon,
-        [Description("Quest")]
-        Quest,
-        [Description("Vendor")]
-        Vendor,
-        [Description("World Drop")]
-        WorldDrop,
-        [Description("Other")]
-        Other
-    }
-
-    /// <summary>
-    /// The type of collectible. 
-    /// Used for sorting, filtering, and form field generation.
-    /// </summary>
-    public enum TaskType
-    {
-        General,
-        Achievement,
-        Collectible
     }
 }

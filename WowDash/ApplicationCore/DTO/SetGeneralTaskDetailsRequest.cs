@@ -1,16 +1,22 @@
 ﻿using System;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash
 {
     public class SetGeneralTaskDetailsRequest
     {
-        public Guid TaskId { get; set; }
-        public string Description { get; set; }
+        public Guid TaskId { get; }
+        public string Description { get; }
+        public RefreshFrequency RefreshFrequency { get; }
+        public Priority Priority { get; }
 
-        public SetGeneralTaskDetailsRequest(Guid taskId, string description)
+        public SetGeneralTaskDetailsRequest(Guid taskId, string description, RefreshFrequency refreshFrequency,
+            Priority priority)
         {
-            Description = description;
             TaskId = taskId;
+            Description = description;
+            RefreshFrequency = refreshFrequency;
+            Priority = priority;
         }
     }
 }

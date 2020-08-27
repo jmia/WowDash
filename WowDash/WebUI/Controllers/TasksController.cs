@@ -38,6 +38,8 @@ namespace WowDash.WebUI.Controllers
                 return BadRequest();
 
             task.Description = request.Description;
+            task.RefreshFrequency = request.RefreshFrequency;
+            task.Priority = request.Priority;
 
             _context.SaveChanges();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.Entities
 {

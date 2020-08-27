@@ -5,6 +5,7 @@ using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Tests.Common;
 using WowDash.WebUI.Controllers;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.Tests.UnitTests.Tasks
 {
@@ -26,7 +27,7 @@ namespace WowDash.Tests.UnitTests.Tasks
         public void GivenValidUser_AddsTaskToDatabase()
         {
             // Arrange
-            var dto = new InitializeTaskRequest(_defaultPlayer.Id);
+            var dto = new InitializeTaskRequest(_defaultPlayer.Id, default);
 
             // Act
             var result = _controller.InitializeTask(dto);
