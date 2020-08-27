@@ -13,10 +13,17 @@ http://localhost:8080
 - [NUnit](https://docs.nunit.org/)
 - [EF Core In Memory Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/testing-sample)
 - [Moq](https://github.com/Moq/moq4/wiki/Quickstart)
+- [FluentAssertions](https://fluentassertions.com/)
 
 -----
 
 ### Stuff For Me
+
+#### Scripts
+
+```
+Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
+```
 
 #### Helpful Links
 
