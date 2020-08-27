@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
 namespace WowDash.WebUI.Controllers
@@ -19,9 +17,13 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
-        public void InitializeTask(ApplicationCore.Entities.Task task)
+        public Guid InitializeTask(InitializeTaskRequest request)
         {
+            var task = new Task(request.PlayerId, request.TaskType);
+
             _context.Tasks.Add(task);
+
+            return task.Id;
         }
 
     }

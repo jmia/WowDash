@@ -18,7 +18,7 @@ namespace WowDash.ApplicationCore.Entities
         public ICollection<TaskCharacter> TaskCharacters { get; set; }
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
-        public TaskType TaskType { get; set; }
+        public TaskType TaskType { get; private set; }
         public CollectibleType CollectibleType { get; set; }
         public Source Source { get; set; }
         public Priority Priority { get; set; }
@@ -30,9 +30,10 @@ namespace WowDash.ApplicationCore.Entities
             TaskCharacters = new List<TaskCharacter>();
         }
 
-        public Task(Guid playerId) : base()
+        public Task(Guid playerId, TaskType taskType) : base()
         {
             PlayerId = playerId;
+            TaskType = taskType;
         }
 
     }
