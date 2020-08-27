@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.WebUI.Controllers
 {
@@ -29,17 +31,38 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPost]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetGeneralTaskDetails(SetGeneralTaskDetailsRequest request)
         {
             var task = _context.Tasks.Find(request.TaskId);
 
             if (task is null)
-                return BadRequest();
+                return NotFound();
 
             task.Description = request.Description;
             task.RefreshFrequency = request.RefreshFrequency;
             task.Priority = request.Priority;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetAchievementTaskDetails(SetAchievementTaskDetailsRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.Description = request.Description;
+            task.Priority = request.Priority;
+
+            // Achievements never recur
+            task.RefreshFrequency = RefreshFrequency.Never;
 
             _context.SaveChanges();
 
