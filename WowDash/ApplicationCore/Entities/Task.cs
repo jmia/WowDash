@@ -12,7 +12,7 @@ namespace WowDash.ApplicationCore.Entities
     {
         public Guid Id { get; set; }
         public Player Player { get; set; }
-        public Guid PlayerId { get; set; }
+        public Guid PlayerId { get; private set; }
         public string Description { get; set; }
         public ICollection<GameDataReference> GameDataReferences { get; set; }
         public ICollection<TaskCharacter> TaskCharacters { get; set; }
@@ -24,7 +24,7 @@ namespace WowDash.ApplicationCore.Entities
         public Priority Priority { get; set; }
         public RefreshFrequency RefreshFrequency { get; set; }
 
-        public Task()
+        private Task()
         {
             GameDataReferences = new List<GameDataReference>();
             TaskCharacters = new List<TaskCharacter>();

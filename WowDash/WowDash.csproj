@@ -30,13 +30,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\Migrations\20200827000939_FakeMigration.cs" />
+    <Compile Remove="Infrastructure\Migrations\20200827000939_FakeMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="WebUI\ClientApp\package-lock.json" />
     <None Include="WebUI\ClientApp\package.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationCore\Interfaces\" />
     <Folder Include="ApplicationCore\DTO\" />
+    <Folder Include="ApplicationCore\Interfaces\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
