@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Transactions;
 
 namespace WowDash.ApplicationCore.Entities
 {
@@ -7,14 +8,16 @@ namespace WowDash.ApplicationCore.Entities
     /// </summary>
     public class TaskCharacter
     {
-        public Guid TaskId { get; set; }
-        public Task Task { get; set; }
-        public Guid CharacterId { get; set; }
+        public Guid CharacterId { get; }
         public Character Character { get; set; }
+        public Guid TaskId { get; }
+        public Task Task { get; set; }
         public bool IsActive { get; set; }
 
-        public TaskCharacter()
+        public TaskCharacter(Guid characterId, Guid taskId)
         {
+            CharacterId = characterId;
+            TaskId = taskId;
             IsActive = true;
         }
     }

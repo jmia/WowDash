@@ -24,16 +24,12 @@ namespace WowDash.ApplicationCore.Entities
         public Priority Priority { get; set; }
         public RefreshFrequency RefreshFrequency { get; set; }
 
-        private Task()
-        {
-            GameDataReferences = new List<GameDataReference>();
-            TaskCharacters = new List<TaskCharacter>();
-        }
-
-        public Task(Guid playerId, TaskType taskType) : base()
+        public Task(Guid playerId, TaskType taskType)
         {
             PlayerId = playerId;
             TaskType = taskType;
+            GameDataReferences = new List<GameDataReference>();
+            TaskCharacters = new List<TaskCharacter>();
         }
     }
 
