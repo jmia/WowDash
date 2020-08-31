@@ -105,5 +105,51 @@ namespace WowDash.WebUI.Controllers
                 throw new Exception("Unhandled status code from 'GetAchievement': " + ex.Message);
             }
         }
+
+        [HttpGet("search/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Achievement>>> SearchAchievementsByName(string name)
+        {
+            var client = _clientFactory.CreateClient();
+
+            var access_token = await GetAccessTokenAsync();
+
+            using var request = new HttpRequestMessage(new HttpMethod("GET"),
+                "https://us.api.blizzard.com/data/wow/achievement/index?" +
+                "namespace=static-us&locale=en_US");
+
+            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
+
+            try
+            {
+                var response = await client.SendAsync(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    return NotFound();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return Unauthorized();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = response.Content.ReadAsStreamAsync();
+                    var index = await JsonSerializer.DeserializeAsync<AchievementIndex>(await content);
+
+                    var results = index.Achievements.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                    return Ok(results);
+                }
+                else
+                {
+                    throw new Exception("The response was status code " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Unhandled status code from 'SearchAchievementsByName': " + ex.Message);
+            }
+        }
     }
 }
