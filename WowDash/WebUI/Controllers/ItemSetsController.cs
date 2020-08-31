@@ -11,7 +11,7 @@ using WowDash.ApplicationCore.Models;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/ItemSets")]
+    [Route("api/item-sets")]
     [ApiController]
     public class ItemSetsController : BaseBlizzardApiController
     {

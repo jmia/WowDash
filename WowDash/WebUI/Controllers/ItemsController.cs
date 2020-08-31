@@ -11,7 +11,7 @@ using WowDash.ApplicationCore.Models;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/Items")]
+    [Route("api/items")]
     [ApiController]
     public class ItemsController : BaseBlizzardApiController
     {
@@ -62,7 +62,7 @@ namespace WowDash.WebUI.Controllers
             }
         }
 
-        [HttpGet("search/item/{name}")]
+        [HttpGet("search/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

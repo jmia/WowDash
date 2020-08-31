@@ -11,7 +11,7 @@ using WowDash.ApplicationCore.Models;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/Achievements")]
+    [Route("api/achievements")]
     [ApiController]
     public class AchievementsController : BaseBlizzardApiController
     {

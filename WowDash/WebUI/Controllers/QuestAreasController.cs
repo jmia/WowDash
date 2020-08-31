@@ -11,7 +11,7 @@ using WowDash.ApplicationCore.Models;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/QuestAreas")]
+    [Route("api/zones")]
     [ApiController]
     public class QuestAreasController : BaseBlizzardApiController
     {

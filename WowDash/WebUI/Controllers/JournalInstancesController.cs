@@ -11,7 +11,7 @@ using WowDash.ApplicationCore.Models;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/JournalInstances")]
+    [Route("api/dungeons")]
     [ApiController]
     public class JournalInstancesController : BaseBlizzardApiController
     {
