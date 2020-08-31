@@ -8,20 +8,20 @@ using WowDash.ApplicationCore.DTO;
 using static WowDash.ApplicationCore.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WowDash.Tests.UnitTests.Tasks.TaskCharacters
+namespace WowDash.Tests.UnitTests.TaskCharacters
 {
     [TestFixture]
     public class RemoveCharacterFromTaskTests : UnitTestBase
     {
         private Player _defaultPlayer;
-        private TasksController _controller;
+        private TaskCharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
             Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
             _defaultPlayer = Context.Players.First();
-            _controller = new TasksController(Context);
+            _controller = new TaskCharactersController(Context);
         }
 
         [Test]
