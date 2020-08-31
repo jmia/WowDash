@@ -32,6 +32,7 @@ namespace WowDash.Tests.UnitTests.Tasks.TaskCharacters
 
             Context.Characters.Add(character);
             Context.Tasks.Add(task);
+            Context.SaveChanges();
 
             var dto = new AddCharacterToTaskRequest(character.Id, task.Id);
 
@@ -53,6 +54,7 @@ namespace WowDash.Tests.UnitTests.Tasks.TaskCharacters
 
             Context.Characters.Add(character);
             Context.Tasks.Add(task);
+            Context.SaveChanges();
 
             var dto = new AddCharacterToTaskRequest(character.Id, task.Id);
 

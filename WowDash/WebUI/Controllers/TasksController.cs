@@ -69,12 +69,27 @@ namespace WowDash.WebUI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TaskCharacter> AddCharacterToTask(AddCharacterToTaskRequest request)
         {
             var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
 
             _context.TaskCharacters.Add(taskCharacter);
+            _context.SaveChanges();
+
+            return taskCharacter;
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public ActionResult<TaskCharacter> RemoveCharacterFromTask(RemoveCharacterFromTaskRequest request)
+        {
+            var taskCharacter = _context.TaskCharacters.Find(request.CharacterId, request.TaskId);
+
+            if (taskCharacter is null)
+                return NotFound();
+
+            _context.TaskCharacters.Remove(taskCharacter);
             _context.SaveChanges();
 
             return taskCharacter;

@@ -43,7 +43,7 @@ namespace WowDash.Tests.Common
 
             context.Players.Add(defaultUser);
 
-            context.Characters.AddRange(new[] { scully, chakwas });
+            context.Characters.AddRange(scully, chakwas);
 
             context.SaveChanges();
 
