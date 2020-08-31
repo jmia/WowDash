@@ -24,8 +24,12 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ApplicationCore\Interfaces\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ApplicationCore\Interfaces\**" />
+    <EmbeddedResource Remove="ApplicationCore\Interfaces\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ApplicationCore\Interfaces\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -37,10 +41,6 @@
   <ItemGroup>
     <None Include="WebUI\ClientApp\package-lock.json" />
     <None Include="WebUI\ClientApp\package.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ApplicationCore\Interfaces\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
