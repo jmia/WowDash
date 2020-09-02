@@ -43,5 +43,35 @@ namespace WowDash.WebUI.Controllers
 
             return taskCharacter;
         }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TaskCharacter> SetAttemptComplete(SetAttemptCompleteRequest request)
+        {
+            var taskCharacter = _context.TaskCharacters.Find(request.CharacterId, request.TaskId);
+
+            if (taskCharacter is null)
+                return NotFound();
+
+            taskCharacter.IsActive = false;
+            _context.SaveChanges();
+
+            return taskCharacter;
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TaskCharacter> SetAttemptIncomplete(SetAttemptIncompleteRequest request)
+        {
+            var taskCharacter = _context.TaskCharacters.Find(request.CharacterId, request.TaskId);
+
+            if (taskCharacter is null)
+                return NotFound();
+
+            taskCharacter.IsActive = true;
+            _context.SaveChanges();
+
+            return taskCharacter;
+        }
     }
 }
