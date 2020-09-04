@@ -13,7 +13,7 @@ namespace WowDash.UnitTests.Common
         }
         public void Dispose()
         {
-            throw new NotImplementedException();
+            ApplicationContextFactory.Destroy(Context);
         }
     }
 }
