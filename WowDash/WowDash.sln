@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WowDash", "WowDash.csproj", "{771F9E24-A768-4DB7-8542-6975CD8C06B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WowDash.Tests", "..\WowDash.Tests\WowDash.Tests.csproj", "{D661B63A-2F13-4A61-BE53-60F337AACCD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WowDash.UnitTests", "..\WowDash.Tests\WowDash.UnitTests.csproj", "{D661B63A-2F13-4A61-BE53-60F337AACCD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowDash.IntegrationTests", "..\WowDash.IntegrationTests\WowDash.IntegrationTests.csproj", "{73DED60C-B4B6-405D-A6CA-3CB30DAF1397}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D661B63A-2F13-4A61-BE53-60F337AACCD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D661B63A-2F13-4A61-BE53-60F337AACCD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D661B63A-2F13-4A61-BE53-60F337AACCD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73DED60C-B4B6-405D-A6CA-3CB30DAF1397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DED60C-B4B6-405D-A6CA-3CB30DAF1397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DED60C-B4B6-405D-A6CA-3CB30DAF1397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DED60C-B4B6-405D-A6CA-3CB30DAF1397}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
