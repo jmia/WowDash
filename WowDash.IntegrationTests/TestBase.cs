@@ -10,6 +10,8 @@ namespace WowDash.IntegrationTests
 
     public class TestBase
     {
+        // Does this class need some sort of resolved DbContext?
+
         [SetUp]
         public async Task TestSetUp()
         {

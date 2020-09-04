@@ -27,7 +27,7 @@ namespace WowDash.IntegrationTests
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables();
+                .AddEnvironmentVariables();     // How do I get this into user secrets instead?
 
             _configuration = builder.Build();
 
@@ -59,7 +59,7 @@ namespace WowDash.IntegrationTests
 
             var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            context.Database.Migrate();
+            context.Database.Migrate();     // How do I make this available to my controllers for DI?
         }
 
         public static async Task ResetState()
