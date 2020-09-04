@@ -3,7 +3,7 @@ using System;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
-namespace WowDash.Tests.Common
+namespace WowDash.UnitTests.Common
 {
     public class ApplicationContextFactory
     {

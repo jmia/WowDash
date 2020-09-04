@@ -2,14 +2,14 @@
 using NUnit.Framework;
 using System.Linq;
 using WowDash.ApplicationCore.Entities;
-using WowDash.Tests.Common;
+using WowDash.UnitTests.Common;
 using WowDash.WebUI.Controllers;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.Tests.UnitTests.Tasks
+namespace WowDash.UnitTests.Tasks
 {
     [TestFixture]
-    public class SetAchievementTaskDetailsTests : UnitTestBase
+    public class SetGeneralTaskDetailsTests : UnitTestBase
     {
         private Player _defaultPlayer;
         private TasksController _controller;
@@ -30,15 +30,34 @@ namespace WowDash.Tests.UnitTests.Tasks
             Context.Tasks.Add(task);
             Context.SaveChanges();
 
-            var description = "Double Agent";
-            var dto = new SetAchievementTaskDetailsRequest(task.Id, description, default);
+            var description = "Reach exalted reputation with The Defilers";
+            var dto = new SetGeneralTaskDetailsRequest(task.Id, description, default, default);
 
             // Act
-            var result = _controller.SetAchievementTaskDetails(dto);
+            var result = _controller.SetGeneralTaskDetails(dto);
 
             // Assert
             var foundTask = Context.Tasks.Find(result.Value);
             foundTask.Description.Should().Be(description);
+        }
+
+        [Test]
+        public void GivenAValidRefreshFrequency_UpdatesTaskInDatabase()
+        {
+            // Arrange
+            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            Context.Tasks.Add(task);
+            Context.SaveChanges();
+
+            var refreshFrequency = RefreshFrequency.Weekly;
+            var dto = new SetGeneralTaskDetailsRequest(task.Id, null, refreshFrequency, default);
+
+            // Act
+            var result = _controller.SetGeneralTaskDetails(dto);
+
+            // Assert
+            var foundTask = Context.Tasks.Find(result.Value);
+            foundTask.RefreshFrequency.Should().Be(refreshFrequency);
         }
 
         [Test]
@@ -50,34 +69,14 @@ namespace WowDash.Tests.UnitTests.Tasks
             Context.SaveChanges();
 
             var priority = Priority.Highest;
-            var dto = new SetAchievementTaskDetailsRequest(task.Id, null, priority);
+            var dto = new SetGeneralTaskDetailsRequest(task.Id, null, default, priority);
 
             // Act
-            var result = _controller.SetAchievementTaskDetails(dto);
+            var result = _controller.SetGeneralTaskDetails(dto);
 
             // Assert
             var foundTask = Context.Tasks.Find(result.Value);
             foundTask.Priority.Should().Be(priority);
-        }
-
-        [Test]
-        public void GivenAllValidValues_SetsDefaultRefreshPriority()
-        {
-            // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
-            Context.Tasks.Add(task);
-            Context.SaveChanges();
-
-            var description = "Double Agent";
-            var priority = Priority.Highest;
-            var dto = new SetAchievementTaskDetailsRequest(task.Id, description, priority);
-
-            // Act
-            var result = _controller.SetAchievementTaskDetails(dto);
-
-            // Assert
-            var foundTask = Context.Tasks.Find(result.Value);
-            foundTask.RefreshFrequency.Should().Be(RefreshFrequency.Never);
         }
     }
 }

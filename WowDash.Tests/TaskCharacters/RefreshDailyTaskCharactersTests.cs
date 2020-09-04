@@ -3,11 +3,11 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using WowDash.ApplicationCore.Entities;
-using WowDash.Tests.Common;
+using WowDash.UnitTests.Common;
 using WowDash.WebUI.Controllers;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.Tests.UnitTests.TaskCharacters
+namespace WowDash.UnitTests.TaskCharacters
 {
     [TestFixture]
     public class RefreshDailyTaskCharactersTests : UnitTestBase
@@ -19,7 +19,7 @@ namespace WowDash.Tests.UnitTests.TaskCharacters
         public void Setup()
         {
             Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            Assume.That((Context.Characters.Count() > 1), "The testing database needs two characters.");
+            Assume.That(Context.Characters.Count() > 1, "The testing database needs two characters.");
             _defaultPlayer = Context.Players.First();
             _controller = new TaskCharactersController(Context);
         }
@@ -64,8 +64,8 @@ namespace WowDash.Tests.UnitTests.TaskCharacters
             var result = _controller.RefreshDailyTaskCharacters();
 
             var foundTaskCharacters = Context.TaskCharacters.Where(
-                tc => tc.TaskId == firstTask.Id || 
-                tc.TaskId == secondTask.Id || 
+                tc => tc.TaskId == firstTask.Id ||
+                tc.TaskId == secondTask.Id ||
                 tc.TaskId == thirdTask.Id);
 
             // Assert

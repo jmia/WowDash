@@ -2,12 +2,12 @@
 using NUnit.Framework;
 using System.Linq;
 using WowDash.ApplicationCore.Entities;
-using WowDash.Tests.Common;
 using WowDash.WebUI.Controllers;
 using WowDash.ApplicationCore.DTO;
 using static WowDash.ApplicationCore.Common.Enums;
+using WowDash.UnitTests.Common;
 
-namespace WowDash.Tests.UnitTests.TaskCharacters
+namespace WowDash.UnitTests.TaskCharacters
 {
     [TestFixture]
     public class AddCharacterToTaskTests : UnitTestBase
