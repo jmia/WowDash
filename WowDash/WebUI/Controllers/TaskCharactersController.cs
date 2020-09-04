@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
@@ -99,6 +98,29 @@ namespace WowDash.WebUI.Controllers
             }
 
             return true;    // This always returns true, what do?
+        }
+
+        public bool RefreshWeeklyTaskCharacters()
+        {
+            var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Weekly);
+
+            if (tasks is null)
+                return true;
+
+            foreach (var task in tasks)
+            {
+                var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
+
+                if (taskCharacters is null)
+                    return true;
+
+                foreach (var taskCharacter in taskCharacters)
+                {
+                    taskCharacter.IsActive = true;
+                }
+            }
+
+            return true;
         }
     }
 }
