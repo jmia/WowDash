@@ -7,20 +7,20 @@ using WowDash.WebUI.Controllers;
 using WowDash.ApplicationCore.DTO;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.Tests.UnitTests.Tasks.TaskCharacters
+namespace WowDash.Tests.UnitTests.TaskCharacters
 {
     [TestFixture]
     public class AddCharacterToTaskTests : UnitTestBase
     {
         private Player _defaultPlayer;
-        private TasksController _controller;
+        private TaskCharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
             Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
             _defaultPlayer = Context.Players.First();
-            _controller = new TasksController(Context);
+            _controller = new TaskCharactersController(Context);
         }
 
         [Test]
@@ -32,6 +32,7 @@ namespace WowDash.Tests.UnitTests.Tasks.TaskCharacters
 
             Context.Characters.Add(character);
             Context.Tasks.Add(task);
+            Context.SaveChanges();
 
             var dto = new AddCharacterToTaskRequest(character.Id, task.Id);
 
@@ -53,6 +54,7 @@ namespace WowDash.Tests.UnitTests.Tasks.TaskCharacters
 
             Context.Characters.Add(character);
             Context.Tasks.Add(task);
+            Context.SaveChanges();
 
             var dto = new AddCharacterToTaskRequest(character.Id, task.Id);
 

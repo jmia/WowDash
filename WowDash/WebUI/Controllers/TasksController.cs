@@ -67,17 +67,5 @@ namespace WowDash.WebUI.Controllers
 
             return task.Id;
         }
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TaskCharacter> AddCharacterToTask(AddCharacterToTaskRequest request)
-        {
-            var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
-
-            _context.TaskCharacters.Add(taskCharacter);
-            _context.SaveChanges();
-
-            return taskCharacter;
-        }
     }
 }
