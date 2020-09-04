@@ -4,6 +4,12 @@ using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.IntegrationTests.Responses
 {
+    /// <summary>
+    /// Represents a JSON response for a sample player model
+    /// from the internal API that would be received by a
+    /// front end caller. It's mapped to an object for 
+    /// ease of testing.
+    /// </summary>
     public class GetPlayerResponse
     {
         [JsonPropertyName("id")]

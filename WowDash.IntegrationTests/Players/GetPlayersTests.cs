@@ -4,7 +4,7 @@ using System.Text.Json;
 using WowDash.ApplicationCore.Entities;
 using WowDash.IntegrationTests.Responses;
 
-namespace WowDash.IntegrationTests
+namespace WowDash.IntegrationTests.Players
 {
     [TestFixture]
     public class GetPlayersTests : IntegrationTestBase
@@ -17,7 +17,7 @@ namespace WowDash.IntegrationTests
             var expectedId = player.Id;
 
             // Act
-            var httpResponse = await Client.GetAsync("/api/Players/" + expectedId); // Will need to change capitalization later
+            var httpResponse = await Client.GetAsync("/api/Players/" + expectedId); // TODO: Will need to change capitalization later
 
             httpResponse.EnsureSuccessStatusCode();
 

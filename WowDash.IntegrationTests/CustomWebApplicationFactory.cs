@@ -9,12 +9,19 @@ using WowDash.WebUI;
 
 namespace WowDash.IntegrationTests
 {
+    /// <summary>
+    /// Custom system-under-test bootstrap class for creating a test server
+    /// with a real database (instead of in-memory) that tracks the code-first
+    /// migrations of my actual database. 
+    /// </summary>
     public class CustomWebApplicationFactory : WebApplicationFactory<Startup>
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             // Haven't figured out how to get configuration in here to store the connection string
-            var connectionString = "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
+            var connectionString = 
+                "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
+            
             builder.ConfigureServices(services =>
             {
                 var descriptor = services.SingleOrDefault(
