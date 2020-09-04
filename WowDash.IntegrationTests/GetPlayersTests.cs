@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using System.Text.Json;
-using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
+using WowDash.IntegrationTests.Responses;
 
 namespace WowDash.IntegrationTests
 {
     [TestFixture]
-    public class UnitTest2 : IntegrationTestBase
+    public class GetPlayersTests : IntegrationTestBase
     {
         [Test]
         public async System.Threading.Tasks.Task GetPlayers_ShouldFindSomething()
@@ -17,7 +17,7 @@ namespace WowDash.IntegrationTests
             var expectedId = player.Id;
 
             // Act
-            var httpResponse = await Client.GetAsync("/api/Players/" + expectedId);
+            var httpResponse = await Client.GetAsync("/api/Players/" + expectedId); // Will need to change capitalization later
 
             httpResponse.EnsureSuccessStatusCode();
 

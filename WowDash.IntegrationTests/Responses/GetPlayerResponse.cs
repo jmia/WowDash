@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.IntegrationTests.Responses
 {
     public class GetPlayerResponse
     {
