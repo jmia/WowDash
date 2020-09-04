@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 using WowDash.WebUI;
 
@@ -44,35 +43,35 @@ namespace WowDash.IntegrationTests
                     try
                     {
                         // These are wiped before the first test run, so they need a better home
-                        var defaultUser = new Player { DisplayName = "Jen", DefaultRealm = "area-52" };
+                        //var defaultUser = new Player { DisplayName = "Jen", DefaultRealm = "area-52" };
 
-                        db.Players.Add(defaultUser);
+                        //db.Players.Add(defaultUser);
 
-                        var scully = new Character
-                        {
-                            Name = "Scully",
-                            Gender = CharacterGender.Female,
-                            Realm = "area-52",
-                            Class = "Hunter",
-                            Race = "Blood Elf",
-                            Level = 120,
-                            PlayerId = defaultUser.Id
-                        };
+                        //var scully = new Character
+                        //{
+                        //    Name = "Scully",
+                        //    Gender = CharacterGender.Female,
+                        //    Realm = "area-52",
+                        //    Class = "Hunter",
+                        //    Race = "Blood Elf",
+                        //    Level = 120,
+                        //    PlayerId = defaultUser.Id
+                        //};
 
-                        var chakwas = new Character
-                        {
-                            Name = "Chakwas",
-                            Gender = CharacterGender.Female,
-                            Realm = "area-52",
-                            Class = "Druid",
-                            Race = "Highmountain Tauren",
-                            Level = 120,
-                            PlayerId = defaultUser.Id
-                        };
+                        //var chakwas = new Character
+                        //{
+                        //    Name = "Chakwas",
+                        //    Gender = CharacterGender.Female,
+                        //    Realm = "area-52",
+                        //    Class = "Druid",
+                        //    Race = "Highmountain Tauren",
+                        //    Level = 120,
+                        //    PlayerId = defaultUser.Id
+                        //};
 
-                        db.Characters.AddRange(scully, chakwas);
+                        //db.Characters.AddRange(scully, chakwas);
 
-                        db.SaveChanges();
+                        //db.SaveChanges();
                     }
                     catch (Exception ex)
                     {

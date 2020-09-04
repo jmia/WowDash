@@ -3,26 +3,24 @@ using NUnit.Framework;
 using Respawn;
 using System.Net.Http;
 using System.Threading.Tasks;
-using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
 namespace WowDash.IntegrationTests
 {
     public class IntegrationTestBase
     {
-        private CustomWebApplicationFactory _factory;
+        private static CustomWebApplicationFactory _factory;
         private Checkpoint _checkpoint;
         // Haven't figured out how to get connection string from factory
         private string _connectionString = "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         public HttpClient Client { get; set; }
 
-        public System.Guid TestUserGuid { get; set; }
-
         [OneTimeSetUp]
         public void RunBeforeTheseTests()
         {
             _factory = new CustomWebApplicationFactory();
+
             Client = _factory.CreateClient();
 
             _checkpoint = new Checkpoint
@@ -32,13 +30,13 @@ namespace WowDash.IntegrationTests
         }
 
         [SetUp]
-        public async System.Threading.Tasks.Task RunBeforeEachTest()
+        public async Task RunBeforeEachTest()
         {
             await _checkpoint.Reset(_connectionString);
         }
 
         [OneTimeTearDown]
-        public async System.Threading.Tasks.Task RunAfterTheseTests()
+        public async Task RunAfterTheseTests()
         {
             await _checkpoint.Reset(_connectionString); // Removes stray entities leftover from the last test
 
@@ -46,20 +44,28 @@ namespace WowDash.IntegrationTests
             _factory.Dispose();
         }
 
-        public async System.Threading.Tasks.Task AddAThingAsync()
+        public static async Task<TEntity> FindAsync<TEntity>(params object[] keyValues)
+            where TEntity : class
         {
-            var player = new Player();
             using var scope = _factory.Server.Services.CreateScope();
 
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            var user = context.Add(player);
+            return await context.FindAsync<TEntity>(keyValues);
+        }
 
-            TestUserGuid = user.Entity.Id;  // Just trying to get it to save something
+        public static async Task<TEntity> AddAsync<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            using var scope = _factory.Server.Services.CreateScope();
+
+            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            context.Add(entity);
 
             await context.SaveChangesAsync();
 
-            // When I try to get one, it's Guid.Empty
+            return entity;
         }
     }
 }
