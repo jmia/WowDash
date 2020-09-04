@@ -1,99 +1,99 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using NUnit.Framework;
-using Respawn;
-using System.IO;
-using System.Threading.Tasks;
-using WowDash.Infrastructure;
-using WowDash.WebUI;
+﻿//using Microsoft.AspNetCore.Hosting;
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
+//using Moq;
+//using NUnit.Framework;
+//using Respawn;
+//using System.IO;
+//using System.Threading.Tasks;
+//using WowDash.Infrastructure;
+//using WowDash.WebUI;
 
-namespace WowDash.IntegrationTests
-{
-    [SetUpFixture]
-    public class Testing
-    {
-        // Adapted from https://github.com/jasontaylordev/CleanArchitecture
+//namespace WowDash.IntegrationTests
+//{
+//    //[SetUpFixture]
+//    public class Testing
+//    {
+//        // Adapted from https://github.com/jasontaylordev/CleanArchitecture
 
-        private static IConfigurationRoot _configuration;
-        private static IServiceScopeFactory _scopeFactory;
-        private static Checkpoint _checkpoint;
+//        private static IConfigurationRoot _configuration;
+//        private static IServiceScopeFactory _scopeFactory;
+//        private static Checkpoint _checkpoint;
 
-        [OneTimeSetUp]
-        public void RunBeforeAnyTests()
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables();     // How do I get this into user secrets instead?
+//        //[OneTimeSetUp]
+//        public void RunBeforeAnyTests()
+//        {
+//            var builder = new ConfigurationBuilder()
+//                .SetBasePath(Directory.GetCurrentDirectory())
+//                .AddJsonFile("appsettings.json", true, true)
+//                .AddEnvironmentVariables();     // How do I get this into user secrets instead?
 
-            _configuration = builder.Build();
+//            _configuration = builder.Build();
 
-            var startup = new Startup(_configuration);
+//            var startup = new Startup(_configuration);
 
-            var services = new ServiceCollection();
+//            var services = new ServiceCollection();
 
-            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
-                w.EnvironmentName == "Development" &&
-                w.ApplicationName == "WowDash"));
+//            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
+//                w.EnvironmentName == "Development" &&
+//                w.ApplicationName == "WowDash"));
 
-            services.AddLogging();
+//            services.AddLogging();
 
-            startup.ConfigureServices(services);
+//            startup.ConfigureServices(services);
 
-            _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
+//            _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
-            _checkpoint = new Checkpoint
-            {
-                TablesToIgnore = new[] { "__EFMigrationsHistory" }
-            };
+//            _checkpoint = new Checkpoint
+//            {
+//                TablesToIgnore = new[] { "__EFMigrationsHistory" }
+//            };
 
-            EnsureDatabase();
-        }
+//            EnsureDatabase();
+//        }
 
-        private static void EnsureDatabase()
-        {
-            using var scope = _scopeFactory.CreateScope();
+//        private static void EnsureDatabase()
+//        {
+//            using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+//            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            context.Database.Migrate();     // How do I make this available to my controllers for DI?
-        }
+//            context.Database.Migrate();
+//        }
 
-        public static async Task ResetState()
-        {
-            await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
-        }
+//        public static async Task ResetState()
+//        {
+//            await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
+//        }
 
-        public static async Task<TEntity> FindAsync<TEntity>(params object[] keyValues)
-            where TEntity : class
-        {
-            using var scope = _scopeFactory.CreateScope();
+//        public static async Task<TEntity> FindAsync<TEntity>(params object[] keyValues)
+//            where TEntity : class
+//        {
+//            using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+//            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            return await context.FindAsync<TEntity>(keyValues);
-        }
+//            return await context.FindAsync<TEntity>(keyValues);
+//        }
 
-        public static async Task<TEntity> AddAsync<TEntity>(TEntity entity)
-            where TEntity : class
-        {
-            using var scope = _scopeFactory.CreateScope();
+//        public static async Task<TEntity> AddAsync<TEntity>(TEntity entity)
+//            where TEntity : class
+//        {
+//            using var scope = _scopeFactory.CreateScope();
 
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+//            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-            context.Add(entity);
+//            context.Add(entity);
 
-            await context.SaveChangesAsync();
+//            await context.SaveChangesAsync();
 
-            return entity;
-        }
+//            return entity;
+//        }
 
-        [OneTimeTearDown]
-        public void RunAfterAnyTests()
-        {
-        }
-    }
-}
+//        //[OneTimeTearDown]
+//        public void RunAfterAnyTests()
+//        {
+//        }
+//    }
+//}
