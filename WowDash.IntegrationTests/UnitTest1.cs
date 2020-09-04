@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using WowDash.ApplicationCore.Entities;
 
 namespace WowDash.IntegrationTests
 {
@@ -10,9 +11,13 @@ namespace WowDash.IntegrationTests
         }
 
         [Test]
-        public void Test1()
+        public async System.Threading.Tasks.Task Test1Async()
         {
-            Assert.Pass();
+            var player = await Testing.AddAsync(new Player());
+
+            var result = await Testing.FindAsync<Player>(player.Id);
+
+            Assert.That(result.Id.Equals(player.Id));
         }
     }
 }
