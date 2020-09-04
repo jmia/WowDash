@@ -15,6 +15,7 @@ namespace WowDash.IntegrationTests
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            // Haven't figured out how to get configuration in here to store the connection string
             var connectionString = "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
             builder.ConfigureServices(services =>
             {
@@ -42,7 +43,7 @@ namespace WowDash.IntegrationTests
 
                     try
                     {
-                        // These are wiped before the first test run
+                        // These are wiped before the first test run, so they need a better home
                         var defaultUser = new Player { DisplayName = "Jen", DefaultRealm = "area-52" };
 
                         db.Players.Add(defaultUser);
