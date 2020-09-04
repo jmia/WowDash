@@ -3,11 +3,11 @@ using NUnit.Framework;
 using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
-using WowDash.Tests.Common;
+using WowDash.UnitTests.Common;
 using WowDash.WebUI.Controllers;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.Tests.UnitTests.TaskCharacters
+namespace WowDash.UnitTests.TaskCharacters
 {
     [TestFixture]
     public class SetAttemptIncompleteTests : UnitTestBase

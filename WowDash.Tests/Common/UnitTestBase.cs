@@ -1,7 +1,7 @@
 ﻿using System;
 using WowDash.Infrastructure;
 
-namespace WowDash.Tests.Common
+namespace WowDash.UnitTests.Common
 {
     public abstract class UnitTestBase : IDisposable
     {
@@ -13,7 +13,7 @@ namespace WowDash.Tests.Common
         }
         public void Dispose()
         {
-            throw new NotImplementedException();
+            ApplicationContextFactory.Destroy(Context);
         }
     }
 }

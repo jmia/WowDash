@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace WowDash.Tests.Common
+namespace WowDash.UnitTests.Common
 {
     public static class TestConstants
     {
