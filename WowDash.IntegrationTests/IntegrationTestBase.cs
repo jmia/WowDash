@@ -12,6 +12,8 @@ namespace WowDash.IntegrationTests
     {
         private CustomWebApplicationFactory _factory;
         private Checkpoint _checkpoint;
+        // Haven't figured out how to get connection string from factory
+        private string _connectionString = "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         public HttpClient Client { get; set; }
 
@@ -32,14 +34,14 @@ namespace WowDash.IntegrationTests
         [SetUp]
         public async System.Threading.Tasks.Task RunBeforeEachTest()
         {
-            // Haven't figured out how to get connection string from factory
-            var connectionString = "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
-            await _checkpoint.Reset(connectionString);
+            await _checkpoint.Reset(_connectionString);
         }
 
         [OneTimeTearDown]
-        public void RunAfterTheseTests()
+        public async System.Threading.Tasks.Task RunAfterTheseTests()
         {
+            await _checkpoint.Reset(_connectionString); // Removes stray entities leftover from the last test
+
             Client.Dispose();
             _factory.Dispose();
         }
@@ -57,7 +59,6 @@ namespace WowDash.IntegrationTests
 
             await context.SaveChangesAsync();
 
-            // Leaves leftover player at the end of testing stray in DB
             // When I try to get one, it's Guid.Empty
         }
     }
