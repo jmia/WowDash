@@ -6,6 +6,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <!-- Removed as part of changing project SDK to Sdk.Web -->
   <!--<ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
