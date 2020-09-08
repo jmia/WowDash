@@ -18,7 +18,6 @@ namespace WowDash.WebUI.Controllers
         public CharactersController(ApplicationDbContext context)
         {
             _context = context;
-            // YO!
         }
 
         // GET: api/Characters
