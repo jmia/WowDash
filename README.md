@@ -19,6 +19,14 @@ http://localhost:8080
 
 ### Stuff For Me
 
+#### Some Business Logic
+
+```
+If the task is daily and `IsActive = false`, if it's >= 11AM EST (8AM PST, 15:00 UTC), mark `IsActive = true`.
+If the task is daily and `IsActive = false`, if it's >= 11AM EST (8AM PST, 15:00 UTC) on _Tuesday_, mark `IsActive = true`.
+If `IsActive = true`, don't mess with it.
+```
+
 #### Scripts
 
 ```
@@ -26,10 +34,6 @@ Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 ```
 
 #### Helpful Links
-
-##### EF Core
-
-- 
 
 ##### Vue + .NET Core
 
