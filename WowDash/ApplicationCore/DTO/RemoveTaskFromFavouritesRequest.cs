@@ -4,7 +4,7 @@ namespace WowDash.ApplicationCore.DTO
 {
     public class RemoveTaskFromFavouritesRequest
     {
-        public Guid TaskId { get; set; }
+        public Guid TaskId { get; }
 
         public RemoveTaskFromFavouritesRequest(Guid taskId)
         {
