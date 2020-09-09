@@ -25,7 +25,7 @@ namespace WowDash.UnitTests.Tasks
         }
 
         [Test]
-        public void GivenValidTask_AddsTaskToFavourites()
+        public void GivenValidTask_RemovesTaskFromFavourites()
         {
             // Arrange
             var task = new Task(_defaultPlayer.Id, TaskType.General);
