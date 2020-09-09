@@ -83,5 +83,37 @@ namespace WowDash.WebUI.Controllers
 
             return task.Id;
         }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> AddTaskToFavourites(AddTaskToFavouritesRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.IsFavourite = true;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> RemoveTaskFromFavourites(RemoveTaskFromFavouritesRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.IsFavourite = false;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
     }
 }
