@@ -67,5 +67,21 @@ namespace WowDash.WebUI.Controllers
 
             return task.Id;
         }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetTaskNotes(SetTaskNotesRequest request)
+        {            
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.Notes = string.IsNullOrWhiteSpace(request.Notes) ? null : request.Notes;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
     }
 }
