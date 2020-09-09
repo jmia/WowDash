@@ -19,11 +19,11 @@ http://localhost:8080
 
 ### Stuff For Me
 
-#### Some Business Logic Thing I Can't Decide Where To Put
+#### Some Business Logic Thing I Don't Want To Misplace
 
-If the task is daily and `IsActive = false`, if it's >= 11AM EST (8AM PST, 15:00 UTC), mark `IsActive = true`.
-If the task is daily and `IsActive = false`, if it's >= 11AM EST (8AM PST, 15:00 UTC) on _Tuesday_, mark `IsActive = true`.
-If `IsActive = true`, don't mess with it.
+- If the task is daily and `IsActive = false`, if it's >= 11AM EST (8AM PST, 15:00 UTC), mark `IsActive = true`.
+- If the task is daily and `IsActive = false`, if it's >= 11AM EST (8AM PST, 15:00 UTC) on _Tuesday_, mark `IsActive = true`.
+- If `IsActive = true`, don't mess with it.
 
 #### Scripts
 
