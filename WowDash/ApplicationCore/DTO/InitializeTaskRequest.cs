@@ -5,8 +5,8 @@ namespace WowDash.ApplicationCore.DTO
 {
     public class InitializeTaskRequest
     {
-        public Guid PlayerId { get; set; }
-        public TaskType TaskType { get; set; }
+        public Guid PlayerId { get; }
+        public TaskType TaskType { get; }
 
         public InitializeTaskRequest(Guid playerId, TaskType taskType)
         {

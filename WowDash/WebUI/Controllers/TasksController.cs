@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
@@ -30,7 +31,7 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetGeneralTaskDetails(SetGeneralTaskDetailsRequest request)
         {
@@ -48,7 +49,7 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetAchievementTaskDetails(SetAchievementTaskDetailsRequest request)
         {
@@ -68,7 +69,7 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetTaskNotes(SetTaskNotesRequest request)
         {            
@@ -84,7 +85,7 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> AddTaskToFavourites(AddTaskToFavouritesRequest request)
         {
@@ -100,7 +101,7 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> RemoveTaskFromFavourites(RemoveTaskFromFavouritesRequest request)
         {
@@ -111,6 +112,27 @@ namespace WowDash.WebUI.Controllers
 
             task.IsFavourite = false;
 
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        // Should this controller be messing with TaskCharacter entities?
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> DeleteTask(DeleteTaskRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == request.TaskId);
+
+            _context.TaskCharacters.RemoveRange(taskCharacters);
+            _context.SaveChanges();
+
+            _context.Tasks.Remove(task);
             _context.SaveChanges();
 
             return task.Id;

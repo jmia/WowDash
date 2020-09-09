@@ -25,7 +25,7 @@ namespace WowDash.UnitTests.TaskCharacters
         }
 
         [Test]
-        public void GivenAValidCharacter_RemovesTaskCharacterFromDatabase()
+        public void GivenATaskWithTwoTaskCharacters_RemovesOnlyOneTaskCharacterFromDatabase()
         {
             // Arrange
             var task = new Task(_defaultPlayer.Id, TaskType.General);
@@ -51,6 +51,32 @@ namespace WowDash.UnitTests.TaskCharacters
             // Assert
             foundTaskCharacters.Count().Should().Be(1);
             foundTaskCharacters.Should().NotContain(tc => tc.CharacterId == character.Id);
+        }
+
+        [Test]
+        public void GivenATaskWithAValidCharacter_RemovesTaskCharacterFromDatabase()
+        {
+            // Arrange
+            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var character = new Character { PlayerId = _defaultPlayer.Id };
+
+            Context.Tasks.Add(task);
+            Context.Characters.Add(character);
+
+            var taskCharacter = new TaskCharacter(character.Id, task.Id);
+
+            Context.TaskCharacters.Add(taskCharacter);
+            Context.SaveChanges();
+
+            var dto = new RemoveCharacterFromTaskRequest(character.Id, task.Id);
+
+            // Act
+            var result = _controller.RemoveCharacterFromTask(dto);
+
+            var foundTaskCharacters = Context.TaskCharacters.Where(tc => tc.TaskId == task.Id);
+
+            // Assert
+            foundTaskCharacters.Should().BeEmpty();
         }
 
         [Test]

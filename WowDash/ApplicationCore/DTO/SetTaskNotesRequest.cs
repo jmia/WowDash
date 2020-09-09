@@ -4,7 +4,7 @@ namespace WowDash.ApplicationCore.DTO
 {
     public class SetTaskNotesRequest
     {
-        public Guid TaskId { get; set; }
+        public Guid TaskId { get; }
         public string Notes { get; }
 
         public SetTaskNotesRequest(Guid taskId, string notes)

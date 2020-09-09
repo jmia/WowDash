@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,7 +70,7 @@ namespace WowDash.UnitTests.TaskCharacters
                 tc.TaskId == thirdTask.Id);
 
             // Assert
-            result.Should().BeTrue();
+            Assert.IsInstanceOf<NoContentResult>(result);
             foundTaskCharacters.All(tc => tc.IsActive == true);
         }
 
@@ -119,7 +120,7 @@ namespace WowDash.UnitTests.TaskCharacters
                 tc => tc.TaskId == thirdTask.Id);
 
             // Assert
-            result.Should().BeTrue();
+            Assert.IsInstanceOf<NoContentResult>(result);
             dailyTaskCharacters.All(tc => tc.IsActive == true);
             weeklyTaskCharacters.All(tc => tc.IsActive == false);
         }
@@ -169,7 +170,7 @@ namespace WowDash.UnitTests.TaskCharacters
                 tc.TaskId == thirdTask.Id);
 
             // Assert
-            result.Should().BeTrue();
+            Assert.IsInstanceOf<NoContentResult>(result);
             foundTaskCharacters.All(tc => tc.IsActive == false);
         }
     }

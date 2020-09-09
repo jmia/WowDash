@@ -2,11 +2,11 @@
 
 namespace WowDash.ApplicationCore.DTO
 {
-    public class AddTaskToFavouritesRequest
+    public class DeleteTaskRequest
     {
         public Guid TaskId { get; }
 
-        public AddTaskToFavouritesRequest(Guid taskId)
+        public DeleteTaskRequest(Guid taskId)
         {
             TaskId = taskId;
         }

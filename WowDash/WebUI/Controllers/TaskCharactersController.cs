@@ -46,7 +46,7 @@ namespace WowDash.WebUI.Controllers
             return taskCharacter;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TaskCharacter> SetAttemptComplete(SetAttemptCompleteRequest request)
         {
@@ -61,7 +61,7 @@ namespace WowDash.WebUI.Controllers
             return taskCharacter;
         }
 
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TaskCharacter> SetAttemptIncomplete(SetAttemptIncompleteRequest request)
         {
@@ -77,19 +77,21 @@ namespace WowDash.WebUI.Controllers
         }
 
         // Is this a Tasks controller method or a TaskCharacters controller method?
-        public bool RefreshDailyTaskCharacters()
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult RefreshDailyTaskCharacters()
         {
             var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Daily);
 
             if (tasks is null)
-                return true;
+                return NoContent();
 
             foreach (var task in tasks)
             {
                 var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
 
                 if (taskCharacters is null)
-                    return true;
+                    return NoContent();
 
                 foreach (var taskCharacter in taskCharacters)
                 {
@@ -97,22 +99,24 @@ namespace WowDash.WebUI.Controllers
                 }
             }
 
-            return true;    // This always returns true, what do?
+            return NoContent();
         }
 
-        public bool RefreshWeeklyTaskCharacters()
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult RefreshWeeklyTaskCharacters()
         {
             var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Weekly);
 
             if (tasks is null)
-                return true;
+                return NoContent();
 
             foreach (var task in tasks)
             {
                 var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
 
                 if (taskCharacters is null)
-                    return true;
+                    return NoContent();
 
                 foreach (var taskCharacter in taskCharacters)
                 {
@@ -120,7 +124,7 @@ namespace WowDash.WebUI.Controllers
                 }
             }
 
-            return true;
+            return NoContent();
         }
     }
 }
