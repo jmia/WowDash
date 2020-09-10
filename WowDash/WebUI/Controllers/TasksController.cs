@@ -71,6 +71,24 @@ namespace WowDash.WebUI.Controllers
 
         [HttpPatch]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetCollectibleTaskDetails(SetCollectibleTaskDetailsRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.Description = request.Description;
+            task.RefreshFrequency = request.RefreshFrequency;
+            task.Priority = request.Priority;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetTaskNotes(SetTaskNotesRequest request)
         {            
             var task = _context.Tasks.Find(request.TaskId);
