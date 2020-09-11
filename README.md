@@ -39,7 +39,7 @@ http://localhost:8080
 Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 ```
 
-#### Helpful Links
+#### References
 
 ##### Vue + .NET Core
 
@@ -59,26 +59,3 @@ Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 
 - [curl to C# Converter](https://curl.olsh.me/)
 - [Querying Blizzard APIs](https://www.reddit.com/r/wowgoblins/comments/bz9zth/c_tutorial_how_to_query_information_from_blizzard/)
-
-#### Version Numbers
-
-##### C# Stuff
-
-- `.NetCoreApp` 3.1
-- `EntityFrameworkCore.SqlServer` & `Tools` 3.1.5
-- `EntityFrameworkCore.InMemory` 3.1.6
-- `VueCliMiddleware` 3.3.1
-- `NUnit` 3.12.0
-- `Moq` 4.14.5
-
-##### npm
-
-- `axios` 0.19.2
-- `babel-eslint` 10.1.0
-- `core-js` 3.6.5
-
-- `eslint` 6.7.2
-- `eslint-plugin-vue` 6.2.2
-- `vue` 2.6.11
-- `vue-cli` (including `plugin-babel` and `plugin-eslint`) 4.4.1
-- `vue-router` 3.3.2
