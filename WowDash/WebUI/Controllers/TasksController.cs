@@ -123,13 +123,25 @@ namespace WowDash.WebUI.Controllers
         }
 
         /// <summary>
-        /// Sets a task's notes. Null or whitespace notes will be set to `null`.
+        /// Adds details to a collectible task.
         /// </summary>
+        /// <remarks>
+        /// `RefreshFrequency`:<br />
+        /// `0` for Never.<br />
+        /// `1` for Daily. <br />
+        /// `2` for Weekly.<br /><br />
+        /// `Priority`:<br />
+        /// `0` for Lowest.<br />
+        /// `1` for Low.<br />
+        /// `2` for Medium.<br />
+        /// `4` for High.<br />
+        /// `5` for Highest.
+        /// </remarks>
         /// <param name="request"></param>
         /// <response code="200">Returns the ID of the updated task.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
         /// <response code="404">If the task was not found in the database.</response>
-        [HttpPatch("notes")]
+        [HttpPatch("collectible/details")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -149,7 +161,16 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Sets a task's notes. Null or whitespace notes will be set to `null`.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("notes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetTaskNotes(SetTaskNotesRequest request)
         {            
