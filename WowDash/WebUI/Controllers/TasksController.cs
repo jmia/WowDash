@@ -58,8 +58,8 @@ namespace WowDash.WebUI.Controllers
         /// `0` for Lowest.<br />
         /// `1` for Low.<br />
         /// `2` for Medium.<br />
-        /// `4` for High.<br />
-        /// `5` for Highest.
+        /// `3` for High.<br />
+        /// `4` for Highest.
         /// </remarks>
         /// <param name="request"></param>
         /// <response code="200">Returns the ID of the updated task.</response>
@@ -93,8 +93,8 @@ namespace WowDash.WebUI.Controllers
         /// `0` for Lowest.<br />
         /// `1` for Low.<br />
         /// `2` for Medium.<br />
-        /// `4` for High.<br />
-        /// `5` for Highest.
+        /// `3` for High.<br />
+        /// `4` for Highest.
         /// </remarks>
         /// <param name="request"></param>
         /// <response code="200">Returns the ID of the updated task.</response>
@@ -134,8 +134,8 @@ namespace WowDash.WebUI.Controllers
         /// `0` for Lowest.<br />
         /// `1` for Low.<br />
         /// `2` for Medium.<br />
-        /// `4` for High.<br />
-        /// `5` for Highest.
+        /// `3` for High.<br />
+        /// `4` for Highest.
         /// </remarks>
         /// <param name="request"></param>
         /// <response code="200">Returns the ID of the updated task.</response>
@@ -155,6 +155,45 @@ namespace WowDash.WebUI.Controllers
             task.Description = request.Description;
             task.RefreshFrequency = request.RefreshFrequency;
             task.Priority = request.Priority;
+
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        /// <summary>
+        /// Adds collectible type and source to a collectible task.
+        /// </summary>
+        /// <remarks>
+        /// `CollectibleType`:<br />
+        /// `0` for Item.<br />
+        /// `1` for ItemSet. <br />
+        /// `2` for Mount.<br />
+        /// `3` for Pet.<br /><br />
+        /// `Priority`:<br />
+        /// `0` for Dungeon.<br />
+        /// `1` for Quest.<br />
+        /// `2` for Vendor.<br />
+        /// `3` for WorldDrop.<br />
+        /// `4` for Other.
+        /// </remarks>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("collectible/type-source")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetTaskCollectibleTypeAndSource(SetTaskCollectibleTypeAndSourceRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.CollectibleType = request.CollectibleType;
+            task.Source = request.Source;
 
             _context.SaveChanges();
 
