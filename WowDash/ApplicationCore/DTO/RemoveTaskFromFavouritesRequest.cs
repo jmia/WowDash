@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WowDash.ApplicationCore.DTO
 {
     public class RemoveTaskFromFavouritesRequest
     {
-        public Guid TaskId { get; }
+        [Required]
+        public Guid TaskId { get; set; }
 
         public RemoveTaskFromFavouritesRequest(Guid taskId)
         {

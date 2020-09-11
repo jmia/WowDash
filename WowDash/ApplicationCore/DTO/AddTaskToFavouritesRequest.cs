@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WowDash.ApplicationCore.DTO
 {
     public class AddTaskToFavouritesRequest
     {
-        public Guid TaskId { get; }
+        [Required]
+        public Guid TaskId { get; set; }
 
         public AddTaskToFavouritesRequest(Guid taskId)
         {
