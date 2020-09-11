@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Transactions;
 
 namespace WowDash.ApplicationCore.Entities
 {
     /// <summary>
-    /// This is a joining/bridging class for tasks & characters.
+    /// This is a joining/bridging class for tasks and characters.
     /// </summary>
     public class TaskCharacter
     {
