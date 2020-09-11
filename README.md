@@ -4,16 +4,24 @@ http://localhost:8080
 
 ### This application is built with:
 - [.Net Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
-- Entity Framework
+- Entity Framework Core 3.1.5
 - [Vue 2.6](https://vuejs.org/v2/guide/)
 - [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
 - JavaScript
 
 ### This application is tested with:
 - [NUnit](https://docs.nunit.org/)
-- [EF Core In Memory Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/testing-sample)
+- [EF Core In Memory Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/testing-sample) 3.1.7
+- [SQL Server Express LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver15)
+
+### This application uses the following NuGet packages:
+#### For testing
 - [Moq](https://github.com/Moq/moq4/wiki/Quickstart)
+- [Respawn](https://github.com/jbogard/Respawn)
 - [FluentAssertions](https://fluentassertions.com/)
+#### For development
+- VueCliMiddleware 3.1.1
+- [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio) 5.5.1
 
 -----
 
@@ -31,7 +39,7 @@ http://localhost:8080
 Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 ```
 
-#### Helpful Links
+#### References
 
 ##### Vue + .NET Core
 
@@ -51,26 +59,3 @@ Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 
 - [curl to C# Converter](https://curl.olsh.me/)
 - [Querying Blizzard APIs](https://www.reddit.com/r/wowgoblins/comments/bz9zth/c_tutorial_how_to_query_information_from_blizzard/)
-
-#### Version Numbers
-
-##### C# Stuff
-
-- `.NetCoreApp` 3.1
-- `EntityFrameworkCore.SqlServer` & `Tools` 3.1.5
-- `EntityFrameworkCore.InMemory` 3.1.6
-- `VueCliMiddleware` 3.3.1
-- `NUnit` 3.12.0
-- `Moq` 4.14.5
-
-##### npm
-
-- `axios` 0.19.2
-- `babel-eslint` 10.1.0
-- `core-js` 3.6.5
-
-- `eslint` 6.7.2
-- `eslint-plugin-vue` 6.2.2
-- `vue` 2.6.11
-- `vue-cli` (including `plugin-babel` and `plugin-eslint`) 4.4.1
-- `vue-router` 3.3.2

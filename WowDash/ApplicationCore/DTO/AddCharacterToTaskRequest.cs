@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WowDash.ApplicationCore.DTO
 {
     public class AddCharacterToTaskRequest
     {
-        public Guid CharacterId { get; }
-        public Guid TaskId { get; }
+        [Required]
+        public Guid CharacterId { get; set; }
+        [Required]
+        public Guid TaskId { get; set; }
 
         public AddCharacterToTaskRequest(Guid characterId, Guid taskId)
         {

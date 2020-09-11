@@ -1,12 +1,15 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.DTO
 {
     public class InitializeTaskRequest
     {
-        public Guid PlayerId { get; }
-        public TaskType TaskType { get; }
+        [Required]
+        public Guid PlayerId { get; set;  }
+        [Required]
+        public TaskType TaskType { get; set; }
 
         public InitializeTaskRequest(Guid playerId, TaskType taskType)
         {

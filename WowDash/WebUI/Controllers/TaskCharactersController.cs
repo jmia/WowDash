@@ -8,6 +8,7 @@ using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.WebUI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/task-characters")]
     [ApiController]
     public class TaskCharactersController : ControllerBase
@@ -19,18 +20,36 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Adds a character to a task.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<TaskCharacter> AddCharacterToTask(AddCharacterToTaskRequest request)
         {
+            // TODO: Validation
+
             var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
 
             _context.TaskCharacters.Add(taskCharacter);
             _context.SaveChanges();
 
+            // TODO: Change the return type
             return taskCharacter;
+
+            // TODO: Update the XML docs.
         }
 
+        /// <summary>
+        /// Removes a character from a task.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
         public ActionResult<TaskCharacter> RemoveCharacterFromTask(RemoveCharacterFromTaskRequest request)
@@ -46,7 +65,14 @@ namespace WowDash.WebUI.Controllers
             return taskCharacter;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Sets a character's attempt complete for the task's refresh frequency.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPatch("complete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TaskCharacter> SetAttemptComplete(SetAttemptCompleteRequest request)
         {
@@ -61,7 +87,14 @@ namespace WowDash.WebUI.Controllers
             return taskCharacter;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Sets a character's attempt incomplete (re-enables attempt) for the task's refresh frequency.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPatch("incomplete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TaskCharacter> SetAttemptIncomplete(SetAttemptIncompleteRequest request)
         {
@@ -76,8 +109,11 @@ namespace WowDash.WebUI.Controllers
             return taskCharacter;
         }
 
-        // Is this a Tasks controller method or a TaskCharacters controller method?
-        [HttpPost]
+        /// <summary>
+        /// Resets all attempts for characters on tasks with a daily refresh frequency.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("refresh/daily")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult RefreshDailyTaskCharacters()
         {
@@ -102,7 +138,11 @@ namespace WowDash.WebUI.Controllers
             return NoContent();
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Resets all attempts for characters on tasks with a daily refresh frequency.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("refresh/weekly")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult RefreshWeeklyTaskCharacters()
         {
