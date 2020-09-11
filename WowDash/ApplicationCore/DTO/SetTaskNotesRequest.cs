@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace WowDash.ApplicationCore.DTO
 {
     public class SetTaskNotesRequest
     {
-        public Guid TaskId { get; }
-        public string Notes { get; }
+        [Required]
+        public Guid TaskId { get; set; }
+        public string Notes { get; set; }
 
         public SetTaskNotesRequest(Guid taskId, string notes)
         {

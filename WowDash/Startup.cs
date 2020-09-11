@@ -6,6 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using VueCliMiddleware;
 using WowDash.Infrastructure;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace WowDash.WebUI
 {
@@ -33,6 +36,14 @@ namespace WowDash.WebUI
             {
                 configuration.RootPath = "WebUI/ClientApp/dist";
             });
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c => {
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,10 +65,22 @@ namespace WowDash.WebUI
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;   // TODO: Remove this when there's a real app to look at
+            });
+
             app.UseRouting();
 
             // TODO: Should this use MVC?
             // app.UseMvc();
+
 
             app.UseEndpoints(endpoints =>
             {

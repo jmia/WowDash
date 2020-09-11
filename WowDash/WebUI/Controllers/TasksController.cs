@@ -9,6 +9,7 @@ using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.WebUI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/tasks")]
     [ApiController]
     public class TasksController : ControllerBase
@@ -20,7 +21,21 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new task.
+        /// </summary>
+        /// <remarks>
+        /// `TaskType`:<br />
+        /// `0` for General Tasks.<br />
+        /// `1` for Achievements.<br />
+        /// `2` for Collectibles.
+        /// </remarks>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the created task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
         {
             var task = new Task(request.PlayerId, request.TaskType);
@@ -31,7 +46,28 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Adds details to a general task.
+        /// </summary>
+        /// <remarks>
+        /// `RefreshFrequency`:<br />
+        /// `0` for Never.<br />
+        /// `1` for Daily. <br />
+        /// `2` for Weekly.<br /><br />
+        /// `Priority`:<br />
+        /// `0` for Lowest.<br />
+        /// `1` for Low.<br />
+        /// `2` for Medium.<br />
+        /// `4` for High.<br />
+        /// `5` for Highest.
+        /// </remarks>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("general/details")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetGeneralTaskDetails(SetGeneralTaskDetailsRequest request)
         {
@@ -49,7 +85,24 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Adds details to an achievement-type task.
+        /// </summary>
+        /// <remarks>
+        /// `Priority`:<br />
+        /// `0` for Lowest.<br />
+        /// `1` for Low.<br />
+        /// `2` for Medium.<br />
+        /// `4` for High.<br />
+        /// `5` for Highest.
+        /// </remarks>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("achievement/details")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetAchievementTaskDetails(SetAchievementTaskDetailsRequest request)
         {
@@ -69,7 +122,16 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Sets a task's notes. Null or whitespace notes will be set to `null`.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("notes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> SetTaskNotes(SetTaskNotesRequest request)
         {            
@@ -85,7 +147,16 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Adds a task to a user's favourites list.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("favourites/add")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> AddTaskToFavourites(AddTaskToFavouritesRequest request)
         {
@@ -101,7 +172,16 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        [HttpPatch]
+        /// <summary>
+        /// Removes a task from a user's favourites list.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
+        [HttpPatch("favourites/remove")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> RemoveTaskFromFavourites(RemoveTaskFromFavouritesRequest request)
         {
@@ -117,8 +197,16 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
-        // Should this controller be messing with TaskCharacter entities?
+        /// <summary>
+        /// Removes a task.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the deleted task.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task was not found in the database.</response>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> DeleteTask(DeleteTaskRequest request)
         {
