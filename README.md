@@ -4,16 +4,24 @@ http://localhost:8080
 
 ### This application is built with:
 - [.Net Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
-- Entity Framework
+- Entity Framework Core 3.1.5
 - [Vue 2.6](https://vuejs.org/v2/guide/)
 - [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
 - JavaScript
 
 ### This application is tested with:
 - [NUnit](https://docs.nunit.org/)
-- [EF Core In Memory Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/testing-sample)
+- [EF Core In Memory Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/testing/testing-sample) 3.1.7
+- [SQL Server Express LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver15)
+
+### This application uses the following NuGet packages:
+#### For testing
 - [Moq](https://github.com/Moq/moq4/wiki/Quickstart)
+- [Respawn](https://github.com/jbogard/Respawn)
 - [FluentAssertions](https://fluentassertions.com/)
+#### For development
+- VueCliMiddleware 3.1.1
+- [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio) 5.5.1
 
 -----
 
