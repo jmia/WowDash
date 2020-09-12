@@ -33,6 +33,8 @@ namespace WowDash.ApplicationCore.DTO
         /// </summary>
         public string Description { get; set; }
 
+        public GameDataReferenceItem() { }
+
         public GameDataReferenceItem(int? id, int? gameId, GameDataType type, string subclass, string description)
         {
             Id = id;

@@ -8,9 +8,14 @@ namespace WowDash
     {
         [Required]
         public Guid TaskId { get; set; }
+        /// <summary>
+        /// The name of the achievement.
+        /// </summary>
         public string Description { get; set; }
         [Required]
         public Priority Priority { get; set; }
+
+        public SetAchievementTaskDetailsRequest() { }
 
         public SetAchievementTaskDetailsRequest(Guid taskId, string description, Priority priority)
         {

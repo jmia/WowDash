@@ -8,6 +8,8 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public Guid TaskId { get; set; }
 
+        public DeleteTaskRequest() { }
+
         public DeleteTaskRequest(Guid taskId)
         {
             TaskId = taskId;

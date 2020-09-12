@@ -7,12 +7,17 @@ namespace WowDash.ApplicationCore.DTO
     public class SetCollectibleTaskDetailsRequest
     {
         [Required]
-        public Guid TaskId { get; }
-        public string Description { get; }
+        public Guid TaskId { get; set;  }
+        /// <summary>
+        /// A UI-set description of the task.
+        /// </summary>
+        public string Description { get; set; }
         [Required]
-        public RefreshFrequency RefreshFrequency { get; }
+        public RefreshFrequency RefreshFrequency { get; set; }
         [Required]
-        public Priority Priority { get; }
+        public Priority Priority { get; set; }
+
+        public SetCollectibleTaskDetailsRequest() { }
 
         public SetCollectibleTaskDetailsRequest(Guid taskId, string description, RefreshFrequency refreshFrequency,
             Priority priority)

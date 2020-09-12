@@ -8,6 +8,8 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public Guid TaskId { get; set; }
 
+        public RemoveTaskFromFavouritesRequest() { }
+
         public RemoveTaskFromFavouritesRequest(Guid taskId)
         {
             TaskId = taskId;

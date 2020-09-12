@@ -10,6 +10,8 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public Guid TaskId { get; set; }
 
+        public SetAttemptCompleteRequest() { }
+
         public SetAttemptCompleteRequest(Guid characterId, Guid taskId)
         {
             CharacterId = characterId;

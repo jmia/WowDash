@@ -11,10 +11,7 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public TaskType TaskType { get; set; }
 
-        public InitializeTaskRequest()
-        {
-
-        }
+        public InitializeTaskRequest() { }
 
         public InitializeTaskRequest(Guid playerId, TaskType taskType)
         {

@@ -13,6 +13,8 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public Source Source { get; set; }
 
+        public SetTaskCollectibleTypeAndSourceRequest() { }
+
         public SetTaskCollectibleTypeAndSourceRequest(Guid taskId, CollectibleType collectibleType, Source source)
         {
             TaskId = taskId;

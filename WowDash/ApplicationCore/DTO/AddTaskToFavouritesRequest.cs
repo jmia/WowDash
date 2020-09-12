@@ -8,6 +8,8 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public Guid TaskId { get; set; }
 
+        public AddTaskToFavouritesRequest() { }
+
         public AddTaskToFavouritesRequest(Guid taskId)
         {
             TaskId = taskId;
