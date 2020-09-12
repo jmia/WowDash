@@ -39,27 +39,43 @@ namespace WowDash.ApplicationCore.Entities
     [Owned]
     public class GameDataReference
     {
-        /// <summary>
-        /// The database-generated ID of the reference.
-        /// </summary>
         public int Id { get; set; }
         /// <summary>
         /// The ID of the record on the Blizzard API (or the Wowhead Database).
         /// </summary>
-        public int? GameId { get; set; }
-        /// <summary>
-        /// The type or category (i.e. endpoint) of data reference.
-        /// </summary>
-        public GameDataType Type { get; set; }
+        public int? GameId { get; private set; }
+        public GameDataType Type { get; private set; }
         /// <summary>
         /// The subclass of the reference (e.g. toy, weapon)
         /// </summary>
-        public string Subclass { get; set; }
+        public string Subclass { get; private set; }
         /// <summary>
-        /// A string display of the data.
+        /// A description of the reference. For achievements,
+        /// this is a description of the achievement requirements.
+        /// For items and NPCs, this is their name.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; private set; }
 
+        public GameDataReference(int? gameId, GameDataType type, string subclass, string description)
+        {
+            GameId = gameId;
+            Type = type;
+            Subclass = subclass;
+            Description = description;
+        }
+
+        /// <summary>
+        /// The type or category (i.e. endpoint) of data reference.<br />
+        /// `0` for Achievement<br />
+        /// `1` for Item<br />
+        /// `2` for ItemSet<br />
+        /// `3` for JournalInstance (Dungeon or raid)<br />
+        /// `4` for JournalEncounter (Boss)<br />
+        /// `5` for NPC (Manually entered)<br />
+        /// `6` for Pet (Battle pets)<br />
+        /// `7` for Quest<br />
+        /// `8` for QuestArea (Zone)
+        /// </summary>
         public enum GameDataType
         {
             Achievement,
