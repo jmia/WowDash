@@ -16,12 +16,13 @@ http://localhost:8080
 
 ### This application uses the following NuGet packages:
 #### For testing
-- [Moq](https://github.com/Moq/moq4/wiki/Quickstart)
-- [Respawn](https://github.com/jbogard/Respawn)
-- [FluentAssertions](https://fluentassertions.com/)
+- [Moq](https://github.com/Moq/moq4/wiki/Quickstart) for mocking dependencies for tests.
+- [Respawn](https://github.com/jbogard/Respawn) for resetting the test database after integration tests run.
+- [FluentAssertions](https://fluentassertions.com/) to make test assertions more human-readable.
 #### For development
-- VueCliMiddleware 3.1.1
-- [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio) 5.5.1
+- VueCliMiddleware 3.1.1 to allow the application to run CLI inputs while building and running the application.
+- [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio) 5.5.1 to provide documentation for the API project
+- [NodaTime](https://nodatime.org/3.0.x/userguide/index) 3.0.0 for clean `DateTime` and `DateTimeOffset` conversions.
 
 -----
 
