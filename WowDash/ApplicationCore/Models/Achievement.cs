@@ -16,6 +16,8 @@ namespace WowDash.ApplicationCore.Models
         public bool IsAccountWide { get; set; }
         [JsonPropertyName("criteria")]
         public AchievementCriteria Criteria { get; set; }
+        [JsonPropertyName("reward_item")]
+        public Item RewardItem { get; set; }
     }
 
     public class AchievementCriteria

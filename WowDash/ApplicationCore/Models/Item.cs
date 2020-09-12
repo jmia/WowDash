@@ -20,6 +20,8 @@ namespace WowDash.ApplicationCore.Models
         public ItemClass Class { get; set; }
         [JsonPropertyName("item_subclass")]
         public ItemSubclass Subclass { get; set; }
+        [JsonPropertyName("toy")]
+        public string Toy { get; set; }
 
         /// <summary>
         /// An item's quality
