@@ -21,7 +21,7 @@ http://localhost:8080
 - [FluentAssertions](https://fluentassertions.com/) to make test assertions more human-readable.
 #### For development
 - VueCliMiddleware 3.1.1 to allow the application to run CLI inputs while building and running the application.
-- [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio) 5.5.1 to provide documentation for the API project
+- [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio) 5.5.1 to help display my documentation and schemas for my API.
 - [NodaTime](https://nodatime.org/3.0.x/userguide/index) 3.0.0 for clean `DateTime` and `DateTimeOffset` conversions.
 
 -----
