@@ -23,7 +23,7 @@ namespace WowDash.IntegrationTests.Tasks
         }
 
         [Test]
-        public async System.Threading.Tasks.Task InitializeTaskEndpoint_AddsTaskToDatabaseAsync()
+        public async System.Threading.Tasks.Task InitializeTaskEndpoint_AddsTask()
         {
             // {
             //    "playerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -62,12 +62,121 @@ namespace WowDash.IntegrationTests.Tasks
             var response = await httpResponse.Content.ReadAsStreamAsync();
             var result = await JsonSerializer.DeserializeAsync<Guid>(response);
 
-            var foundTask = FindAsync<Task>(result).Result;
+            var foundTask = await FindAsync<Task>(result);
 
             // Assert
             foundTask.Should().NotBeNull();
             foundTask.PlayerId.Should().Be(defaultPlayerId);
             foundTask.TaskType.Should().Be(TaskType.Achievement);
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task DeleteTask_DeletesTask()
+        {
+            //{
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            //}
+
+            // Arrange
+            var task = await AddAsync(new Task(defaultPlayerId, TaskType.General));
+
+            // Act
+            var httpResponse = await Client.DeleteAsync($"/api/tasks/{task.Id}");
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+            var result = await JsonSerializer.DeserializeAsync<Guid>(response);
+
+            var foundTask = FindAsync<Task>(result).Result;
+
+            // Assert
+            foundTask.Should().BeNull();
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task SetGeneralTaskDetails_UpdatesTask()
+        {
+            //{
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //      "description": "string",
+            //      "refreshFrequency": 0,
+            //      "priority": 0
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task SetAchievementTaskDetails_UpdatesTask()
+        {
+            //{
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //    "description": "string",
+            //    "priority": 0
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task SetCollectibleTaskDetails_UpdatesTask()
+        {
+
+            //{
+            //  "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //  "description": "string",
+            //  "refreshFrequency": 0,
+            //  "priority": 0
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task SetTaskCollectibleTypeAndSource_UpdatesTask()
+        {
+            //{
+            //  "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //  "collectibleType": 0,
+            //  "source": 0
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task SetGameDataReferences_UpdatesTask()
+        {
+            //{
+            //  "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //  "gameDataReferenceItems": [
+            //    {
+            //      "id": 0,
+            //      "gameId": 0,
+            //      "type": 0,
+            //      "subclass": "string",
+            //      "description": "string"
+            //    }
+            //  ]
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task SetTaskNotes_UpdatesTask()
+        {
+            //{
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //    "notes": "string"
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task AddTaskToFavourites_UpdatesTask()
+        {
+            //{
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            //}
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task RemoveTaskFromFavourites_UpdatesTask()
+        {
+            //{
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            //}
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Respawn;
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WowDash.Infrastructure;

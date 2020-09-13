@@ -254,22 +254,22 @@ namespace WowDash.WebUI.Controllers
         /// <summary>
         /// Removes a task.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="taskId">The ID of the task.</param>
         /// <response code="200">Returns the ID of the deleted task.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
         /// <response code="404">If the task was not found in the database.</response>
-        [HttpDelete]
+        [HttpDelete("{taskId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Guid> DeleteTask(DeleteTaskRequest request)
+        public ActionResult<Guid> DeleteTask(Guid taskId)
         {
-            var task = _context.Tasks.Find(request.TaskId);
+            var task = _context.Tasks.Find(taskId);
 
             if (task is null)
                 return NotFound();
 
-            var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == request.TaskId);
+            var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == taskId);
 
             _context.TaskCharacters.RemoveRange(taskCharacters);
             _context.SaveChanges();

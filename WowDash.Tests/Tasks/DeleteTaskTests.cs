@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
 using WowDash.WebUI.Controllers;
@@ -34,10 +33,8 @@ namespace WowDash.UnitTests.Tasks
             Context.Tasks.Add(task);
             Context.SaveChanges();
 
-            var dto = new DeleteTaskRequest(task.Id);
-
             // Act
-            var result = _controller.DeleteTask(dto);
+            var result = _controller.DeleteTask(task.Id);
 
             var removedTask = Context.Tasks.Find(result.Value);
 
@@ -66,10 +63,8 @@ namespace WowDash.UnitTests.Tasks
             Context.TaskCharacters.AddRange(taskCharacters);
             Context.SaveChanges();
 
-            var dto = new DeleteTaskRequest(task.Id);
-
             // Act
-            var result = _controller.DeleteTask(dto);
+            var result = _controller.DeleteTask(task.Id);
 
             var removedTaskCharacters = Context.TaskCharacters.Where(tc => tc.TaskId == task.Id);
 
@@ -80,11 +75,8 @@ namespace WowDash.UnitTests.Tasks
         [Test]
         public void GivenAnInvalidTask_ReturnsNotFound()
         {
-            // Arrange
-            var dto = new DeleteTaskRequest(TestConstants.AllOnesGuid);
-
-            // Act
-            var result = _controller.DeleteTask(dto);
+            // Arrange, Act
+            var result = _controller.DeleteTask(TestConstants.AllOnesGuid);
 
             // Assert
             Assert.IsInstanceOf<NotFoundResult>(result.Result);
