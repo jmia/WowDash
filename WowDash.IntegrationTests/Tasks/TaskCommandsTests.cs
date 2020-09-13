@@ -31,7 +31,7 @@ namespace WowDash.IntegrationTests.Tasks
             // };
 
             // Arrange
-            var expectedTaskType = (int)TaskType.Achievement;
+            var expectedTaskType = TaskType.Achievement;
             string json;
 
             var options = new JsonWriterOptions
@@ -45,7 +45,7 @@ namespace WowDash.IntegrationTests.Tasks
                 {
                     writer.WriteStartObject();
                     writer.WriteString("playerId", defaultPlayerId);
-                    writer.WriteNumber("taskType", expectedTaskType);
+                    writer.WriteNumber("taskType", (int)expectedTaskType);
                     writer.WriteEndObject();
                 }
 
@@ -67,7 +67,7 @@ namespace WowDash.IntegrationTests.Tasks
             // Assert
             foundTask.Should().NotBeNull();
             foundTask.PlayerId.Should().Be(defaultPlayerId);
-            foundTask.TaskType.Should().Be(TaskType.Achievement);
+            foundTask.TaskType.Should().Be(expectedTaskType);
         }
 
         [Test]
@@ -98,11 +98,58 @@ namespace WowDash.IntegrationTests.Tasks
         public async System.Threading.Tasks.Task SetGeneralTaskDetails_UpdatesTask()
         {
             //{
-            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //      "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             //      "description": "string",
             //      "refreshFrequency": 0,
             //      "priority": 0
             //}
+
+            // Arrange
+            var task = await AddAsync(new Task(defaultPlayerId, TaskType.General));
+
+            var expectedDescription = "Reach exalted with the Defilers";
+            var expectedRefreshFrequency = RefreshFrequency.Weekly;
+            var expectedPriority = Priority.Highest;
+            string json;
+
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream, options))
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("taskId", task.Id);
+                    writer.WriteString("description", expectedDescription);
+                    writer.WriteNumber("refreshFrequency", (int)expectedRefreshFrequency);
+                    writer.WriteNumber("priority", (int)expectedPriority);
+                    writer.WriteEndObject();
+                }
+
+                json = Encoding.UTF8.GetString(stream.ToArray());
+            }
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var httpResponse = await Client.PatchAsync("/api/tasks/general/details", content);
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+            var result = await JsonSerializer.DeserializeAsync<Guid>(response);
+
+            var foundTask = await FindAsync<Task>(result);
+
+            // Assert
+            foundTask.Should().NotBeNull();
+            foundTask.PlayerId.Should().Be(defaultPlayerId);
+            foundTask.Description.Should().Be(expectedDescription);
+            foundTask.RefreshFrequency.Should().Be(expectedRefreshFrequency);
+            foundTask.Priority.Should().Be(expectedPriority);
         }
 
         [Test]
