@@ -10,7 +10,7 @@ namespace WowDash.IntegrationTests.Responses
     /// front end caller. It's mapped to an object for 
     /// ease of testing.
     /// </summary>
-    public class GetPlayerResponse
+    public class GetPlayerResponse      // TODO: Delete this when queries are built for this endpoint
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }

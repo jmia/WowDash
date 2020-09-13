@@ -46,7 +46,7 @@ namespace WowDash.UnitTests.TaskCharacters
             var foundTaskCharacter = Context.TaskCharacters.Find(result.Value.CharacterId, result.Value.TaskId);
 
             // Assert
-            foundTaskCharacter.IsActive.Should().Be(false);
+            foundTaskCharacter.IsActive.Should().BeFalse();
         }
     }
 }
