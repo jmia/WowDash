@@ -14,6 +14,8 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public ICollection<GameDataReferenceItem> GameDataReferenceItems { get; set; }
 
+        public SetGameDataReferencesRequest() { }
+
         public SetGameDataReferencesRequest(Guid taskId, ICollection<GameDataReferenceItem> gameDataReferenceItems)
         {
             TaskId = taskId;

@@ -8,11 +8,16 @@ namespace WowDash
     {
         [Required]
         public Guid TaskId { get; set; }
+        /// <summary>
+        /// A player-set description of the task.
+        /// </summary>
         public string Description { get; set; }
         [Required]
         public RefreshFrequency RefreshFrequency { get; set; }
         [Required]
         public Priority Priority { get; set; }
+
+        public SetGeneralTaskDetailsRequest() { }
 
         public SetGeneralTaskDetailsRequest(Guid taskId, string description, RefreshFrequency refreshFrequency,
             Priority priority)

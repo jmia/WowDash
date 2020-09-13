@@ -39,7 +39,7 @@ namespace WowDash.UnitTests.Tasks
 
             // Assert
             var foundTask = Context.Tasks.Find(result.Value);
-            foundTask.IsFavourite.Should().Be(true);
+            foundTask.IsFavourite.Should().BeTrue();
         }
 
         [Test]

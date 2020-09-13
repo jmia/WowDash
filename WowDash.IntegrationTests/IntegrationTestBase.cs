@@ -20,7 +20,7 @@ namespace WowDash.IntegrationTests
         private Checkpoint _checkpoint;
 
         // Haven't figured out how to get connection string from factory
-        private string _connectionString = 
+        private readonly string _connectionString = 
             "Server=(LocalDB)\\MSSQLLocalDB;Database=WowDash-Testing;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         public HttpClient Client { get; set; }
