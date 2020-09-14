@@ -9,6 +9,7 @@ using WowDash.WebUI.Controllers;
 
 namespace WowDash.UnitTests.Characters
 {
+    [TestFixture]
     public class UpdateCharacterTests : UnitTestBase
     {
         private Player _defaultPlayer;

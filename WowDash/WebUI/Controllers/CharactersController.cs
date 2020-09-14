@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
@@ -48,6 +49,24 @@ namespace WowDash.WebUI.Controllers
             character.Race = request.Race;
             character.Realm = request.Realm;
 
+            _context.SaveChanges();
+
+            return character.Id;
+        }
+
+        public ActionResult<Guid> DeleteCharacter(Guid characterId)
+        {
+            var character = _context.Characters.Find(characterId);
+
+            if (character is null)
+                return NotFound();
+
+            var taskCharacters = _context.TaskCharacters.Where(tc => tc.CharacterId == characterId);
+
+            _context.TaskCharacters.RemoveRange(taskCharacters);
+            _context.SaveChanges();
+
+            _context.Characters.Remove(character);
             _context.SaveChanges();
 
             return character.Id;
