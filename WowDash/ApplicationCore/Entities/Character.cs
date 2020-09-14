@@ -20,8 +20,20 @@ namespace WowDash.ApplicationCore.Entities
         public string Race { get; set; }
         public string Realm { get; set; }
 
-        public Character()
+        public Character() { }      // TODO: Update SeedData method and take this out if not needed
+
+        public Character(Guid playerId, int? gameId, string name, CharacterGender gender, int? level, string @class,
+            string race, string realm)
         {
+            PlayerId = playerId;
+            GameId = gameId;
+            Name = name;
+            Gender = gender;
+            Level = level;
+            Class = @class;
+            Race = race;
+            Realm = realm;
+
             TaskCharacters = new List<TaskCharacter>();
         }
     }

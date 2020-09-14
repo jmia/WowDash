@@ -32,7 +32,12 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
         {
-            var task = new Task(request.PlayerId, request.TaskType);
+            var player = _context.Players.Find(request.PlayerId);
+
+            if (player is null)
+                return NotFound();
+
+            var task = new Task(player.Id, request.TaskType);
 
             _context.Tasks.Add(task);
             _context.SaveChanges();

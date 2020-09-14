@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Linq;
 using WowDash.ApplicationCore.DTO;
@@ -21,6 +22,20 @@ namespace WowDash.UnitTests.Tasks
             Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
             _defaultPlayer = Context.Players.First();
             _controller = new TasksController(Context);
+        }
+
+        [Test]
+        public void GivenAnInvalidUser_DoesNotAddTaskToDatabase()
+        {
+            // Arrange
+            var dto = new InitializeTaskRequest(TestConstants.AllOnesGuid, default);
+
+            // Act
+            var result = _controller.InitializeTask(dto);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+
         }
 
         [Test]
