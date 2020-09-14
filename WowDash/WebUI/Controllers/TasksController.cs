@@ -27,9 +27,11 @@ namespace WowDash.WebUI.Controllers
         /// <param name="request"></param>
         /// <response code="200">Returns the ID of the created task.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the player was not found in the database.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
         {
             var player = _context.Players.Find(request.PlayerId);

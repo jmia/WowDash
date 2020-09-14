@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
@@ -7,6 +8,7 @@ using WowDash.Infrastructure;
 
 namespace WowDash.WebUI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/characters")]
     [ApiController]
     public class CharactersController : ControllerBase
@@ -18,6 +20,16 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new character.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the created character.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the player was not found in the database.</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<Guid> AddCharacter(AddCharacterRequest request)
         {
             var player = _context.Players.Find(request.PlayerId);
@@ -34,6 +46,17 @@ namespace WowDash.WebUI.Controllers
             return character.Id;
         }
 
+        /// <summary>
+        /// Updates all of a character's properties.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated characters.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the character was not found in the database.</response>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> UpdateCharacter(UpdateCharacterRequest request)
         {
             var character = _context.Characters.Find(request.CharacterId);
@@ -54,6 +77,14 @@ namespace WowDash.WebUI.Controllers
             return character.Id;
         }
 
+        /// <summary>
+        /// Deletes a character from the database.
+        /// </summary>
+        /// <param name="characterId">The ID of the character.</param>
+        /// <response code="200">Returns the ID of the deleted character.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the character was not found in the database.</response>
+        [HttpDelete("{characterId}")]
         public ActionResult<Guid> DeleteCharacter(Guid characterId)
         {
             var character = _context.Characters.Find(characterId);
