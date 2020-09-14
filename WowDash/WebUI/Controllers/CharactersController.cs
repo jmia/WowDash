@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Route("api/characters")]
     [ApiController]
     public class CharactersController : ControllerBase
     {
@@ -20,90 +20,87 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
-        // GET: api/Characters
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Character>>> GetCharacters()
-        {
-            return await _context.Characters.ToListAsync();
-        }
-
-        // GET: api/Characters/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> GetCharacter(Guid id)
-        {
-            var character = await _context.Characters.FindAsync(id);
-
-            if (character == null)
-            {
-                return NotFound();
-            }
-
-            return character;
-        }
-
-        // PUT: api/Characters/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCharacter(Guid id, Character character)
-        {
-            if (id != character.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(character).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CharacterExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Characters
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        /// Creates a new character.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the created character.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the player was not found in the database.</response>
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(Character character)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<Guid> AddCharacter(AddCharacterRequest request)
         {
-            _context.Characters.Add(character);
-            await _context.SaveChangesAsync();
+            var player = _context.Players.Find(request.PlayerId);
 
-            return CreatedAtAction("GetCharacter", new { id = character.Id }, character);
+            if (player is null)
+                return NotFound();
+
+            var character = new Character(player.Id, request.GameId, request.Name, request.Gender, request.Level,
+                request.Class, request.Race, request.Realm);
+
+            _context.Characters.Add(character);
+            _context.SaveChanges();
+
+            return character.Id;
         }
 
-        // DELETE: api/Characters/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Character>> DeleteCharacter(Guid id)
+        /// <summary>
+        /// Updates all of a character's properties.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <response code="200">Returns the ID of the updated characters.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the character was not found in the database.</response>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> UpdateCharacter(UpdateCharacterRequest request)
         {
-            var character = await _context.Characters.FindAsync(id);
-            if (character == null)
-            {
+            var character = _context.Characters.Find(request.CharacterId);
+
+            if (character is null)
                 return NotFound();
-            }
+
+            character.GameId = request.GameId;
+            character.Name = request.Name;
+            character.Gender = request.Gender;
+            character.Level = request.Level;
+            character.Class = request.Class;
+            character.Race = request.Race;
+            character.Realm = request.Realm;
+
+            _context.SaveChanges();
+
+            return character.Id;
+        }
+
+        /// <summary>
+        /// Deletes a character from the database.
+        /// </summary>
+        /// <param name="characterId">The ID of the character.</param>
+        /// <response code="200">Returns the ID of the deleted character.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the character was not found in the database.</response>
+        [HttpDelete("{characterId}")]
+        public ActionResult<Guid> DeleteCharacter(Guid characterId)
+        {
+            var character = _context.Characters.Find(characterId);
+
+            if (character is null)
+                return NotFound();
+
+            var taskCharacters = _context.TaskCharacters.Where(tc => tc.CharacterId == characterId);
+
+            _context.TaskCharacters.RemoveRange(taskCharacters);
+            _context.SaveChanges();
 
             _context.Characters.Remove(character);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return character;
-        }
-
-        private bool CharacterExists(Guid id)
-        {
-            return _context.Characters.Any(e => e.Id == id);
+            return character.Id;
         }
     }
 }
