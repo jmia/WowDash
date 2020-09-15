@@ -13,22 +13,19 @@ namespace WowDash.UnitTests.Tasks
     [TestFixture]
     public class DeleteTaskTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TasksController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
-            _controller = new TasksController(Context);
+           _controller = new TasksController(Context);
         }
 
         [Test]
         public void GivenAValidTask_DeletesTaskFromDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
 
             Context.Tasks.Add(task);
             Context.SaveChanges();
@@ -46,7 +43,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTaskWithTaskCharacters_DeletesAllAssociatedTaskCharactersFromDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
 
             var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
             var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();

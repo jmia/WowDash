@@ -14,14 +14,11 @@ namespace WowDash.UnitTests.Tasks
     [TestFixture]
     public class SetGameDataReferencesTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TasksController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TasksController(Context);
         }
 
@@ -29,7 +26,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndValidGameDataReferences_AddsDataReferencesToDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.Collectible);
+            var task = new Task(DefaultPlayer.Id, TaskType.Collectible);
 
             Context.Add(task);
             Context.SaveChanges();
@@ -72,7 +69,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndMatchingReferencesExist_OnlyAddsNewReferences()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.Collectible);
+            var task = new Task(DefaultPlayer.Id, TaskType.Collectible);
 
             var existingReference = new GameDataReference(
                 13502,
@@ -121,7 +118,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndReferencesExist_ThatAreNotInGivenList_RemovesExtraReferences()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.Collectible);
+            var task = new Task(DefaultPlayer.Id, TaskType.Collectible);
 
             var existingReference = new GameDataReference(
                 19019,
@@ -171,7 +168,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndNoReferences_RemovesAllReferences()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.Collectible);
+            var task = new Task(DefaultPlayer.Id, TaskType.Collectible);
 
             var existingReference = new GameDataReference(
                 19019,

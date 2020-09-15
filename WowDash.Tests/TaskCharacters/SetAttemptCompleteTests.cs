@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -12,14 +11,11 @@ namespace WowDash.UnitTests.TaskCharacters
     [TestFixture]
     public class SetAttemptCompleteTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TaskCharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TaskCharactersController(Context);
         }
 
@@ -27,8 +23,8 @@ namespace WowDash.UnitTests.TaskCharacters
         public void GivenAValidTaskCharacter_ShouldSetTaskCharacterToInactive()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
-            var character = new Character { PlayerId = _defaultPlayer.Id };
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
+            var character = new Character { PlayerId = DefaultPlayer.Id };
 
             Context.Tasks.Add(task);
             Context.Characters.Add(character);

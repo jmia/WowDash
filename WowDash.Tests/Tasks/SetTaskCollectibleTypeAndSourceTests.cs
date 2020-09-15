@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -13,14 +12,11 @@ namespace WowDash.UnitTests.Tasks
     [TestFixture]
     public class SetTaskCollectibleTypeAndSourceTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TasksController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TasksController(Context);
         }
 
@@ -28,7 +24,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndValidProperties_UpdatesTaskInDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.Collectible);
+            var task = new Task(DefaultPlayer.Id, TaskType.Collectible);
             Context.Tasks.Add(task);
             Context.SaveChanges();
 
