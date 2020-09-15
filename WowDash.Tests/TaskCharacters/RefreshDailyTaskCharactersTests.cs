@@ -13,15 +13,12 @@ namespace WowDash.UnitTests.TaskCharacters
     [TestFixture]
     public class RefreshDailyTaskCharactersTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TaskCharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
             Assume.That(Context.Characters.Count() > 1, "The testing database needs two characters.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TaskCharactersController(Context);
         }
 
@@ -29,9 +26,9 @@ namespace WowDash.UnitTests.TaskCharacters
         public void GivenACollectionOfDailyRecurringTasks_SetsAllTaskCharactersToActive()
         {
             // Arrange
-            var firstTask = new Task(_defaultPlayer.Id, TaskType.General);
-            var secondTask = new Task(_defaultPlayer.Id, TaskType.General);
-            var thirdTask = new Task(_defaultPlayer.Id, TaskType.General);
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
 
             firstTask.RefreshFrequency = RefreshFrequency.Daily;
             secondTask.RefreshFrequency = RefreshFrequency.Daily;
@@ -71,16 +68,16 @@ namespace WowDash.UnitTests.TaskCharacters
 
             // Assert
             Assert.IsInstanceOf<NoContentResult>(result);
-            foundTaskCharacters.All(tc => tc.IsActive == true);
+            foundTaskCharacters.All(tc => tc.IsActive == true).Should().BeTrue();
         }
 
         [Test]
         public void GivenACollectionOfSomeDailyRecurringTasks_SetsOnlyDailyTaskCharactersToActive()
         {
             // Arrange
-            var firstTask = new Task(_defaultPlayer.Id, TaskType.General);
-            var secondTask = new Task(_defaultPlayer.Id, TaskType.General);
-            var thirdTask = new Task(_defaultPlayer.Id, TaskType.General);
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
 
             firstTask.RefreshFrequency = RefreshFrequency.Daily;
             secondTask.RefreshFrequency = RefreshFrequency.Daily;
@@ -121,17 +118,17 @@ namespace WowDash.UnitTests.TaskCharacters
 
             // Assert
             Assert.IsInstanceOf<NoContentResult>(result);
-            dailyTaskCharacters.All(tc => tc.IsActive == true);
-            weeklyTaskCharacters.All(tc => tc.IsActive == false);
+            dailyTaskCharacters.All(tc => tc.IsActive == true).Should().BeTrue();
+            weeklyTaskCharacters.All(tc => tc.IsActive == false).Should().BeTrue();
         }
 
         [Test]
         public void GivenACollectionWithNoDailyRecurringTasks_SetsNoTaskCharactersToActive()
         {
             // Arrange
-            var firstTask = new Task(_defaultPlayer.Id, TaskType.General);
-            var secondTask = new Task(_defaultPlayer.Id, TaskType.General);
-            var thirdTask = new Task(_defaultPlayer.Id, TaskType.General);
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
 
             firstTask.RefreshFrequency = RefreshFrequency.Weekly;
             secondTask.RefreshFrequency = RefreshFrequency.Weekly;
@@ -171,7 +168,7 @@ namespace WowDash.UnitTests.TaskCharacters
 
             // Assert
             Assert.IsInstanceOf<NoContentResult>(result);
-            foundTaskCharacters.All(tc => tc.IsActive == false);
+            foundTaskCharacters.All(tc => tc.IsActive == false).Should().BeTrue();
         }
     }
 }

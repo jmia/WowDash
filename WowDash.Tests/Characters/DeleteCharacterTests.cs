@@ -11,22 +11,19 @@ namespace WowDash.UnitTests.Characters
 {
     public class DeleteCharacterTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private CharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
-            _controller = new CharactersController(Context);
+             _controller = new CharactersController(Context);
         }
 
         [Test]
         public void GivenAValidCharacter_RemovesCharacter()
         {
             // Arrange
-            var character = new Character() { PlayerId = _defaultPlayer.Id };
+            var character = new Character() { PlayerId = DefaultPlayer.Id };
 
             Context.Characters.Add(character);
             Context.SaveChanges();
@@ -44,8 +41,8 @@ namespace WowDash.UnitTests.Characters
         public void GivenAValidCharacterWithTasks_RemovesTaskCharacters()
         {
             // Arrange
-            var character = new Character() { PlayerId = _defaultPlayer.Id };
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var character = new Character() { PlayerId = DefaultPlayer.Id };
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
 
             Context.Characters.Add(character);
             Context.Tasks.Add(task);

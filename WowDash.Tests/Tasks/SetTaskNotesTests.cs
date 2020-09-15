@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -13,14 +12,11 @@ namespace WowDash.UnitTests.Tasks
     [TestFixture]
     public class SetTaskNotesTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TasksController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TasksController(Context);
         }
 
@@ -28,7 +24,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndValidNotes_AddsNotes()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
             var expectedNotes = "These are the expected notes.";
 
             Context.Tasks.Add(task);
@@ -49,7 +45,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTaskWithExistingNotes_AndValidNotes_AddsNotes()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
 
             task.Notes = "These are the original notes.";
 
@@ -88,7 +84,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTask_AndNullOrEmptyNotes_SetsNotesToNull(string expectedNotes)
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
 
             Context.Tasks.Add(task);
             Context.SaveChanges();
@@ -110,7 +106,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidTaskWithExistingNotes_AndNullOrEmptyNotes_RemovesNotes(string expectedNotes)
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
 
             task.Notes = "This note should be removed.";
 
