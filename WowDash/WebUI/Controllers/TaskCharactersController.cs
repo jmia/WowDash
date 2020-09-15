@@ -24,34 +24,32 @@ namespace WowDash.WebUI.Controllers
         /// <summary>
         /// Adds a character to a task.
         /// </summary>
-        /// <param name="characterId">The ID of the character.</param>
-        /// <param name="taskId">The ID of the task.</param>
-        /// <returns></returns>
-        [HttpPut("add/task/{taskId}/character/{characterId}")]
-        [HttpPut("add/character/{characterId}/task/{taskId}")]
+        /// <param name="request">The ID of the character and task.</param>
+        /// <response code="204">If the request successfully adds the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the task or character was not found in the database.</response>
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult AddCharacterToTask(Guid characterId, Guid taskId)
+        public ActionResult AddCharacterToTask(AddCharacterToTaskRequest request)
         {
-            var task = _context.Tasks.Find(taskId);
+            var task = _context.Tasks.Find(request.TaskId);
 
             if (task is null)
                 return NotFound();
 
-            var character = _context.Characters.Find(characterId);
+            var character = _context.Characters.Find(request.CharacterId);
 
             if (character is null)
                 return NotFound();
 
-            var taskCharacter = new TaskCharacter(characterId, taskId);
+            var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
 
             _context.TaskCharacters.Add(taskCharacter);
             _context.SaveChanges();
 
             return NoContent();
-
-            // TODO: Update the XML docs.
         }
 
         /// <summary>
@@ -59,13 +57,14 @@ namespace WowDash.WebUI.Controllers
         /// </summary>
         /// <param name="characterId">The ID of the character.</param>
         /// <param name="taskId">The ID of the task.</param>
-        /// <returns></returns>
-        [HttpDelete("")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <response code="204">If the request successfully deletes the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource was not found in the database.</response>
+        [HttpDelete("{characterId}:{taskId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult<TaskCharacter> RemoveCharacterFromTask(Guid characterId, Guid taskId)
+        public ActionResult RemoveCharacterFromTask(Guid characterId, Guid taskId)
         {
             var taskCharacter = _context.TaskCharacters.Find(characterId, taskId);
 
@@ -75,19 +74,21 @@ namespace WowDash.WebUI.Controllers
             _context.TaskCharacters.Remove(taskCharacter);
             _context.SaveChanges();
 
-            return taskCharacter;
+            return NoContent();
         }
 
         /// <summary>
         /// Sets a character's attempt complete for the task's refresh frequency.
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request">The ID of the character and task.</param>
+        /// <response code="204">If the request successfully updates the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource was not found in the database.</response>
         [HttpPatch("complete")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TaskCharacter> SetAttemptComplete(SetAttemptCompleteRequest request)
+        public ActionResult SetAttemptComplete(SetAttemptCompleteRequest request)
         {
             var taskCharacter = _context.TaskCharacters.Find(request.CharacterId, request.TaskId);
 
@@ -97,19 +98,21 @@ namespace WowDash.WebUI.Controllers
             taskCharacter.IsActive = false;
             _context.SaveChanges();
 
-            return taskCharacter;
+            return NoContent();
         }
 
         /// <summary>
         /// Sets a character's attempt incomplete (re-enables attempt) for the task's refresh frequency.
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [HttpPatch("incomplete")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <param name="request">The ID of the character and task.</param>
+        /// <response code="204">If the request successfully updates the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource was not found in the database.</response>
+        [HttpPatch("revert")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TaskCharacter> SetAttemptIncomplete(SetAttemptIncompleteRequest request)
+        public ActionResult SetAttemptIncomplete(SetAttemptIncompleteRequest request)
         {
             var taskCharacter = _context.TaskCharacters.Find(request.CharacterId, request.TaskId);
 
@@ -119,13 +122,13 @@ namespace WowDash.WebUI.Controllers
             taskCharacter.IsActive = true;
             _context.SaveChanges();
 
-            return taskCharacter;
+            return NoContent();
         }
 
         /// <summary>
         /// Resets all attempts for characters on tasks with a daily refresh frequency.
         /// </summary>
-        /// <returns></returns>
+        /// <response code="204">If the request successfully updates the resources.</response>
         [HttpPost("refresh/daily")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult RefreshDailyTaskCharacters()
@@ -156,7 +159,7 @@ namespace WowDash.WebUI.Controllers
         /// <summary>
         /// Resets all attempts for characters on tasks with a daily refresh frequency.
         /// </summary>
-        /// <returns></returns>
+        /// <response code="204">If the request successfully updates the resources.</response>
         [HttpPost("refresh/weekly")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult RefreshWeeklyTaskCharacters()
