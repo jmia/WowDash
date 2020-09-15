@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
@@ -23,21 +24,32 @@ namespace WowDash.WebUI.Controllers
         /// <summary>
         /// Adds a character to a task.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="characterId">The ID of the character.</param>
+        /// <param name="taskId">The ID of the task.</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut("add/task/{taskId}/character/{characterId}")]
+        [HttpPut("add/character/{characterId}/task/{taskId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<TaskCharacter> AddCharacterToTask(AddCharacterToTaskRequest request)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult AddCharacterToTask(Guid characterId, Guid taskId)
         {
-            // TODO: Validation
+            var task = _context.Tasks.Find(taskId);
 
-            var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
+            if (task is null)
+                return NotFound();
+
+            var character = _context.Characters.Find(characterId);
+
+            if (character is null)
+                return NotFound();
+
+            var taskCharacter = new TaskCharacter(characterId, taskId);
 
             _context.TaskCharacters.Add(taskCharacter);
             _context.SaveChanges();
 
-            // TODO: Change the return type
-            return taskCharacter;
+            return NoContent();
 
             // TODO: Update the XML docs.
         }
@@ -45,16 +57,17 @@ namespace WowDash.WebUI.Controllers
         /// <summary>
         /// Removes a character from a task.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="characterId">The ID of the character.</param>
+        /// <param name="taskId">The ID of the task.</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public ActionResult<TaskCharacter> RemoveCharacterFromTask(RemoveCharacterFromTaskRequest request)
+        public ActionResult<TaskCharacter> RemoveCharacterFromTask(Guid characterId, Guid taskId)
         {
-            var taskCharacter = _context.TaskCharacters.Find(request.CharacterId, request.TaskId);
+            var taskCharacter = _context.TaskCharacters.Find(characterId, taskId);
 
             if (taskCharacter is null)
                 return NotFound();
