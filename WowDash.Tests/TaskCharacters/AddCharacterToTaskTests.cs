@@ -33,9 +33,9 @@ namespace WowDash.UnitTests.TaskCharacters
             var dto = new AddCharacterToTaskRequest(character.Id, task.Id);
 
             // Act
-            var result = _controller.AddCharacterToTask(dto);
+            _controller.AddCharacterToTask(dto);
 
-            var foundTaskCharacter = Context.TaskCharacters.Find(result.Value.CharacterId, result.Value.TaskId);
+            var foundTaskCharacter = Context.TaskCharacters.Find(dto.CharacterId, dto.TaskId);
 
             // Assert
             foundTaskCharacter.Should().NotBeNull();
@@ -55,9 +55,9 @@ namespace WowDash.UnitTests.TaskCharacters
             var dto = new AddCharacterToTaskRequest(character.Id, task.Id);
 
             // Act
-            var result = _controller.AddCharacterToTask(dto);
+            _controller.AddCharacterToTask(dto);
 
-            var foundTaskCharacter = Context.TaskCharacters.Find(result.Value.CharacterId, result.Value.TaskId);
+            var foundTaskCharacter = Context.TaskCharacters.Find(dto.CharacterId, dto.TaskId);
 
             // Assert
             foundTaskCharacter.IsActive.Should().BeTrue();

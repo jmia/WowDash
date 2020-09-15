@@ -37,9 +37,9 @@ namespace WowDash.UnitTests.TaskCharacters
             var request = new SetAttemptIncompleteRequest(taskCharacter.CharacterId, taskCharacter.TaskId);
 
             // Act
-            var result = _controller.SetAttemptIncomplete(request);
+            _controller.SetAttemptIncomplete(request);
 
-            var foundTaskCharacter = Context.TaskCharacters.Find(result.Value.CharacterId, result.Value.TaskId);
+            var foundTaskCharacter = Context.TaskCharacters.Find(request.CharacterId, request.TaskId);
 
             // Assert
             foundTaskCharacter.IsActive.Should().BeTrue();
