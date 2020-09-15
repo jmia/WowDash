@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -12,14 +11,11 @@ namespace WowDash.UnitTests.Tasks
     [TestFixture]
     public class SetCollectibleTaskDetailsTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TasksController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TasksController(Context);
         }
 
@@ -27,7 +23,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidDescription_UpdatesTaskInDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
             Context.Tasks.Add(task);
             Context.SaveChanges();
 
@@ -46,7 +42,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidRefreshFrequency_UpdatesTaskInDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
             Context.Tasks.Add(task);
             Context.SaveChanges();
 
@@ -65,7 +61,7 @@ namespace WowDash.UnitTests.Tasks
         public void GivenAValidPriority_UpdatesTaskInDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
             Context.Tasks.Add(task);
             Context.SaveChanges();
 

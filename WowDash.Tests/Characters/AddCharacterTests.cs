@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -12,14 +11,11 @@ namespace WowDash.UnitTests.Characters
     [TestFixture]
     public class AddCharacterTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private CharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new CharactersController(Context);
         }
 
@@ -35,7 +31,7 @@ namespace WowDash.UnitTests.Characters
             var expectedGender = CharacterGender.Female;
             int? expectedGameId = null;
 
-            var dto = new AddCharacterRequest(_defaultPlayer.Id, expectedGameId, expectedName, expectedGender,
+            var dto = new AddCharacterRequest(DefaultPlayer.Id, expectedGameId, expectedName, expectedGender,
                 expectedLevel, expectedClass, expectedRace, expectedRealm);
 
             // Act
@@ -45,7 +41,7 @@ namespace WowDash.UnitTests.Characters
 
             // Assert
             foundCharacter.Should().NotBeNull();
-            foundCharacter.PlayerId.Should().Be(_defaultPlayer.Id);
+            foundCharacter.PlayerId.Should().Be(DefaultPlayer.Id);
             foundCharacter.Name.Should().Be(expectedName);
             foundCharacter.GameId.Should().BeNull();
             foundCharacter.Class.Should().Be(expectedClass);
@@ -66,7 +62,7 @@ namespace WowDash.UnitTests.Characters
             CharacterGender gender, int? level, string @class, string race, string realm)
         {
             // Arrange
-            var dto = new AddCharacterRequest(_defaultPlayer.Id, gameId, name, gender,
+            var dto = new AddCharacterRequest(DefaultPlayer.Id, gameId, name, gender,
                 level, @class, race, realm);
 
             // Act
@@ -76,7 +72,7 @@ namespace WowDash.UnitTests.Characters
 
             // Assert
             foundCharacter.Should().NotBeNull();
-            foundCharacter.PlayerId.Should().Be(_defaultPlayer.Id);
+            foundCharacter.PlayerId.Should().Be(DefaultPlayer.Id);
             foundCharacter.Name.Should().Be(name);
             foundCharacter.GameId.Should().Be(gameId);
             foundCharacter.Class.Should().Be(@class);

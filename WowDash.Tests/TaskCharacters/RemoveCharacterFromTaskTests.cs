@@ -13,14 +13,11 @@ namespace WowDash.UnitTests.TaskCharacters
     [TestFixture]
     public class RemoveCharacterFromTaskTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private TaskCharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new TaskCharactersController(Context);
         }
 
@@ -28,9 +25,9 @@ namespace WowDash.UnitTests.TaskCharacters
         public void GivenATaskWithTwoTaskCharacters_RemovesOnlyOneTaskCharacterFromDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
-            var character = new Character { PlayerId = _defaultPlayer.Id };
-            var secondCharacter = new Character { PlayerId = _defaultPlayer.Id };
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
+            var character = new Character { PlayerId = DefaultPlayer.Id };
+            var secondCharacter = new Character { PlayerId = DefaultPlayer.Id };
 
             Context.Tasks.Add(task);
             Context.Characters.AddRange(character, secondCharacter);
@@ -57,8 +54,8 @@ namespace WowDash.UnitTests.TaskCharacters
         public void GivenATaskWithAValidCharacter_RemovesTaskCharacterFromDatabase()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
-            var character = new Character { PlayerId = _defaultPlayer.Id };
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
+            var character = new Character { PlayerId = DefaultPlayer.Id };
 
             Context.Tasks.Add(task);
             Context.Characters.Add(character);
@@ -83,8 +80,8 @@ namespace WowDash.UnitTests.TaskCharacters
         public void GivenAnInvalidCharacter_ReturnsNotFound()
         {
             // Arrange
-            var task = new Task(_defaultPlayer.Id, TaskType.General);
-            var character = new Character { PlayerId = _defaultPlayer.Id };
+            var task = new Task(DefaultPlayer.Id, TaskType.General);
+            var character = new Character { PlayerId = DefaultPlayer.Id };
 
             Context.Tasks.Add(task);
             Context.Characters.Add(character);

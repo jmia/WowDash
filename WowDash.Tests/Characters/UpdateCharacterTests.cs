@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System.Linq;
 using WowDash.ApplicationCore.DTO;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -12,14 +11,11 @@ namespace WowDash.UnitTests.Characters
     [TestFixture]
     public class UpdateCharacterTests : UnitTestBase
     {
-        private Player _defaultPlayer;
         private CharactersController _controller;
 
         [SetUp]
         public void Setup()
         {
-            Assume.That(Context.Players.Any(), "The testing database needs at least one user.");
-            _defaultPlayer = Context.Players.First();
             _controller = new CharactersController(Context);
         }
 
@@ -29,7 +25,7 @@ namespace WowDash.UnitTests.Characters
             // Arrange
             var character = new Character
             {
-                PlayerId = _defaultPlayer.Id
+                PlayerId = DefaultPlayer.Id
             };
 
             Context.Characters.Add(character);
@@ -53,7 +49,7 @@ namespace WowDash.UnitTests.Characters
 
             // Assert
             foundCharacter.Should().NotBeNull();
-            foundCharacter.PlayerId.Should().Be(_defaultPlayer.Id);
+            foundCharacter.PlayerId.Should().Be(DefaultPlayer.Id);
             foundCharacter.Name.Should().Be(expectedName);
             foundCharacter.GameId.Should().BeNull();
             foundCharacter.Class.Should().Be(expectedClass);
@@ -69,7 +65,7 @@ namespace WowDash.UnitTests.Characters
             // Arrange
             var character = new Character
             {
-                PlayerId = _defaultPlayer.Id,
+                PlayerId = DefaultPlayer.Id,
                 Name = "Meraddison",
                 Class = "Warlock",
                 Level = 120,
@@ -98,7 +94,7 @@ namespace WowDash.UnitTests.Characters
 
             // Assert
             foundCharacter.Should().NotBeNull();
-            foundCharacter.PlayerId.Should().Be(_defaultPlayer.Id);
+            foundCharacter.PlayerId.Should().Be(DefaultPlayer.Id);
             foundCharacter.Name.Should().Be(expectedName);
             foundCharacter.GameId.Should().BeNull();
             foundCharacter.Class.Should().Be(expectedClass);

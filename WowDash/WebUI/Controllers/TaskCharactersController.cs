@@ -140,13 +140,15 @@ namespace WowDash.WebUI.Controllers
                 var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
 
                 if (taskCharacters is null)
-                    return NoContent();
+                    continue;
 
                 foreach (var taskCharacter in taskCharacters)
                 {
                     taskCharacter.IsActive = true;
                 }
             }
+
+            _context.SaveChanges();
 
             return NoContent();
         }
@@ -169,13 +171,15 @@ namespace WowDash.WebUI.Controllers
                 var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
 
                 if (taskCharacters is null)
-                    return NoContent();
+                    continue;
 
                 foreach (var taskCharacter in taskCharacters)
                 {
                     taskCharacter.IsActive = true;
                 }
             }
+
+            _context.SaveChanges();
 
             return NoContent();
         }
