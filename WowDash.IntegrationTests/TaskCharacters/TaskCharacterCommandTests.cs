@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using System;
+using System.IO;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using WowDash.ApplicationCore.Entities;
 using static WowDash.ApplicationCore.Common.Enums;
@@ -26,24 +29,36 @@ namespace WowDash.IntegrationTests.TaskCharacters
         [Test]
         public async System.Threading.Tasks.Task AddCharacterToTask_CreatesNewTaskCharacter()
         {
-            // Arrange, Act
-            var httpResponse = await Client.PutAsync($"/api/task-characters/add/task/{defaultTaskId}/character/{defaultCharacterId}", null);
+            // {
+            //    "characterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            // };
 
-            httpResponse.EnsureSuccessStatusCode();
+            // Arrange
+            string json;
 
-            var foundTaskCharacter = await FindAsync<TaskCharacter>(defaultCharacterId, defaultTaskId);
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
 
-            // Assert
-            foundTaskCharacter.Should().NotBeNull();
-            foundTaskCharacter.TaskId.Should().Be(defaultTaskId);
-            foundTaskCharacter.CharacterId.Should().Be(defaultCharacterId);
-        }
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream, options))
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("characterId", defaultCharacterId);
+                    writer.WriteString("taskId", defaultTaskId);
+                    writer.WriteEndObject();
+                }
 
-        [Test]
-        public async System.Threading.Tasks.Task AddCharacterToTask_AlternateRoute_CreatesNewTaskCharacter()
-        {
-            // Arrange, Act
-            var httpResponse = await Client.PutAsync($"/api/task-characters/add/character/{defaultCharacterId}/task/{defaultTaskId}", null);
+                json = Encoding.UTF8.GetString(stream.ToArray());
+            }
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var httpResponse = await Client.PutAsync($"/api/task-characters/", content);
 
             httpResponse.EnsureSuccessStatusCode();
 
@@ -58,17 +73,18 @@ namespace WowDash.IntegrationTests.TaskCharacters
         [Test]
         public async System.Threading.Tasks.Task RemoveCharacterFromTask_DeletesTaskCharacter()
         {
-            // Arrange, Act
-            var httpResponse = await Client.PutAsync($"/api/task-characters/add/character/{defaultCharacterId}/task/{defaultTaskId}", null);
+            // Arrange
+            await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
+
+            // Act
+            var httpResponse = await Client.DeleteAsync($"/api/task-characters/{defaultCharacterId}:{defaultTaskId}");
 
             httpResponse.EnsureSuccessStatusCode();
 
             var foundTaskCharacter = await FindAsync<TaskCharacter>(defaultCharacterId, defaultTaskId);
 
             // Assert
-            foundTaskCharacter.Should().NotBeNull();
-            foundTaskCharacter.TaskId.Should().Be(defaultTaskId);
-            foundTaskCharacter.CharacterId.Should().Be(defaultCharacterId);
+            foundTaskCharacter.Should().BeNull();
         }
     }
 }
