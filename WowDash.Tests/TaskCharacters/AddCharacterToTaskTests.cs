@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using WowDash.ApplicationCore.Entities;
 using WowDash.WebUI.Controllers;
-using WowDash.ApplicationCore.DTO;
 using static WowDash.ApplicationCore.Common.Enums;
 using WowDash.UnitTests.Common;
+using WowDash.ApplicationCore.DTO.Requests;
 
 namespace WowDash.UnitTests.TaskCharacters
 {

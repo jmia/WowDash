@@ -2,12 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using WowDash.ApplicationCore.Entities;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
-    public class AddCharacterRequest
+    public class UpdateCharacterRequest
     {
         [Required]
-        public Guid PlayerId { get; set; }
+        public Guid CharacterId { get; set; }
         public int? GameId { get; set; }
         public string Name { get; set; }
         public CharacterGender Gender { get; set; }
@@ -16,10 +16,10 @@ namespace WowDash.ApplicationCore.DTO
         public string Race { get; set; }
         public string Realm { get; set; }
 
-        public AddCharacterRequest() { }
+        public UpdateCharacterRequest() { }
 
-        public AddCharacterRequest(
-            Guid playerId,
+        public UpdateCharacterRequest(
+            Guid characterId,
             int? gameId,
             string name,
             CharacterGender gender,
@@ -28,7 +28,7 @@ namespace WowDash.ApplicationCore.DTO
             string race,
             string realm)
         {
-            PlayerId = playerId;
+            CharacterId = characterId;
             GameId = gameId;
             Name = name;
             Gender = gender;

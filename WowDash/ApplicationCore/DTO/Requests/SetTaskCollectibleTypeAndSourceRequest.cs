@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
     public class SetTaskCollectibleTypeAndSourceRequest
     {

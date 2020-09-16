@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Entities.GameDataReference;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
     /// <summary>
     /// An item in a list of game data references

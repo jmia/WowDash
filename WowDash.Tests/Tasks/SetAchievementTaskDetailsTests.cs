@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
 using WowDash.WebUI.Controllers;

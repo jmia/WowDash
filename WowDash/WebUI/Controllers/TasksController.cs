@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 using static WowDash.ApplicationCore.Common.Enums;

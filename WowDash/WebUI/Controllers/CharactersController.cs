@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
@@ -18,6 +19,32 @@ namespace WowDash.WebUI.Controllers
         public CharactersController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("all/{playerId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ICollection<Character>> GetPlayerCharacters(Guid playerId)
+        {
+            var characters = _context.Characters.Where(c => c.PlayerId == playerId);
+
+            if (characters is null) // is empty?
+                return NotFound();
+
+            return characters.ToList();
+        }
+
+        [HttpGet("{characterId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Character> GetCharacterById(Guid characterId)
+        {
+            var character = _context.Characters.Find(characterId);
+
+            if (character is null)
+                return NotFound();
+
+            return character;
         }
 
         /// <summary>

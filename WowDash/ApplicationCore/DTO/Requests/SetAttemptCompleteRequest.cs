@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
     public class SetAttemptCompleteRequest
     {
