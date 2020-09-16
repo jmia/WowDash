@@ -38,10 +38,8 @@ namespace WowDash.UnitTests.TaskCharacters
             Context.TaskCharacters.AddRange(taskCharacter, secondTaskCharacter);
             Context.SaveChanges();
 
-            var dto = new RemoveCharacterFromTaskRequest(character.Id, task.Id);
-
             // Act
-            var result = _controller.RemoveCharacterFromTask(dto);
+            _controller.RemoveCharacterFromTask(character.Id, task.Id);
 
             var foundTaskCharacters = Context.TaskCharacters.Where(tc => tc.TaskId == task.Id);
 
@@ -65,10 +63,8 @@ namespace WowDash.UnitTests.TaskCharacters
             Context.TaskCharacters.Add(taskCharacter);
             Context.SaveChanges();
 
-            var dto = new RemoveCharacterFromTaskRequest(character.Id, task.Id);
-
             // Act
-            var result = _controller.RemoveCharacterFromTask(dto);
+            _controller.RemoveCharacterFromTask(character.Id, task.Id);
 
             var foundTaskCharacters = Context.TaskCharacters.Where(tc => tc.TaskId == task.Id);
 
@@ -91,13 +87,11 @@ namespace WowDash.UnitTests.TaskCharacters
             Context.TaskCharacters.Add(taskCharacter);
             Context.SaveChanges();
 
-            var dto = new RemoveCharacterFromTaskRequest(TestConstants.AllOnesGuid, task.Id);
-
             // Act
-            var result = _controller.RemoveCharacterFromTask(dto);
+            var result = _controller.RemoveCharacterFromTask(TestConstants.AllOnesGuid, task.Id);
 
             // Assert
-            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+            Assert.IsInstanceOf<NotFoundResult>(result);
         }
     }
 }

@@ -12,7 +12,7 @@ using static WowDash.ApplicationCore.Common.Enums;
 namespace WowDash.IntegrationTests.Tasks
 {
     [TestFixture]
-    public class TaskCommandsTests : IntegrationTestBase
+    public class TaskCommandTests : IntegrationTestBase
     {
         internal Guid defaultPlayerId;
 
