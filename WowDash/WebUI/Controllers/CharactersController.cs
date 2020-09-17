@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WowDash.ApplicationCore.DTO.Requests;
+using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
@@ -24,27 +25,53 @@ namespace WowDash.WebUI.Controllers
         [HttpGet("all/{playerId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ICollection<Character>> GetPlayerCharacters(Guid playerId)
+        public ActionResult<GetCharactersResponse> GetPlayerCharacters(Guid playerId)
         {
             var characters = _context.Characters.Where(c => c.PlayerId == playerId);
 
-            if (characters is null) // is empty?
+            if (characters is null || !characters.Any())
                 return NotFound();
 
-            return characters.ToList();
+            var characterList = new List<GetCharacterResponse>(characters.Select(c =>
+                new GetCharacterResponse()
+                {
+                    Id = c.Id,
+                    PlayerId = c.PlayerId,
+                    GameId = c.GameId,
+                    Name = c.Name,
+                    Gender = c.Gender,
+                    Level = c.Level,
+                    Class = c.Class,
+                    Race = c.Race,
+                    Realm = c.Realm
+                }
+            ));
+
+            return new GetCharactersResponse(playerId, characterList);
         }
 
         [HttpGet("{characterId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Character> GetCharacterById(Guid characterId)
+        public ActionResult<GetCharacterResponse> GetCharacterById(Guid characterId)
         {
             var character = _context.Characters.Find(characterId);
 
             if (character is null)
                 return NotFound();
 
-            return character;
+            return new GetCharacterResponse()
+            {
+                Id = character.Id,
+                PlayerId = character.PlayerId,
+                GameId = character.GameId,
+                Name = character.Name,
+                Gender = character.Gender,
+                Level = character.Level,
+                Class = character.Class,
+                Race = character.Race,
+                Realm = character.Realm
+            };
         }
 
         /// <summary>
