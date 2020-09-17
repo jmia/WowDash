@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.DTO.Requests;
+using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 
@@ -18,6 +20,74 @@ namespace WowDash.WebUI.Controllers
         public CharactersController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        /// <summary>
+        /// Gets a player's entire character roster.
+        /// </summary>
+        /// <param name="playerId">The ID of the player.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the player was not found in the database.</response>
+        [HttpGet("all/{playerId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetCharactersResponse> GetPlayerCharacters(Guid playerId)
+        {
+            var characters = _context.Characters.Where(c => c.PlayerId == playerId);
+
+            if (characters is null || !characters.Any())
+                return NotFound();
+
+            var characterList = new List<GetCharacterResponse>(characters.Select(c =>
+                new GetCharacterResponse()
+                {
+                    CharacterId = c.Id,
+                    PlayerId = c.PlayerId,
+                    GameId = c.GameId,
+                    Name = c.Name,
+                    Gender = c.Gender,
+                    Level = c.Level,
+                    Class = c.Class,
+                    Race = c.Race,
+                    Realm = c.Realm
+                }
+            ));
+
+            return new GetCharactersResponse(playerId, characterList);
+        }
+
+        /// <summary>
+        /// Gets a character by ID.
+        /// </summary>
+        /// <param name="characterId">The ID of the character.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the character was not found in the database.</response>
+        [HttpGet("{characterId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetCharacterResponse> GetCharacterById(Guid characterId)
+        {
+            var character = _context.Characters.Find(characterId);
+
+            if (character is null)
+                return NotFound();
+
+            return new GetCharacterResponse()
+            {
+                CharacterId = character.Id,
+                PlayerId = character.PlayerId,
+                GameId = character.GameId,
+                Name = character.Name,
+                Gender = character.Gender,
+                Level = character.Level,
+                Class = character.Class,
+                Race = character.Race,
+                Realm = character.Realm
+            };
         }
 
         /// <summary>

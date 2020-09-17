@@ -2,29 +2,25 @@
 using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash
+namespace WowDash.ApplicationCore.DTO.Requests
 {
-    public class SetGeneralTaskDetailsRequest
+    public class SetAchievementTaskDetailsRequest
     {
         [Required]
         public Guid TaskId { get; set; }
         /// <summary>
-        /// A player-set description of the task.
+        /// The name of the achievement.
         /// </summary>
         public string Description { get; set; }
         [Required]
-        public RefreshFrequency RefreshFrequency { get; set; }
-        [Required]
         public Priority Priority { get; set; }
 
-        public SetGeneralTaskDetailsRequest() { }
+        public SetAchievementTaskDetailsRequest() { }
 
-        public SetGeneralTaskDetailsRequest(Guid taskId, string description, RefreshFrequency refreshFrequency,
-            Priority priority)
+        public SetAchievementTaskDetailsRequest(Guid taskId, string description, Priority priority)
         {
             TaskId = taskId;
             Description = description;
-            RefreshFrequency = refreshFrequency;
             Priority = priority;
         }
     }

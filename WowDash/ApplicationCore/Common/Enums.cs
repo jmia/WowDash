@@ -5,6 +5,18 @@ namespace WowDash.ApplicationCore.Common
     public class Enums
     {
         /// <summary>
+        /// A character's gender.
+        /// `0` for Male<br />
+        /// `1` for Female<br />
+        /// No further identities supported at this time.
+        /// </summary>
+        public enum CharacterGender
+        {
+            Male,
+            Female
+        }
+
+        /// <summary>
         /// The type of collectible associated with the task.<br />
         /// `0` for Item<br />
         /// `1` for ItemSet<br />

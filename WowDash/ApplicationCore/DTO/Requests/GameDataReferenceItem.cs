@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Entities.GameDataReference;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
     /// <summary>
     /// An item in a list of game data references
@@ -14,7 +14,7 @@ namespace WowDash.ApplicationCore.DTO
         /// </summary>
         public int? Id { get; set; }
         /// <summary>
-        /// The game ID of the reference, if provided.
+        /// The in-game ID of the reference, if provided.
         /// </summary>
         public int? GameId { get; set; }
         /// <summary>

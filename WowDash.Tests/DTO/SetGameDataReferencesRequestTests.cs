@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.UnitTests.Common;
 
 namespace WowDash.UnitTests.DTO

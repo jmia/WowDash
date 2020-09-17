@@ -2,14 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
     public class SetCollectibleTaskDetailsRequest
     {
         [Required]
-        public Guid TaskId { get; set;  }
+        public Guid TaskId { get; set; }
         /// <summary>
-        /// A UI-set description of the task.
+        /// A generated description of the task.
         /// </summary>
         public string Description { get; set; }
         [Required]

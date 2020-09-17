@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using WowDash.ApplicationCore.DTO;
+using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.UnitTests.Common;
 using WowDash.WebUI.Controllers;
 using static WowDash.ApplicationCore.Common.Enums;

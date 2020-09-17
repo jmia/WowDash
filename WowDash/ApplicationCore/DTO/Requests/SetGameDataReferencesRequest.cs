@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace WowDash.ApplicationCore.DTO
+namespace WowDash.ApplicationCore.DTO.Requests
 {
     public class SetGameDataReferencesRequest
     {
@@ -14,7 +14,10 @@ namespace WowDash.ApplicationCore.DTO
         [Required]
         public ICollection<GameDataReferenceItem> GameDataReferenceItems { get; set; }
 
-        public SetGameDataReferencesRequest() { }
+        public SetGameDataReferencesRequest() 
+        {
+            GameDataReferenceItems = new List<GameDataReferenceItem>();
+        }
 
         public SetGameDataReferencesRequest(Guid taskId, ICollection<GameDataReferenceItem> gameDataReferenceItems)
         {
