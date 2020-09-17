@@ -19,6 +19,9 @@ namespace WowDash.ApplicationCore.Entities
         public int? Level { get; set; }
         public string Class { get; set; }
         public string Race { get; set; }
+        /// <summary>
+        /// The home realm of the character in kebab-case.
+        /// </summary>
         public string Realm { get; set; }
 
         public Character() { }      // TODO: Update SeedData method and take this out if not needed
