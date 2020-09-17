@@ -9,7 +9,7 @@ namespace WowDash.ApplicationCore.DTO.Requests
         [Required]
         public Guid TaskId { get; set; }
         /// <summary>
-        /// A UI-set description of the task.
+        /// A generated description of the task.
         /// </summary>
         public string Description { get; set; }
         [Required]

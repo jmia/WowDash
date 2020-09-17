@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using WowDash.ApplicationCore.Entities;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.DTO.Requests
 {
@@ -8,6 +8,9 @@ namespace WowDash.ApplicationCore.DTO.Requests
     {
         [Required]
         public Guid CharacterId { get; set; }
+        /// <summary>
+        /// The in-game ID of the character, if provided.
+        /// </summary>
         public int? GameId { get; set; }
         public string Name { get; set; }
         public CharacterGender Gender { get; set; }

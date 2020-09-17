@@ -14,7 +14,7 @@ namespace WowDash.ApplicationCore.DTO.Requests
         /// </summary>
         public int? Id { get; set; }
         /// <summary>
-        /// The game ID of the reference, if provided.
+        /// The in-game ID of the reference, if provided.
         /// </summary>
         public int? GameId { get; set; }
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.Entities
 {
@@ -36,11 +37,5 @@ namespace WowDash.ApplicationCore.Entities
 
             TaskCharacters = new List<TaskCharacter>();
         }
-    }
-
-    public enum CharacterGender
-    {
-        Male,
-        Female
     }
 }

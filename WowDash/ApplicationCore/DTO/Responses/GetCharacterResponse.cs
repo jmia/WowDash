@@ -1,16 +1,12 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using static WowDash.ApplicationCore.Common.Enums;
 
-namespace WowDash.ApplicationCore.DTO.Requests
+namespace WowDash.ApplicationCore.DTO.Responses
 {
-    public class AddCharacterRequest
+    public class GetCharacterResponse
     {
-        [Required]
-        public Guid PlayerId { get; set; }
-        /// <summary>
-        /// The in-game ID of the character, if provided.
-        /// </summary>
+        public Guid Id { get; set; }
+        public Guid PlayerId { get; set; }  // TODO: Probably don't need?
         public int? GameId { get; set; }
         public string Name { get; set; }
         public CharacterGender Gender { get; set; }
@@ -19,18 +15,12 @@ namespace WowDash.ApplicationCore.DTO.Requests
         public string Race { get; set; }
         public string Realm { get; set; }
 
-        public AddCharacterRequest() { }
+        public GetCharacterResponse() { }
 
-        public AddCharacterRequest(
-            Guid playerId,
-            int? gameId,
-            string name,
-            CharacterGender gender,
-            int? level,
-            string @class,
-            string race,
-            string realm)
+        public GetCharacterResponse(Guid id, Guid playerId, int? gameId, string name, CharacterGender gender, int? level,
+            string @class, string race, string realm)
         {
+            Id = id;
             PlayerId = playerId;
             GameId = gameId;
             Name = name;
