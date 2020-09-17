@@ -43,7 +43,7 @@ namespace WowDash.WebUI.Controllers
             var characterList = new List<GetCharacterResponse>(characters.Select(c =>
                 new GetCharacterResponse()
                 {
-                    Id = c.Id,
+                    CharacterId = c.Id,
                     PlayerId = c.PlayerId,
                     GameId = c.GameId,
                     Name = c.Name,
@@ -78,7 +78,7 @@ namespace WowDash.WebUI.Controllers
 
             return new GetCharacterResponse()
             {
-                Id = character.Id,
+                CharacterId = character.Id,
                 PlayerId = character.PlayerId,
                 GameId = character.GameId,
                 Name = character.Name,

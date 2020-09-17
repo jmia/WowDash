@@ -5,7 +5,7 @@ namespace WowDash.ApplicationCore.DTO.Responses
 {
     public class GetCharacterResponse
     {
-        public Guid Id { get; set; }
+        public Guid CharacterId { get; set; }
         public Guid PlayerId { get; set; }  // TODO: Probably don't need?
         public int? GameId { get; set; }
         public string Name { get; set; }
@@ -17,10 +17,10 @@ namespace WowDash.ApplicationCore.DTO.Responses
 
         public GetCharacterResponse() { }
 
-        public GetCharacterResponse(Guid id, Guid playerId, int? gameId, string name, CharacterGender gender, int? level,
+        public GetCharacterResponse(Guid characterId, Guid playerId, int? gameId, string name, CharacterGender gender, int? level,
             string @class, string race, string realm)
         {
-            Id = id;
+            CharacterId = characterId;
             PlayerId = playerId;
             GameId = gameId;
             Name = name;

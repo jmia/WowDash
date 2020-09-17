@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
