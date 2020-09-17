@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using WowDash.ApplicationCore.Entities;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.Infrastructure
 {

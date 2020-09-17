@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using WowDash.ApplicationCore.Entities;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.IntegrationTests.Characters
 {

@@ -2,6 +2,7 @@
 using System;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
+using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.UnitTests.Common
 {
