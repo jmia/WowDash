@@ -40,8 +40,8 @@ namespace WowDash.WebUI.Controllers
             if (characters is null || !characters.Any())
                 return NotFound();
 
-            var characterList = new List<GetCharacterResponse>(characters.Select(c =>
-                new GetCharacterResponse()
+            var characterList = new List<CharacterResponse>(characters.Select(c =>
+                new CharacterResponse()
                 {
                     CharacterId = c.Id,
                     PlayerId = c.PlayerId,
@@ -69,14 +69,14 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<GetCharacterResponse> GetCharacterById(Guid characterId)
+        public ActionResult<CharacterResponse> GetCharacterById(Guid characterId)
         {
             var character = _context.Characters.Find(characterId);
 
             if (character is null)
                 return NotFound();
 
-            return new GetCharacterResponse()
+            return new CharacterResponse()
             {
                 CharacterId = character.Id,
                 PlayerId = character.PlayerId,

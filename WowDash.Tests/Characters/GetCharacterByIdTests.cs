@@ -40,7 +40,7 @@ namespace WowDash.UnitTests.Characters
 
             // Assert
             response.Value.Should().NotBeNull();
-            Assert.IsInstanceOf<GetCharacterResponse>(response.Value);
+            Assert.IsInstanceOf<CharacterResponse>(response.Value);
             response.Value.PlayerId.Should().Be(DefaultPlayer.Id);
             response.Value.GameId.Should().BeNull();
             response.Value.Name.Should().Be(expectedName);

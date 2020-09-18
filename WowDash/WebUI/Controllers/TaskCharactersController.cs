@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using WowDash.ApplicationCore.DTO.Requests;
+using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 using static WowDash.ApplicationCore.Common.Enums;
@@ -19,6 +20,31 @@ namespace WowDash.WebUI.Controllers
         public TaskCharactersController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        /// <summary>
+        /// Gets a single task-character for a given composite key.
+        /// </summary>
+        /// <param name="characterId">The ID of the character.</param>
+        /// <param name="taskId">The ID of the task.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource was not found in the database.</response>
+        [HttpGet("{characterId}:{taskId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TaskCharacterResponse> GetTaskCharacterById(Guid characterId, Guid taskId)
+        {
+            var taskCharacter = _context.TaskCharacters.Find(characterId, taskId);
+
+            if (taskCharacter is null)
+                return NotFound();
+
+            var response = new TaskCharacterResponse(taskCharacter.CharacterId, taskCharacter.TaskId,
+                taskCharacter.IsActive);
+
+            return response;
         }
 
         /// <summary>
