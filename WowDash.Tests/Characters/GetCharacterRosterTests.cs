@@ -10,7 +10,7 @@ using static WowDash.ApplicationCore.Common.Enums;
 namespace WowDash.UnitTests.Characters
 {
     [TestFixture]
-    public class GetPlayerCharactersTests : UnitTestBase
+    public class GetCharacterRosterTests : UnitTestBase
     {
         private CharactersController _controller;
 
@@ -33,11 +33,11 @@ namespace WowDash.UnitTests.Characters
             Context.SaveChanges();
 
             // Act
-            var response = _controller.GetPlayerCharacters(DefaultPlayer.Id);
+            var response = _controller.GetCharacterRoster(DefaultPlayer.Id);
 
             // Assert
             response.Value.Should().NotBeNull();
-            Assert.IsInstanceOf<GetCharactersResponse>(response.Value);
+            Assert.IsInstanceOf<GetCharacterRosterResponse>(response.Value);
             response.Value.Characters.Count.Should().Be(2);
             response.Value.PlayerId.Should().Be(DefaultPlayer.Id);
         }
@@ -46,7 +46,7 @@ namespace WowDash.UnitTests.Characters
         public void GivenAnInvalidPlayerId_ReturnsNotFound()
         {
             // Arrange, Act
-            var response = _controller.GetPlayerCharacters(TestConstants.AllOnesGuid);
+            var response = _controller.GetCharacterRoster(TestConstants.AllOnesGuid);
 
             // Assert
             Assert.IsInstanceOf<NotFoundResult>(response.Result);

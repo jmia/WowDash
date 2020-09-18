@@ -48,13 +48,33 @@ namespace WowDash.IntegrationTests.TaskCharacters
 
             var result = await JsonSerializer.DeserializeAsync<TaskCharacterResponse>(response, options);
 
-            var foundTaskCharacter = await FindAsync<TaskCharacter>(result.CharacterId, result.TaskId);
+            // Assert
+            result.CharacterId.Should().Be(taskCharacter.CharacterId);
+            result.TaskId.Should().Be(taskCharacter.TaskId);
+        }
+
+        public async System.Threading.Tasks.Task GetCharactersForTask_ReturnsCharacters()
+        {
+            // Arrange
+            var taskCharacter = await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
+
+            // Act
+            var httpResponse = await Client.GetAsync($"/api/task-characters/task/{taskCharacter.TaskId}");
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var result = await JsonSerializer.DeserializeAsync<GetCharactersForTaskResponse>(response, options);
 
             // Assert
-            foundTaskCharacter.Should().NotBeNull();
-            foundTaskCharacter.TaskId.Should().Be(defaultTaskId);
-            foundTaskCharacter.CharacterId.Should().Be(defaultCharacterId);
-            foundTaskCharacter.IsActive.Should().BeTrue();
+            result.TaskId.Should().Be(defaultTaskId);
+            result.Characters.Count.Should().Be(1);
         }
     }
 }

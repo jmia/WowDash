@@ -29,19 +29,19 @@ namespace WowDash.WebUI.Controllers
         /// <response code="200">Returns the resource.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
         /// <response code="404">If the player was not found in the database.</response>
-        [HttpGet("all/{playerId}")]
+        [HttpGet("roster/{playerId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<GetCharactersResponse> GetPlayerCharacters(Guid playerId)
+        public ActionResult<GetCharacterRosterResponse> GetCharacterRoster(Guid playerId)
         {
             var characters = _context.Characters.Where(c => c.PlayerId == playerId);
 
-            if (characters is null || !characters.Any())
+            if (!characters.Any())
                 return NotFound();
 
-            var characterList = new List<CharacterResponse>(characters.Select(c =>
-                new CharacterResponse()
+            var characterList = new List<CharacterRosterEntry>(characters.Select(c =>
+                new CharacterRosterEntry()
                 {
                     CharacterId = c.Id,
                     PlayerId = c.PlayerId,
@@ -55,7 +55,7 @@ namespace WowDash.WebUI.Controllers
                 }
             ));
 
-            return new GetCharactersResponse(playerId, characterList);
+            return new GetCharacterRosterResponse(playerId, characterList);
         }
 
         /// <summary>
@@ -69,14 +69,14 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<CharacterResponse> GetCharacterById(Guid characterId)
+        public ActionResult<CharacterRosterEntry> GetCharacterById(Guid characterId)
         {
             var character = _context.Characters.Find(characterId);
 
             if (character is null)
                 return NotFound();
 
-            return new CharacterResponse()
+            return new CharacterRosterEntry()
             {
                 CharacterId = character.Id,
                 PlayerId = character.PlayerId,
