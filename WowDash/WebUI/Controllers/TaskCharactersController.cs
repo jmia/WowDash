@@ -34,14 +34,14 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<GetTaskCharacterByIdResponse> GetTaskCharacterById(Guid characterId, Guid taskId)
+        public ActionResult<TaskCharacterResponse> GetTaskCharacterById(Guid characterId, Guid taskId)
         {
             var taskCharacter = _context.TaskCharacters.Find(characterId, taskId);
 
             if (taskCharacter is null)
                 return NotFound();
 
-            var response = new GetTaskCharacterByIdResponse(taskCharacter.CharacterId, taskCharacter.TaskId,
+            var response = new TaskCharacterResponse(taskCharacter.CharacterId, taskCharacter.TaskId,
                 taskCharacter.IsActive);
 
             return response;

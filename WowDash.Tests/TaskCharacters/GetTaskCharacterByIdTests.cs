@@ -45,7 +45,7 @@ namespace WowDash.UnitTests.TaskCharacters
             var foundTaskCharacter = Context.TaskCharacters.Find(result.Value.CharacterId, result.Value.TaskId);
 
             // Assert
-            Assert.IsInstanceOf<GetTaskCharacterByIdResponse>(result.Value);
+            Assert.IsInstanceOf<TaskCharacterResponse>(result.Value);
 
             foundTaskCharacter.Should().NotBeNull();
             foundTaskCharacter.TaskId.Should().Be(task.Id);

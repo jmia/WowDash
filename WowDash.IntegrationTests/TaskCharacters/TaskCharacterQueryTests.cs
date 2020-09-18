@@ -22,7 +22,7 @@ namespace WowDash.IntegrationTests.TaskCharacters
         {
             var defaultPlayer = await AddAsync(new Player() { DisplayName = "Jen" });
             defaultPlayerId = defaultPlayer.Id;
-            var defaultTask = await AddAsync(new ApplicationCore.Entities.Task(defaultPlayer.Id, TaskType.General));
+            var defaultTask = await AddAsync(new Task(defaultPlayer.Id, TaskType.General));
             defaultTaskId = defaultTask.Id;
             var defaultCharacter = await AddAsync(new Character() { PlayerId = defaultPlayer.Id });
             defaultCharacterId = defaultCharacter.Id;
@@ -46,7 +46,7 @@ namespace WowDash.IntegrationTests.TaskCharacters
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<GetTaskCharacterByIdResponse>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<TaskCharacterResponse>(response, options);
 
             var foundTaskCharacter = await FindAsync<TaskCharacter>(result.CharacterId, result.TaskId);
 
@@ -55,18 +55,6 @@ namespace WowDash.IntegrationTests.TaskCharacters
             foundTaskCharacter.TaskId.Should().Be(defaultTaskId);
             foundTaskCharacter.CharacterId.Should().Be(defaultCharacterId);
             foundTaskCharacter.IsActive.Should().BeTrue();
-        }
-
-        [Test]
-        public void GetTaskCharactersByTaskId_ReturnsTaskCharacters()
-        {
-
-        }
-
-        [Test]
-        public void GetTaskCharactersByCharacterId_ReturnsTaskCharacters()
-        {
-
         }
     }
 }
