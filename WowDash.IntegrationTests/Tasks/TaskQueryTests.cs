@@ -57,7 +57,13 @@ namespace WowDash.IntegrationTests.Tasks
             httpResponse.EnsureSuccessStatusCode();
 
             var response = await httpResponse.Content.ReadAsStreamAsync();
-            var result = await JsonSerializer.DeserializeAsync<TaskResponse>(response);
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var result = await JsonSerializer.DeserializeAsync<TaskResponse>(response, options);
 
             // Assert
             result.TaskId.Should().Be(task.Id);
