@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 
 namespace WowDash.ApplicationCore.DTO.Responses
 {
-    public class CharacterForTaskEntry
+    public class CharacterForTaskResponse
     {
         public Guid CharacterId { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
 
-        public CharacterForTaskEntry() { }
+        public CharacterForTaskResponse() { }
 
-        public CharacterForTaskEntry(Guid characterId, string name, string @class)
+        public CharacterForTaskResponse(Guid characterId, string name, string @class)
         {
             CharacterId = characterId;
             Name = name;

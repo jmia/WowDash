@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using WowDash.ApplicationCore.DTO.Common;
 using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;

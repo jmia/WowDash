@@ -3,7 +3,7 @@ using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.DTO.Responses
 {
-    public class CharacterRosterEntry
+    public class CharacterResponse
     {
         public Guid CharacterId { get; set; }
         public Guid PlayerId { get; set; }  // TODO: Probably don't need?
@@ -15,9 +15,9 @@ namespace WowDash.ApplicationCore.DTO.Responses
         public string Race { get; set; }
         public string Realm { get; set; }
 
-        public CharacterRosterEntry() { }
+        public CharacterResponse() { }
 
-        public CharacterRosterEntry(Guid characterId, Guid playerId, int? gameId, string name, CharacterGender gender, int? level,
+        public CharacterResponse(Guid characterId, Guid playerId, int? gameId, string name, CharacterGender gender, int? level,
             string @class, string race, string realm)
         {
             CharacterId = characterId;

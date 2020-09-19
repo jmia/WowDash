@@ -49,7 +49,7 @@ namespace WowDash.IntegrationTests.Characters
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<CharacterRosterEntry>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<CharacterResponse>(response, options);
 
             var foundCharacter = await FindAsync<Character>(result.CharacterId);
 
