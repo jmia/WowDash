@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using WowDash.ApplicationCore.DTO.Common;
 using WowDash.ApplicationCore.DTO.Requests;
+using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 using static WowDash.ApplicationCore.Common.Enums;
@@ -19,6 +21,32 @@ namespace WowDash.WebUI.Controllers
         public TasksController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        /// <summary>
+        /// Gets a task by its ID.
+        /// </summary>
+        /// <param name="taskId">The ID of the task.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource was not found in the database.</response>
+        [HttpGet("{taskId}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TaskResponse> GetTaskById(Guid taskId)
+        {
+            var task = _context.Tasks.Find(taskId);
+
+            if (task is null)
+                return NotFound();
+
+            var gameDataReferences = task.GameDataReferences.Select(gdr =>
+                new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
+                .ToList();
+
+            return new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
+                task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency);
         }
 
         /// <summary>
