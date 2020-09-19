@@ -19,8 +19,8 @@ namespace WowDash.ApplicationCore.Entities
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
         public TaskType TaskType { get; private set; }
-        public CollectibleType CollectibleType { get; set; }    // TODO: Might need to make this nullable for sorting
-        public Source Source { get; set; }
+        public CollectibleType? CollectibleType { get; set; }
+        public Source? Source { get; set; }
         public Priority Priority { get; set; }
         public RefreshFrequency RefreshFrequency { get; set; }
 

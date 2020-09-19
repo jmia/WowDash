@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.ApplicationCore.DTO.Responses;
@@ -45,6 +46,27 @@ namespace WowDash.WebUI.Controllers
                 taskCharacter.IsActive);
 
             return response;
+        }
+
+        /// <summary>
+        /// Gets all characters for a given task.
+        /// </summary>
+        /// <param name="taskId">The ID of the task.</param>
+        /// <returns></returns>
+        [HttpGet("task/{taskId}")]
+        public ActionResult<GetCharactersForTaskResponse> GetCharactersForTask(Guid taskId)
+        {
+            var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == taskId);
+
+            var characterList = new List<CharacterForTaskResponse>();
+
+            foreach (var tc in taskCharacters)
+            {
+                var character = _context.Characters.Find(tc.CharacterId);
+                characterList.Add(new CharacterForTaskResponse(character.Id, character.Name, character.Class));
+            }
+
+            return new GetCharactersForTaskResponse(taskId, characterList);
         }
 
         /// <summary>
@@ -161,15 +183,9 @@ namespace WowDash.WebUI.Controllers
         {
             var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Daily);
 
-            if (tasks is null)
-                return NoContent();
-
             foreach (var task in tasks)
             {
                 var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
-
-                if (taskCharacters is null)
-                    continue;
 
                 foreach (var taskCharacter in taskCharacters)
                 {
@@ -192,15 +208,9 @@ namespace WowDash.WebUI.Controllers
         {
             var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Weekly);
 
-            if (tasks is null)
-                return NoContent();
-
             foreach (var task in tasks)
             {
                 var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == task.Id && tc.IsActive == false);
-
-                if (taskCharacters is null)
-                    continue;
 
                 foreach (var taskCharacter in taskCharacters)
                 {

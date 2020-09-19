@@ -66,7 +66,7 @@ namespace WowDash.IntegrationTests.Characters
         }
 
         [Test]
-        public async System.Threading.Tasks.Task GetPlayerCharacters_ReturnsCharacters()
+        public async System.Threading.Tasks.Task GetCharacterRoster_ReturnsCharacters()
         {
             var expectedGameId = 0;
             var expectedName = "Starling";
@@ -81,7 +81,7 @@ namespace WowDash.IntegrationTests.Characters
                     expectedRace, expectedRealm));
 
             // Act
-            var httpResponse = await Client.GetAsync($"/api/characters/all/{defaultPlayerId}");
+            var httpResponse = await Client.GetAsync($"/api/characters/roster/{defaultPlayerId}");
 
             httpResponse.EnsureSuccessStatusCode();
 
@@ -92,7 +92,7 @@ namespace WowDash.IntegrationTests.Characters
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<GetCharactersResponse>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<GetCharacterRosterResponse>(response, options);
 
             // Assert
             result.Should().NotBeNull();
