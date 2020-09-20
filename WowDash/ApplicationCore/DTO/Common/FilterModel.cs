@@ -39,6 +39,12 @@ namespace WowDash.ApplicationCore.DTO.Common
         /// The refresh frequencies to filter on, separated by "|".
         /// </summary>
         public string RefreshFrequency { get; set; }
+        /// <summary>
+        /// The property on which to sort, 
+        /// can be "priority" or "alpha",
+        /// suffixed with "_asc" or "_desc."
+        /// </summary>
+        public string SortBy { get; set; }
 
         public FilterModel() { }
 
