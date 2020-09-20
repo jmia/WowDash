@@ -108,7 +108,7 @@ namespace WowDash.UnitTests.Tasks
             // Arrange
             var task = new Task(DefaultPlayer.Id, TaskType.General);
 
-            task.Notes = "This note should be removed.";
+            task.Notes = "I could be more boring than this, but I'm not going to try.";
 
             Context.Tasks.Add(task);
             Context.SaveChanges();

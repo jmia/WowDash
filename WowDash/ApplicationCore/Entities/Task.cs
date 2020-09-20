@@ -11,11 +11,11 @@ namespace WowDash.ApplicationCore.Entities
     public class Task
     {
         public Guid Id { get; set; }
-        public Player Player { get; set; }
+        public virtual Player Player { get; set; }
         public Guid PlayerId { get; private set; }
         public string Description { get; set; }
         public ICollection<GameDataReference> GameDataReferences { get; set; }
-        public ICollection<TaskCharacter> TaskCharacters { get; set; }
+        public virtual ICollection<TaskCharacter> TaskCharacters { get; set; }
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
         public TaskType TaskType { get; private set; }
