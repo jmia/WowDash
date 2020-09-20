@@ -52,24 +52,5 @@ namespace WowDash.UnitTests.Tasks
             result.Value.Tasks.Count.Should().Be(2);
         }
 
-        [Test]
-        public void GivenACharacterId_GetsAllTasksAssignedToCharacter()
-        {
-            // Arrange
-            var firstTask = new Task(DefaultPlayer.Id, TaskType.General) { IsFavourite = true };
-            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible) { IsFavourite = false };
-
-            Context.Tasks.AddRange(firstTask, secondTask);
-            Context.SaveChanges();
-
-            // TODO: Add TaskCharacters
-
-            //// Act
-            //var result = _controller.GetTasks();
-
-            //// Assert
-            //Assert.IsInstanceOf<GetTasksResponse>(result.Value);
-            //result.Value.Tasks.Count.Should().Be(2);
-        }
     }
 }

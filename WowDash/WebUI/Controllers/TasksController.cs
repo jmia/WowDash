@@ -52,7 +52,34 @@ namespace WowDash.WebUI.Controllers
                 task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency);
         }
 
-        // TODO: GetFavouriteTasks
+        /// <summary>
+        /// Gets all favourite tasks for a player.
+        /// </summary>
+        /// <param name="playerId">The ID of the player.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        [HttpGet("favourites/{playerId}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetFavouriteTasksResponse> GetFavouriteTasks(Guid playerId)
+        {
+            var tasks = _context.Tasks.Where(t => t.PlayerId == playerId && t.IsFavourite == true);
+
+            var taskList = new List<TaskResponse>();
+
+            foreach (var task in tasks)
+            {
+                var gameDataReferences = task.GameDataReferences.Select(gdr =>
+                    new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
+                    .ToList();
+
+                taskList.Add(new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
+                    task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency));
+            }
+
+            return new GetFavouriteTasksResponse(playerId, taskList);
+        }
 
         /// <summary>
         /// Gets all tasks for a player with a given filter.
@@ -60,11 +87,9 @@ namespace WowDash.WebUI.Controllers
         /// <param name="filterModel">A collection of properties on which to filter the list.</param>
         /// <response code="200">Returns the resource.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
-        /// <response code="404">If the resource was not found in the database.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetTasksResponse> GetTasks([FromQuery] FilterModel filterModel)
         {
             var tasks = _context.Tasks.Where(t => t.PlayerId == filterModel.PlayerId);
