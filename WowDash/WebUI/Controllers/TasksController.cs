@@ -519,7 +519,7 @@ namespace WowDash.WebUI.Controllers
                     var taskCharacters = _context.TaskCharacters.Where(tc => characterIds.Contains(tc.CharacterId));
 
                     // Filter to all tasks that match these TaskCharacters
-                    tasks = _context.Tasks.Where(t => taskCharacters.Any(tc => tc.TaskId == t.Id)).Distinct();
+                    tasks = tasks.Where(t => taskCharacters.Any(tc => tc.TaskId == t.Id)).Distinct();
                 }
             }
 
@@ -535,7 +535,7 @@ namespace WowDash.WebUI.Controllers
                                                          .Select(x => dungeonId).ToList();
 
                     // Filter to all tasks that have game references that are dungeons and match the supplied dungeonId list
-                    tasks = _context.Tasks.Where(t => t.GameDataReferences
+                    tasks = tasks.Where(t => t.GameDataReferences
                         // This is like 3 loops? Help?
                         .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.JournalInstance && 
                             dungeonIds.Contains((int)gdr.GameId)));
@@ -554,10 +554,17 @@ namespace WowDash.WebUI.Controllers
                                                          .Select(x => zoneId).ToList();
 
                     // Filter to all tasks that have game references that are zones and match the supplied zoneId list
-                    tasks = _context.Tasks.Where(t => t.GameDataReferences
+                    tasks = tasks.Where(t => t.GameDataReferences
                         .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.QuestArea &&
                             zoneIds.Contains((int)gdr.GameId)));
                 }
+            }
+
+            // If only where there are active character attempts left
+            if (filterModel.OnlyActiveAttempts)
+            {
+                var taskChars = _context.TaskCharacters.Where(tc => tc.IsActive == true).Select(tc => tc.TaskId).ToList().Distinct();
+                tasks = tasks.Where(t => taskChars.Contains(t.Id));
             }
         }
 

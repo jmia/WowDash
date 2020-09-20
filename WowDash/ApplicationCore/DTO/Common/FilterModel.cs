@@ -7,7 +7,6 @@ using static WowDash.ApplicationCore.Common.Enums;
 
 namespace WowDash.ApplicationCore.DTO.Common
 {
-    // Or maybe ICollection<Guid>?
     public class FilterModel
     {
         /// <summary>
@@ -39,6 +38,11 @@ namespace WowDash.ApplicationCore.DTO.Common
         /// The refresh frequencies to filter on, separated by "|".
         /// </summary>
         public string RefreshFrequency { get; set; }
+        /// <summary>
+        /// Whether the filter should return only tasks with assigned
+        /// task characters that are active for this lockout (refresh frequency).
+        /// </summary>
+        public bool OnlyActiveAttempts { get; set; } = false;
         /// <summary>
         /// The property on which to sort, 
         /// can be "priority" or "alpha",

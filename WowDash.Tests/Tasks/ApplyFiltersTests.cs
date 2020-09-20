@@ -175,9 +175,6 @@ namespace WowDash.UnitTests.Tasks
                 null,
                 "Icecrown Citadel"));
 
-            var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
-            var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();
-
             Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
             Context.SaveChanges();
 
@@ -194,6 +191,43 @@ namespace WowDash.UnitTests.Tasks
             // Assert
             taskList.Should().HaveCount(2);
             taskList.Any(t => t.GameDataReferences.All(gdr => gdr.Type == GameDataReference.GameDataType.QuestArea)).Should().BeTrue();
+        }
+
+        [Test]
+        public void GivenAnActiveOnlyFlag_FiltersByActiveTaskCharacters()
+        {
+            // Arrange
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
+
+            var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
+            var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();
+
+            Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
+            Context.SaveChanges();
+
+            var taskCharacters = new List<TaskCharacter>()
+            {
+                new TaskCharacter(scully.Id, firstTask.Id),
+                new TaskCharacter(chakwas.Id, firstTask.Id) { IsActive = false },
+                new TaskCharacter(scully.Id, secondTask.Id) { IsActive = false },
+                new TaskCharacter(scully.Id, thirdTask.Id)
+            };
+
+            Context.TaskCharacters.AddRange(taskCharacters);
+            Context.SaveChanges();
+
+            var taskList = Context.Tasks.Where(t => t.Id == firstTask.Id || t.Id == secondTask.Id || t.Id == thirdTask.Id);
+
+            var filterModel = new FilterModel() { OnlyActiveAttempts = true };
+
+            // Act
+            _controller.ApplyFilters(ref taskList, filterModel);
+
+            // Assert
+            taskList.Should().HaveCount(2);
+            taskList.All(t => t.Id != secondTask.Id).Should().BeTrue();
         }
 
         [TestCase(null, 3)]
@@ -311,6 +345,77 @@ namespace WowDash.UnitTests.Tasks
 
             // Assert
             tasks.Count().Should().Be(count);
+        }
+
+        [Test]
+        public void GivenALittleBitOfEverything_FiltersRealGood()
+        {
+            // Arrange
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
+            {
+                CollectibleType = CollectibleType.Pet,
+                RefreshFrequency = RefreshFrequency.Weekly,
+                GameDataReferences = new List<GameDataReference>
+                { 
+                    new GameDataReference(759, GameDataReference.GameDataType.JournalInstance, null, "Ulduar")
+                }
+            };
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
+            {
+                CollectibleType = CollectibleType.Pet,
+                RefreshFrequency = RefreshFrequency.Weekly,
+                GameDataReferences = new List<GameDataReference>
+                {
+                    new GameDataReference(759, GameDataReference.GameDataType.JournalInstance, null, "Ulduar")
+                }
+            };
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
+            {
+                CollectibleType = CollectibleType.Pet,
+                RefreshFrequency = RefreshFrequency.Weekly,
+                GameDataReferences = new List<GameDataReference>
+                {
+                    new GameDataReference(759, GameDataReference.GameDataType.JournalInstance, null, "Ulduar")
+                }
+            };
+            var fourthTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+
+            var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
+            var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();
+
+            Context.Tasks.AddRange(firstTask, secondTask, thirdTask, fourthTask);
+            Context.SaveChanges();
+
+            var taskCharacters = new List<TaskCharacter>()
+            {
+                new TaskCharacter(scully.Id, firstTask.Id),
+                new TaskCharacter(chakwas.Id, firstTask.Id) { IsActive = false },
+                new TaskCharacter(scully.Id, secondTask.Id) { IsActive = false },
+                new TaskCharacter(chakwas.Id, thirdTask.Id)
+            };
+
+            Context.TaskCharacters.AddRange(taskCharacters);
+            Context.SaveChanges();
+
+            var tasks = Context.Tasks.Where(t => t.Id == firstTask.Id ||
+                t.Id == secondTask.Id ||
+                t.Id == thirdTask.Id ||
+                t.Id == fourthTask.Id);
+
+            var filterModel = new FilterModel(DefaultPlayer.Id) 
+            { 
+                CollectibleType = "0|3", 
+                CharacterId = $"{scully.Id}",
+                RefreshFrequency = $"2",
+                DungeonId = $"759",
+                OnlyActiveAttempts = true
+            };
+
+            // Act
+            _controller.ApplyFilters(ref tasks, filterModel);
+
+            // Assert
+            tasks.Count().Should().Be(1);
         }
 
     }
