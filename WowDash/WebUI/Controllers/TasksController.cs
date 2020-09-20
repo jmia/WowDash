@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using WowDash.ApplicationCore.DTO.Common;
 using WowDash.ApplicationCore.DTO.Requests;
 using WowDash.ApplicationCore.DTO.Responses;
@@ -9,6 +11,7 @@ using WowDash.ApplicationCore.Entities;
 using WowDash.Infrastructure;
 using static WowDash.ApplicationCore.Common.Enums;
 
+[assembly: InternalsVisibleTo("WowDash.UnitTests")]
 namespace WowDash.WebUI.Controllers
 {
     [Produces("application/json")]
@@ -47,6 +50,40 @@ namespace WowDash.WebUI.Controllers
 
             return new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
                 task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency);
+        }
+
+        // TODO: GetFavouriteTasks
+
+        /// <summary>
+        /// Gets all tasks for a player with a given filter.
+        /// </summary>
+        /// <param name="filterModel">A collection of properties on which to filter the list.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource was not found in the database.</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetTasksResponse> GetTasks([FromQuery] FilterModel filterModel)
+        {
+            var tasks = _context.Tasks.Where(t => t.PlayerId == filterModel.PlayerId);
+
+            ApplyFilters(ref tasks, filterModel);
+
+            var taskList = new List<TaskResponse>();
+
+            foreach (var task in tasks)
+            {
+                var gameDataReferences = task.GameDataReferences.Select(gdr =>
+                    new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
+                    .ToList();
+                
+                taskList.Add(new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
+                    task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency));
+            }
+
+            return new GetTasksResponse(filterModel.PlayerId, taskList);
         }
 
         /// <summary>
@@ -313,6 +350,110 @@ namespace WowDash.WebUI.Controllers
             _context.SaveChanges();
 
             return task.Id;
+        }
+
+        internal void ApplyFilters(ref IQueryable<Task> tasks, FilterModel filterModel)
+        {
+            //public string CharacterId { get; set; }
+            //public string DungeonId { get; set; }
+            //public string ZoneId { get; set; }
+
+            // TaskType
+            if (!string.IsNullOrWhiteSpace(filterModel.TaskType))
+            {
+                // Creates array with up to 3 elements (0, 1, 2)
+                var taskTypes = filterModel.TaskType.Split('|').Select(tt => int.Parse(tt)).ToList();
+
+                // Filters the list with OR clauses
+                switch (taskTypes.Count)
+                {
+                    case 1:
+                        tasks = tasks.Where(t => t.TaskType == (TaskType)taskTypes[0]);
+                        break;
+                    case 2:
+                        tasks = tasks.Where(t => t.TaskType == (TaskType)taskTypes[0] || 
+                            t.TaskType == (TaskType)taskTypes[1]);
+                        break;
+                    default:
+                        // If it has 3 or 0, we're sending back everything
+                        break;
+                }
+            }
+
+            // RefreshFrequency
+            if (!string.IsNullOrWhiteSpace(filterModel.RefreshFrequency))
+            {
+                // Creates array with up to 3 elements (0, 1, 2)
+                var refreshFrequencies = filterModel.RefreshFrequency.Split('|').Select(tt => int.Parse(tt)).ToList();
+
+                // Filters the list with OR clauses
+                switch (refreshFrequencies.Count)
+                {
+                    case 1:
+                        tasks = tasks.Where(t => t.RefreshFrequency == (RefreshFrequency)refreshFrequencies[0]);
+                        break;
+                    case 2:
+                        tasks = tasks.Where(t => t.RefreshFrequency == (RefreshFrequency)refreshFrequencies[0] || 
+                            t.RefreshFrequency == (RefreshFrequency)refreshFrequencies[1]);
+                        break;
+                    default:
+                        // If it has 3 or 0, we're sending back everything
+                        break;
+                }
+            }
+
+            // CollectibleType
+            if (!string.IsNullOrWhiteSpace(filterModel.CollectibleType))
+            {
+                // Creates array with up to 4 elements (0, 1, 2, 3)
+                var collectibleTypes = filterModel.CollectibleType.Split('|').Select(tt => int.Parse(tt)).ToList();
+
+                // Filters the list with OR clauses
+                switch (collectibleTypes.Count)
+                {
+                    case 1:
+                        tasks = tasks.Where(t => t.CollectibleType == (CollectibleType)collectibleTypes[0]);
+                        break;
+                    case 2:
+                        tasks = tasks.Where(t => t.CollectibleType == (CollectibleType)collectibleTypes[0] ||
+                            t.CollectibleType == (CollectibleType)collectibleTypes[1]);
+                        break;
+                    case 3:
+                        tasks = tasks.Where(t => t.CollectibleType == (CollectibleType)collectibleTypes[0] ||
+                            t.CollectibleType == (CollectibleType)collectibleTypes[1] ||
+                            t.CollectibleType == (CollectibleType)collectibleTypes[2]);
+                        break;
+                    default:
+                        // If it has 4 or 0, we're sending back everything
+                        break;
+                }
+            }
+
+            // If any CharacterIDs are specified
+            if (!string.IsNullOrWhiteSpace(filterModel.CharacterId))
+            {
+                var characterIdStrings = filterModel.CharacterId.Split('|');
+                if (characterIdStrings.Count() > 0)
+                {
+                    // Parse a list of all chars I want to sort on
+                    Guid characterId = Guid.Empty;
+                    var characterIds = characterIdStrings.Where(c => Guid.TryParse(c, out characterId))
+                                                         .Select(x => characterId).ToList();
+
+                    // I need a list of all tasks that have any of these characters as an assigned TaskCharacter
+
+
+                    // Get all task characters that have these parsed character IDs
+                    // And filter the list of tasks to any that match the task IDs of the task characters
+
+                    // OR get all task characters that have any of the task IDs from the passed in collection
+                    // And filter the list of tasks to any that match the character IDs of the parsed character IDs
+
+                    // "WHERE characterId = this OR characterId = that OR characterId = thisotherthing"
+
+                }
+            }
+
         }
     }
 }

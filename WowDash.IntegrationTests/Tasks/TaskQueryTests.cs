@@ -77,6 +77,60 @@ namespace WowDash.IntegrationTests.Tasks
             result.RefreshFrequency.Should().Be(expectedRefreshFrequency);
         }
 
+        [Test]
+        public async System.Threading.Tasks.Task GetTasksWithPlayerId_ReturnsTask()
+        {
+            // Arrange
+            var expectedTaskType = TaskType.Collectible;
+            var expectedDescription = "Get Midnight's Eternal Reins from Karazhan";
+            var expectedGdrDescription = "Midnight's Eternal Reins";
+            var expectedGameDataReferences = new List<GameDataReference>()
+            {
+                new GameDataReference(142236, GameDataReference.GameDataType.Item, "Mount", expectedGdrDescription)
+            };
+            var expectedCollectibleType = CollectibleType.Mount;
+            var expectedSource = Source.Dungeon;
+            var expectedPriority = Priority.Medium;
+            var expectedRefreshFrequency = RefreshFrequency.Weekly;
+
+            var task = new Task(defaultPlayerId, expectedTaskType)
+            {
+                Description = expectedDescription,
+                GameDataReferences = expectedGameDataReferences,
+                CollectibleType = expectedCollectibleType,
+                Source = expectedSource,
+                Priority = expectedPriority,
+                RefreshFrequency = expectedRefreshFrequency
+            };
+
+            await AddAsync(task);
+
+            var queryString = $"playerId={defaultPlayerId}";
+
+            // Act
+            var httpResponse = await Client.GetAsync($"/api/tasks?{queryString}");
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var result = await JsonSerializer.DeserializeAsync<GetTasksResponse>(response, options);
+
+            // Assert
+            result.PlayerId.Should().Be(defaultPlayerId);
+            result.Tasks.Should().NotBeEmpty().And.HaveCount(1);
+
+            var foundTask = result.Tasks.FirstOrDefault();
+
+            foundTask.Description.Should().Be(expectedDescription);
+            foundTask.GameDataReferences.Should().NotBeEmpty().And.HaveCount(1);
+        }
+
 
     }
 }
