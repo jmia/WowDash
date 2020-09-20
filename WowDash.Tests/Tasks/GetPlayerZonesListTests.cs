@@ -11,7 +11,7 @@ using static WowDash.ApplicationCore.Common.Enums;
 namespace WowDash.UnitTests.Tasks
 {
     [TestFixture]
-    public class GetPlayerDungeonsListTests : UnitTestBase
+    public class GetPlayerZonesListTests : UnitTestBase
     {
         private TasksController _controller;
 
@@ -22,47 +22,50 @@ namespace WowDash.UnitTests.Tasks
         }
 
         [Test]
-        public void GivenAMixedListOfTasks_ReturnsUniqueDungeonList()
+        public void GivenAMixedListOfTasks_ReturnsUniqueZoneList()
         {
             // Arrange
-            var karazhan = "Karazhan";
-            var grimrailDepot = "Grimrail Depot";
+            var deadwindPass = "Deadwind Pass";
+            var nagrand = "Nagrand";
 
-            var firstTask = new Task(DefaultPlayer.Id, TaskType.General) {
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.General)
+            {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(101, GameDataReference.GameDataType.JournalInstance, null, karazhan) }
+                { new GameDataReference(101, GameDataReference.GameDataType.QuestArea, null, deadwindPass) }
             };
-            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible) {
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
+            {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(101, GameDataReference.GameDataType.JournalInstance, null, karazhan) }
+                { new GameDataReference(101, GameDataReference.GameDataType.QuestArea, null, deadwindPass) }
             };
-            var thirdTask = new Task(DefaultPlayer.Id, TaskType.Collectible) {
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
+            {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(103, GameDataReference.GameDataType.JournalInstance, null, grimrailDepot) }
+                { new GameDataReference(103, GameDataReference.GameDataType.QuestArea, null, nagrand) }
             };
 
             Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
             Context.SaveChanges();
 
             // Act
-            var result = _controller.GetPlayerDungeonsList(DefaultPlayer.Id);
+            var result = _controller.GetPlayerZonesList(DefaultPlayer.Id);
 
             // Assert
             Assert.IsInstanceOf<ICollection<FilterListSourceResponse>>(result.Value);
             result.Value.Count.Should().Be(2);
-            result.Value.Any(d => d.Name.Equals(karazhan)).Should().BeTrue();
-            result.Value.Any(d => d.Name.Equals(grimrailDepot)).Should().BeTrue();
+            result.Value.Any(d => d.Name.Equals(deadwindPass)).Should().BeTrue();
+            result.Value.Any(d => d.Name.Equals(nagrand)).Should().BeTrue();
         }
 
         [Test]
-        public void GivenAListOfTasksWithoutDungeons_ReturnsEmptyList()
+        public void GivenAListOfTasksWithoutZones_ReturnsEmptyList()
         {
             // Arrange
 
             var firstTask = new Task(DefaultPlayer.Id, TaskType.General)
-            {
+            { 
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(101, GameDataReference.GameDataType.QuestArea, null, "Deadwind Pass") }
+                { new GameDataReference(101, GameDataReference.GameDataType.JournalInstance, null, "Karazhan") }
             };
             var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
 
@@ -70,12 +73,11 @@ namespace WowDash.UnitTests.Tasks
             Context.SaveChanges();
 
             // Act
-            var result = _controller.GetPlayerDungeonsList(DefaultPlayer.Id);
+            var result = _controller.GetPlayerZonesList(DefaultPlayer.Id);
 
             // Assert
             Assert.IsInstanceOf<ICollection<FilterListSourceResponse>>(result.Value);
             result.Value.Should().BeEmpty().And.HaveCount(0);
         }
-
     }
 }
