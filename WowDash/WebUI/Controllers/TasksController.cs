@@ -45,6 +45,7 @@ namespace WowDash.WebUI.Controllers
             if (task is null)
                 return NotFound();
 
+            // Map GameDataReference entities to the GameDataReferenceItem DTO
             var gameDataReferences = task.GameDataReferences.Select(gdr =>
                 new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
                 .ToList();
@@ -71,6 +72,7 @@ namespace WowDash.WebUI.Controllers
 
             foreach (var task in tasks)
             {
+                // Map GameDataReference entities to the GameDataReferenceItem DTO
                 var gameDataReferences = task.GameDataReferences.Select(gdr =>
                     new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
                     .ToList();
@@ -429,6 +431,8 @@ namespace WowDash.WebUI.Controllers
         /// <param name="filterModel">The key-values for filtering.</param>
         internal void ApplyFilters(ref IQueryable<Task> tasks, FilterModel filterModel)
         {
+            // Don't Panic.
+
             // TaskType
             if (!string.IsNullOrWhiteSpace(filterModel.TaskType))
             {
@@ -476,9 +480,6 @@ namespace WowDash.WebUI.Controllers
             // CollectibleType
             if (!string.IsNullOrWhiteSpace(filterModel.CollectibleType))
             {
-
-                // "api/tasks?collectibleType=2|3"
-
                 // Creates array with up to 4 elements (0, 1, 2, 3)
                 var collectibleTypes = filterModel.CollectibleType.Split('|').Select(tt => int.Parse(tt)).ToList();
 
@@ -509,13 +510,15 @@ namespace WowDash.WebUI.Controllers
                 var characterIdStrings = filterModel.CharacterId.Split('|');
                 if (characterIdStrings.Count() > 0)
                 {
+                    // Try parsing every string to a GUID
                     Guid characterId = Guid.Empty;
                     var characterIds = characterIdStrings.Where(c => Guid.TryParse(c, out characterId))
                                                          .Select(x => characterId).ToList();
 
+                    // Get all TaskCharacters that have CharacterIds that match the supplied characterId list
                     var taskCharacters = _context.TaskCharacters.Where(tc => characterIds.Contains(tc.CharacterId));
 
-                    // To distinct and then back to queryable! ?? (help)
+                    // Filter to all tasks that match these TaskCharacters
                     tasks = _context.Tasks.Where(t => taskCharacters.Any(tc => tc.TaskId == t.Id)).Distinct();
                 }
             }
@@ -526,12 +529,14 @@ namespace WowDash.WebUI.Controllers
                 var dungeonIdStrings = filterModel.DungeonId.Split('|');
                 if (dungeonIdStrings.Count() > 0)
                 {
+                    // Try parsing every string to an int
                     int dungeonId = 0;
                     var dungeonIds = dungeonIdStrings.Where(c => int.TryParse(c, out dungeonId))
                                                          .Select(x => dungeonId).ToList();
 
-                    // This is like 3 loops? Help?
+                    // Filter to all tasks that have game references that are dungeons and match the supplied dungeonId list
                     tasks = _context.Tasks.Where(t => t.GameDataReferences
+                        // This is like 3 loops? Help?
                         .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.JournalInstance && 
                             dungeonIds.Contains((int)gdr.GameId)));
                 }
@@ -543,10 +548,12 @@ namespace WowDash.WebUI.Controllers
                 var zoneIdStrings = filterModel.ZoneId.Split('|');
                 if (zoneIdStrings.Count() > 0)
                 {
+                    // Try parsing every string to an int
                     int zoneId = 0;
                     var zoneIds = zoneIdStrings.Where(c => int.TryParse(c, out zoneId))
                                                          .Select(x => zoneId).ToList();
 
+                    // Filter to all tasks that have game references that are zones and match the supplied zoneId list
                     tasks = _context.Tasks.Where(t => t.GameDataReferences
                         .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.QuestArea &&
                             zoneIds.Contains((int)gdr.GameId)));
@@ -582,7 +589,7 @@ namespace WowDash.WebUI.Controllers
             }
             else
             {
-                // Is this what I actually want? Can change anytime.
+                // Is this what I actually want as default?
                 tasks = tasks.OrderByDescending(t => t.Priority).ThenBy(t => t.Description);
             }
         }
