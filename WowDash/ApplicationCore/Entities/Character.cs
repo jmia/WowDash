@@ -10,10 +10,10 @@ namespace WowDash.ApplicationCore.Entities
     public class Character
     {
         public Guid Id { get; set; }
-        public Player Player { get; set; }
+        public virtual Player Player { get; set; }
         public Guid PlayerId { get; set; }
         public int? GameId { get; set; }
-        public ICollection<TaskCharacter> TaskCharacters { get; set; }
+        public virtual ICollection<TaskCharacter> TaskCharacters { get; set; }
         public string Name { get; set; }
         public CharacterGender Gender { get; set; }
         public int? Level { get; set; }

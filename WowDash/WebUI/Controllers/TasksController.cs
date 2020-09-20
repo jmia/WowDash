@@ -139,6 +139,8 @@ namespace WowDash.WebUI.Controllers
 
             ApplyFilters(ref tasks, filterModel);
 
+            ApplySort(ref tasks, filterModel);
+
             var taskList = new List<TaskResponse>();
 
             foreach (var task in tasks)
@@ -420,12 +422,13 @@ namespace WowDash.WebUI.Controllers
             return task.Id;
         }
 
+        /// <summary>
+        /// Filter a list of tasks by model properties.
+        /// </summary>
+        /// <param name="tasks">The list of tasks to filter.</param>
+        /// <param name="filterModel">The key-values for filtering.</param>
         internal void ApplyFilters(ref IQueryable<Task> tasks, FilterModel filterModel)
         {
-            //public string CharacterId { get; set; }
-            //public string DungeonId { get; set; }
-            //public string ZoneId { get; set; }
-
             // TaskType
             if (!string.IsNullOrWhiteSpace(filterModel.TaskType))
             {
@@ -500,7 +503,7 @@ namespace WowDash.WebUI.Controllers
                 }
             }
 
-            // If any CharacterIDs are specified
+            // CharacterID
             if (!string.IsNullOrWhiteSpace(filterModel.CharacterId))
             {
                 var characterIdStrings = filterModel.CharacterId.Split('|');
@@ -517,7 +520,7 @@ namespace WowDash.WebUI.Controllers
                 }
             }
 
-            // If any DungeonIDs are specified
+            // DungeonID
             if (!string.IsNullOrWhiteSpace(filterModel.DungeonId))
             {
                 var dungeonIdStrings = filterModel.DungeonId.Split('|');
@@ -534,7 +537,7 @@ namespace WowDash.WebUI.Controllers
                 }
             }
 
-            // If any ZoneIDs are specified
+            // ZoneID
             if (!string.IsNullOrWhiteSpace(filterModel.ZoneId))
             {
                 var zoneIdStrings = filterModel.ZoneId.Split('|');
@@ -544,11 +547,43 @@ namespace WowDash.WebUI.Controllers
                     var zoneIds = zoneIdStrings.Where(c => int.TryParse(c, out zoneId))
                                                          .Select(x => zoneId).ToList();
 
-                    // This is like 3 loops? Help?
                     tasks = _context.Tasks.Where(t => t.GameDataReferences
                         .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.QuestArea &&
                             zoneIds.Contains((int)gdr.GameId)));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Sort a list of tasks by priority or alphabetical by description.
+        /// </summary>
+        /// <param name="tasks">The list of tasks to sort.</param>
+        /// <param name="filterModel">The key-values for sorting.</param>
+        internal void ApplySort(ref IQueryable<Task> tasks, FilterModel filterModel)
+        {
+            if (!string.IsNullOrWhiteSpace(filterModel.SortBy))
+            {
+                switch (filterModel.SortBy)
+                {
+                    case "priority_asc":
+                        tasks = tasks.OrderBy(t => t.Priority).ThenBy(t => t.Description);
+                        break;
+                    case "alpha_asc":
+                        tasks = tasks.OrderBy(t => t.Description).ThenByDescending(t => t.Priority);
+                        break;
+                    case "alpha_desc":
+                        tasks = tasks.OrderByDescending(t => t.Description).ThenByDescending(t => t.Priority);
+                        break;
+                    case "priority_desc":
+                    default:
+                        tasks = tasks.OrderByDescending(t => t.Priority).ThenBy(t => t.Description);
+                        break;
+                }
+            }
+            else
+            {
+                // Is this what I actually want? Can change anytime.
+                tasks = tasks.OrderByDescending(t => t.Priority).ThenBy(t => t.Description);
             }
         }
     }

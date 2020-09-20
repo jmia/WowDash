@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Remove="Infrastructure\Migrations\20200827000939_FakeMigration.cs" />
     <Compile Remove="Infrastructure\Migrations\20200827000939_FakeMigration.Designer.cs" />
+    <Compile Remove="Infrastructure\Migrations\20200920221835_JustChecking.cs" />
+    <Compile Remove="Infrastructure\Migrations\20200920221835_JustChecking.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

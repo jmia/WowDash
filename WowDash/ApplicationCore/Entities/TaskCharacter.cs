@@ -8,9 +8,9 @@ namespace WowDash.ApplicationCore.Entities
     public class TaskCharacter
     {
         public Guid CharacterId { get; }
-        public Character Character { get; set; }
+        public virtual Character Character { get; set; }
         public Guid TaskId { get; }
-        public Task Task { get; set; }
+        public virtual Task Task { get; set; }
         public bool IsActive { get; set; }
 
         public TaskCharacter(Guid characterId, Guid taskId)
