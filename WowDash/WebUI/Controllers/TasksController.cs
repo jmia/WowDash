@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetFavouriteTasksResponse> GetFavouriteTasks(Guid playerId)
         {
-            var tasks = _context.Tasks.Where(t => t.PlayerId == playerId && t.IsFavourite == true);
+            var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId && t.IsFavourite == true);
 
             var taskList = new List<TaskResponse>();
 
@@ -82,6 +83,48 @@ namespace WowDash.WebUI.Controllers
         }
 
         /// <summary>
+        /// Gets a list of unique dungeon names for filtering.
+        /// </summary>
+        /// <param name="playerId">The ID of the player.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        [HttpGet("dungeon-index/{playerId}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ICollection<FilterListSourceResponse>> GetPlayerDungeonsList(Guid playerId)
+        {
+            var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId && 
+                t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.JournalInstance));
+
+            var references = tasks.SelectMany(t => t.GameDataReferences);
+            var distinctReferences = references.DistinctBy(r => r.GameId);
+
+            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).ToList();
+        }
+
+        /// <summary>
+        /// Gets all favourite tasks for a player.
+        /// </summary>
+        /// <param name="playerId">The ID of the player.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        [HttpGet("zone-index/{playerId}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ICollection<FilterListSourceResponse>> GetPlayerZonesList(Guid playerId)
+        {
+            var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId &&
+                t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.QuestArea));
+
+            var references = tasks.SelectMany(t => t.GameDataReferences);
+            var distinctReferences = references.DistinctBy(r => r.GameId);
+
+            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).ToList();
+        }
+
+        /// <summary>
         /// Gets all tasks for a player with a given filter.
         /// </summary>
         /// <param name="filterModel">A collection of properties on which to filter the list.</param>
@@ -92,7 +135,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<GetTasksResponse> GetTasks([FromQuery] FilterModel filterModel)
         {
-            var tasks = _context.Tasks.Where(t => t.PlayerId == filterModel.PlayerId);
+            var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == filterModel.PlayerId);
 
             ApplyFilters(ref tasks, filterModel);
 

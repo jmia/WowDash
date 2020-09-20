@@ -163,7 +163,7 @@ namespace WowDash.UnitTests.Tasks
         [TestCase("3|1|0|2", 4)]
         [TestCase("3|1|2|0", 4)]
         [TestCase("3|2|0|1", 4)]
-        [TestCase("3|2|1|0", 4)]
+        [TestCase("3|2|1|0", 4)]    // Math, y'all.
         public void GivenAnyCollectibleTypes_FiltersList(string collectibleTypes, int count)
         {
             // Arrange
