@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WowDash.ApplicationCore.DTO.Common;
 using WowDash.ApplicationCore.Entities;
 using WowDash.UnitTests.Common;
@@ -26,13 +24,26 @@ namespace WowDash.UnitTests.Tasks
         [Test]
         public void GivenNoParameters_DoesNotFilterList()
         {
+            // Arrange
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
 
-        }
+            Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
+            Context.SaveChanges();
 
-        [Test]
-        public void GivenNoTaskTypes_DoesNotFilterList()
-        {
+            var taskList = Context.Tasks.Where(t => t.Id == firstTask.Id || t.Id == secondTask.Id || t.Id == thirdTask.Id);
 
+            var filterModel = new FilterModel();
+
+            // Act
+            _controller.ApplyFilters(ref taskList, filterModel);
+
+            // Assert
+            taskList.Should().HaveCount(3);
+            taskList.Any(t => t.Id == firstTask.Id).Should().BeTrue();
+            taskList.Any(t => t.Id == secondTask.Id).Should().BeTrue();
+            taskList.Any(t => t.Id == thirdTask.Id).Should().BeTrue();
         }
 
         [Test]
@@ -83,6 +94,106 @@ namespace WowDash.UnitTests.Tasks
             taskList.Any(t => t.Id == firstTask.Id).Should().BeTrue();
             taskList.Any(t => t.Id == secondTask.Id).Should().BeTrue();
             taskList.Any(t => t.Id == thirdTask.Id).Should().BeTrue();
+        }
+
+        [Test]
+        public void GivenAListOfDungeonIds_FiltersListByDungeons()
+        {
+            // Arrange
+            var expectedFirstId = 13502;
+            var expectedSecondId = 1154;
+            var expectedThirdId = 1597;
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+            firstTask.GameDataReferences.Add(new GameDataReference(
+                expectedFirstId,
+                GameDataReference.GameDataType.JournalInstance,
+                null,
+                "Karazhan"));
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+            secondTask.GameDataReferences.Add(new GameDataReference(
+                expectedFirstId,
+                GameDataReference.GameDataType.JournalInstance,
+                null,
+                "Karazhan"));
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
+            thirdTask.GameDataReferences.Add(new GameDataReference(
+                expectedSecondId,
+                GameDataReference.GameDataType.Item,
+                null,
+                "Frostmourne"));
+            thirdTask.GameDataReferences.Add(new GameDataReference(
+                expectedThirdId,
+                GameDataReference.GameDataType.JournalInstance,
+                null,
+                "Icecrown Citadel"));
+
+            var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
+            var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();
+
+            Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
+            Context.SaveChanges();
+
+            var taskList = Context.Tasks.Where(t => t.Id == firstTask.Id || t.Id == secondTask.Id || t.Id == thirdTask.Id);
+
+            var filterModel = new FilterModel
+            {
+                DungeonId = $"{expectedFirstId}|{expectedSecondId}|{expectedThirdId}"
+            };
+
+            // Act
+            _controller.ApplyFilters(ref taskList, filterModel);
+
+            // Assert
+            taskList.Should().HaveCount(3);
+            taskList.Any(t => t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.Item)).Should().BeTrue();
+            taskList.Where(t => t.GameDataReferences.Any(gdr => gdr.GameId == expectedFirstId)).Count().Should().Be(2);
+        }
+
+        [Test]
+        public void GivenAListOfZoneIds_FiltersListByZone()
+        {
+            // Arrange
+            var expectedFirstId = 2250;
+            var expectedSecondId = 1597;
+            var expectedThirdId = 7536;
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+            firstTask.GameDataReferences.Add(new GameDataReference(
+                expectedFirstId,
+                GameDataReference.GameDataType.QuestArea,
+                null,
+                "Deadwind Pass"));
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
+            secondTask.GameDataReferences.Add(new GameDataReference(
+                expectedSecondId,
+                GameDataReference.GameDataType.QuestArea,
+                null,
+                "Icecrown"));
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
+            thirdTask.GameDataReferences.Add(new GameDataReference(
+                expectedThirdId,
+                GameDataReference.GameDataType.JournalInstance,
+                null,
+                "Icecrown Citadel"));
+
+            var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
+            var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();
+
+            Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
+            Context.SaveChanges();
+
+            var taskList = Context.Tasks.Where(t => t.Id == firstTask.Id || t.Id == secondTask.Id || t.Id == thirdTask.Id);
+
+            var filterModel = new FilterModel
+            {
+                ZoneId = $"{expectedFirstId}|{expectedSecondId}"
+            };
+
+            // Act
+            _controller.ApplyFilters(ref taskList, filterModel);
+
+            // Assert
+            taskList.Should().HaveCount(2);
+            taskList.Any(t => t.GameDataReferences.All(gdr => gdr.Type == GameDataReference.GameDataType.QuestArea)).Should().BeTrue();
         }
 
         [TestCase(null, 3)]

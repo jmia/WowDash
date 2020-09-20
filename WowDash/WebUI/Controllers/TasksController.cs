@@ -512,10 +512,44 @@ namespace WowDash.WebUI.Controllers
 
                     var taskCharacters = _context.TaskCharacters.Where(tc => characterIds.Contains(tc.CharacterId));
 
+                    // To distinct and then back to queryable! ?? (help)
                     tasks = _context.Tasks.Where(t => taskCharacters.Any(tc => tc.TaskId == t.Id)).Distinct();
                 }
             }
 
+            // If any DungeonIDs are specified
+            if (!string.IsNullOrWhiteSpace(filterModel.DungeonId))
+            {
+                var dungeonIdStrings = filterModel.DungeonId.Split('|');
+                if (dungeonIdStrings.Count() > 0)
+                {
+                    int dungeonId = 0;
+                    var dungeonIds = dungeonIdStrings.Where(c => int.TryParse(c, out dungeonId))
+                                                         .Select(x => dungeonId).ToList();
+
+                    // This is like 3 loops? Help?
+                    tasks = _context.Tasks.Where(t => t.GameDataReferences
+                        .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.JournalInstance && 
+                            dungeonIds.Contains((int)gdr.GameId)));
+                }
+            }
+
+            // If any ZoneIDs are specified
+            if (!string.IsNullOrWhiteSpace(filterModel.ZoneId))
+            {
+                var zoneIdStrings = filterModel.ZoneId.Split('|');
+                if (zoneIdStrings.Count() > 0)
+                {
+                    int zoneId = 0;
+                    var zoneIds = zoneIdStrings.Where(c => int.TryParse(c, out zoneId))
+                                                         .Select(x => zoneId).ToList();
+
+                    // This is like 3 loops? Help?
+                    tasks = _context.Tasks.Where(t => t.GameDataReferences
+                        .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.QuestArea &&
+                            zoneIds.Contains((int)gdr.GameId)));
+                }
+            }
         }
     }
 }
