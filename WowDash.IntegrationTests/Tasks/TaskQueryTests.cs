@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using WowDash.ApplicationCore.DTO.Common;
 using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.ApplicationCore.Entities;
 using static WowDash.ApplicationCore.Common.Enums;
@@ -167,6 +168,80 @@ namespace WowDash.IntegrationTests.Tasks
             foundTask.IsFavourite.Should().BeTrue();
         }
 
+        [Test]
+        public async System.Threading.Tasks.Task GetPlayerDungeonsList_ReturnsList()
+        {
+            // Arrange
+            var expectedTaskType = TaskType.Collectible;
+            var expectedGdrDescription = "Karazhan";
+            var expectedGameDataReferences = new List<GameDataReference>()
+            {
+                new GameDataReference(103, GameDataReference.GameDataType.JournalInstance, null, expectedGdrDescription)
+            };
 
+            var task = new Task(defaultPlayerId, expectedTaskType)
+            {
+                GameDataReferences = expectedGameDataReferences
+            };
+
+            await AddAsync(task);
+
+            // Act
+            var httpResponse = await Client.GetAsync($"/api/tasks/dungeon-index/{defaultPlayerId}");
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var result = await JsonSerializer.DeserializeAsync<ICollection<FilterListSourceResponse>>(response, options);
+
+            // Assert
+            Assert.IsInstanceOf<ICollection<FilterListSourceResponse>>(result);
+            result.Count.Should().Be(1);
+            result.Any(d => d.Name.Equals(expectedGdrDescription)).Should().BeTrue();
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task GetPlayerZonesList_ReturnsList()
+        {
+            // Arrange
+            var expectedTaskType = TaskType.Collectible;
+            var expectedGdrDescription = "Deadwind Pass";
+            var expectedGameDataReferences = new List<GameDataReference>()
+            {
+                new GameDataReference(103, GameDataReference.GameDataType.QuestArea, null, expectedGdrDescription)
+            };
+
+            var task = new Task(defaultPlayerId, expectedTaskType)
+            {
+                GameDataReferences = expectedGameDataReferences
+            };
+
+            await AddAsync(task);
+
+            // Act
+            var httpResponse = await Client.GetAsync($"/api/tasks/zone-index/{defaultPlayerId}");
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var result = await JsonSerializer.DeserializeAsync<ICollection<FilterListSourceResponse>>(response, options);
+
+            // Assert
+            Assert.IsInstanceOf<ICollection<FilterListSourceResponse>>(result);
+            result.Count.Should().Be(1);
+            result.Any(d => d.Name.Equals(expectedGdrDescription)).Should().BeTrue();
+        }
     }
 }

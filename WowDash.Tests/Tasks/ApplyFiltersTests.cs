@@ -35,6 +35,56 @@ namespace WowDash.UnitTests.Tasks
 
         }
 
+        [Test]
+        public void GivenAListOfCharacterIds_FiltersListByCharacters()
+        {
+            // Arrange
+            var firstTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var secondTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
+            var fourthTask = new Task(DefaultPlayer.Id, TaskType.General);
+
+            var scully = Context.Characters.Where(c => c.Name.Equals("Scully")).FirstOrDefault();
+            var chakwas = Context.Characters.Where(c => c.Name.Equals("Chakwas")).FirstOrDefault();
+
+            var temperance = new Character() { Name = "Temperance" };
+
+            Context.Characters.Add(temperance);
+            Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
+            Context.SaveChanges();
+
+            var taskCharacters = new List<TaskCharacter>
+            {
+                new TaskCharacter(scully.Id, firstTask.Id),
+                new TaskCharacter(chakwas.Id, firstTask.Id),
+                new TaskCharacter(scully.Id, secondTask.Id),
+                new TaskCharacter(chakwas.Id, secondTask.Id),
+                new TaskCharacter(temperance.Id, secondTask.Id),
+                new TaskCharacter(scully.Id, thirdTask.Id),
+                new TaskCharacter(temperance.Id, thirdTask.Id),
+                new TaskCharacter(scully.Id, fourthTask.Id),
+            };
+
+            Context.TaskCharacters.AddRange(taskCharacters);
+            Context.SaveChanges();
+
+            var taskList = Context.Tasks.Where(t => t.Id == firstTask.Id || t.Id == secondTask.Id || t.Id == thirdTask.Id || t.Id == fourthTask.Id);
+
+            var filterModel = new FilterModel
+            {
+                CharacterId = $"{chakwas.Id}|{temperance.Id}"
+            };
+
+            // Act
+            _controller.ApplyFilters(ref taskList, filterModel);
+
+            // Assert
+            taskList.Should().HaveCount(3);
+            taskList.Any(t => t.Id == firstTask.Id).Should().BeTrue();
+            taskList.Any(t => t.Id == secondTask.Id).Should().BeTrue();
+            taskList.Any(t => t.Id == thirdTask.Id).Should().BeTrue();
+        }
+
         [TestCase(null, 3)]
         [TestCase("0", 1)]
         [TestCase("1", 1)]
@@ -188,7 +238,6 @@ namespace WowDash.UnitTests.Tasks
             // Assert
             tasks.Count().Should().Be(count);
         }
-
 
     }
 }

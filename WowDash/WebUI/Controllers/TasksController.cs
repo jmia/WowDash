@@ -473,6 +473,9 @@ namespace WowDash.WebUI.Controllers
             // CollectibleType
             if (!string.IsNullOrWhiteSpace(filterModel.CollectibleType))
             {
+
+                // "api/tasks?collectibleType=2|3"
+
                 // Creates array with up to 4 elements (0, 1, 2, 3)
                 var collectibleTypes = filterModel.CollectibleType.Split('|').Select(tt => int.Parse(tt)).ToList();
 
@@ -503,22 +506,13 @@ namespace WowDash.WebUI.Controllers
                 var characterIdStrings = filterModel.CharacterId.Split('|');
                 if (characterIdStrings.Count() > 0)
                 {
-                    // Parse a list of all chars I want to sort on
                     Guid characterId = Guid.Empty;
                     var characterIds = characterIdStrings.Where(c => Guid.TryParse(c, out characterId))
                                                          .Select(x => characterId).ToList();
 
-                    // I need a list of all tasks that have any of these characters as an assigned TaskCharacter
+                    var taskCharacters = _context.TaskCharacters.Where(tc => characterIds.Contains(tc.CharacterId));
 
-
-                    // Get all task characters that have these parsed character IDs
-                    // And filter the list of tasks to any that match the task IDs of the task characters
-
-                    // OR get all task characters that have any of the task IDs from the passed in collection
-                    // And filter the list of tasks to any that match the character IDs of the parsed character IDs
-
-                    // "WHERE characterId = this OR characterId = that OR characterId = thisotherthing"
-
+                    tasks = _context.Tasks.Where(t => taskCharacters.Any(tc => tc.TaskId == t.Id)).Distinct();
                 }
             }
 
