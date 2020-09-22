@@ -12,58 +12,24 @@ using WowDash.ApplicationCore.Models;
 namespace WowDash.WebUI.Controllers
 {
     [Route("api/achievements")]
+    [Produces("application/json")]
     [ApiController]
     public class AchievementsController : BaseBlizzardApiController
     {
         public AchievementsController(IHttpClientFactory clientFactory, IConfiguration configuration)
             : base(clientFactory, configuration) { }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Achievement>>> GetAchievements()
-        {
-            var client = _clientFactory.CreateClient();
-
-            var access_token = await GetAccessTokenAsync();
-
-            using var request = new HttpRequestMessage(new HttpMethod("GET"),
-                "https://us.api.blizzard.com/data/wow/achievement/index?" +
-                "namespace=static-us&locale=en_US");
-
-            request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
-
-            try
-            {
-                var response = await client.SendAsync(request);
-
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var index = await JsonSerializer.DeserializeAsync<AchievementIndex>(await content);
-
-                    return Ok(index.Achievements.ToList());
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'GetAchievements': " + ex.Message);
-            }
-        }
-
+        /// <summary>
+        /// Get an achievement by its game ID.
+        /// </summary>
+        /// <param name="id">The game ID of the achievement.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="401">If the client failed to authorize an access token.</response>
+        /// <response code="404">If the resource was not found.</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Achievement>> GetAchievement(int id)
@@ -78,36 +44,36 @@ namespace WowDash.WebUI.Controllers
 
             request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
 
-            try
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return NotFound();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return Unauthorized();
+
+            if (response.IsSuccessStatusCode)
             {
-                var response = await client.SendAsync(request);
+                var content = response.Content.ReadAsStreamAsync();
+                var achievement = await JsonSerializer.DeserializeAsync<Achievement>(await content);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var achievement = await JsonSerializer.DeserializeAsync<Achievement>(await content);
-
-                    return Ok(achievement);
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
+                return Ok(achievement);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'GetAchievement': " + ex.Message);
-            }
+
+            return StatusCode((int)response.StatusCode);
         }
 
+        /// <summary>
+        /// Search for an achievement by its name (partials accepted, case insensitive).
+        /// </summary>
+        /// <param name="name">The search term.</param>
+        /// <response code="200">Returns a list of matched resources.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="401">If the client failed to authorize an access token.</response>
+        /// <response code="404">If the resource was not found.</response>
         [HttpGet("search/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Achievement>>> SearchAchievementsByName(string name)
@@ -122,34 +88,25 @@ namespace WowDash.WebUI.Controllers
 
             request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
 
-            try
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return NotFound();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return Unauthorized();
+
+            if (response.IsSuccessStatusCode)
             {
-                var response = await client.SendAsync(request);
+                var content = response.Content.ReadAsStreamAsync();
+                var index = await JsonSerializer.DeserializeAsync<AchievementIndex>(await content);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
+                var results = index.Achievements.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var index = await JsonSerializer.DeserializeAsync<AchievementIndex>(await content);
-
-                    var results = index.Achievements.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    return Ok(results);
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
+                return Ok(results);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'SearchAchievementsByName': " + ex.Message);
-            }
+
+            return StatusCode((int)response.StatusCode);
         }
     }
 }
