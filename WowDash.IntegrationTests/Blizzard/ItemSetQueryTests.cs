@@ -13,7 +13,7 @@ namespace WowDash.IntegrationTests.Blizzard
     public class ItemSetQueryTests : IntegrationTestBase
     {
         [Test]
-        public async Task GetItemset_ReturnsItemset()
+        public async Task GetItemSet_ReturnsItemSet()
         {
             var expectedGameId = 857;
             var expectedName = "VanCleef's Battlegear";

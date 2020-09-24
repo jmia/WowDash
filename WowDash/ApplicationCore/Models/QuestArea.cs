@@ -10,7 +10,11 @@ namespace WowDash.ApplicationCore.Models
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
         [JsonPropertyName("area")]
-        public string Area { get; set; }
+        public string Area { set => Name = value; } // This property needs to be redirected when it comes in for naming convention.
     }
 }
