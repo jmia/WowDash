@@ -10,10 +10,10 @@ using WowDash.ApplicationCore.Models;
 namespace WowDash.IntegrationTests.Blizzard
 {
     [TestFixture]
-    public class JournalInstanceQueryTests : IntegrationTestBase
+    public class DungeonQueryTests : IntegrationTestBase
     {
         [Test]
-        public async Task GetJournalInstance_ReturnsJournalInstance()
+        public async Task GetDungeon_ReturnsDungeon()
         {
             var expectedGameId = 751;
             var expectedName = "Black Temple";
@@ -30,7 +30,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<JournalInstance>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<Dungeon>(response, options);
 
             // Assert
             result.Id.Should().Be(expectedGameId);
@@ -38,7 +38,7 @@ namespace WowDash.IntegrationTests.Blizzard
         }
 
         [Test]
-        public async Task SearchJournalInstancesByName_ReturnsList()
+        public async Task SearchDungeonsByName_ReturnsList()
         {
             var searchTerm = "karazhan";
 
@@ -54,7 +54,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<JournalInstance>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<SearchResult>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();

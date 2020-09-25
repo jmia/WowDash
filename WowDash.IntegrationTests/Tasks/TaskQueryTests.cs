@@ -176,7 +176,7 @@ namespace WowDash.IntegrationTests.Tasks
             var expectedGdrDescription = "Karazhan";
             var expectedGameDataReferences = new List<GameDataReference>()
             {
-                new GameDataReference(103, GameDataReference.GameDataType.JournalInstance, null, expectedGdrDescription)
+                new GameDataReference(103, GameDataReference.GameDataType.Dungeon, null, expectedGdrDescription)
             };
 
             var task = new Task(defaultPlayerId, expectedTaskType)
@@ -214,7 +214,7 @@ namespace WowDash.IntegrationTests.Tasks
             var expectedGdrDescription = "Deadwind Pass";
             var expectedGameDataReferences = new List<GameDataReference>()
             {
-                new GameDataReference(103, GameDataReference.GameDataType.QuestArea, null, expectedGdrDescription)
+                new GameDataReference(103, GameDataReference.GameDataType.Zone, null, expectedGdrDescription)
             };
 
             var task = new Task(defaultPlayerId, expectedTaskType)

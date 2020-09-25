@@ -10,10 +10,10 @@ using WowDash.ApplicationCore.Models;
 namespace WowDash.IntegrationTests.Blizzard
 {
     [TestFixture]
-    public class JournalEncounterQueryTests : IntegrationTestBase
+    public class BossQueryTests : IntegrationTestBase
     {
         [Test]
-        public async Task GetJournalEncounter_ReturnsJournalEncounter()
+        public async Task GetBoss_ReturnsBoss()
         {
             var expectedGameId = 1590;
             var expectedName = "Illidan Stormrage";
@@ -30,7 +30,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<JournalEncounter>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<Boss>(response, options);
 
             // Assert
             result.Id.Should().Be(expectedGameId);
@@ -38,7 +38,7 @@ namespace WowDash.IntegrationTests.Blizzard
         }
 
         [Test]
-        public async Task SearchJournalEncountersByBossName_ReturnsList()
+        public async Task SearchBossesByBossName_ReturnsList()
         {
             var searchTerm = "prince";
 
@@ -54,7 +54,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<JournalEncounter>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<SearchResult>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();
@@ -62,7 +62,7 @@ namespace WowDash.IntegrationTests.Blizzard
         }
 
         [Test]
-        public async Task SearchJournalEncountersByDungeonName_ReturnsList()
+        public async Task SearchBossesByDungeonName_ReturnsList()
         {
             var searchTerm = "karazhan";
 
@@ -78,7 +78,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<JournalEncounter>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<SearchResult>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();

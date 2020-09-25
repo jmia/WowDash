@@ -12,9 +12,9 @@ namespace WowDash.WebUI.Controllers
 {
     [Route("api/bosses")]
     [ApiController]
-    public class JournalEncountersController : BaseBlizzardApiController
+    public class BossesController : BaseBlizzardApiController
     {
-        public JournalEncountersController(IHttpClientFactory clientFactory, IConfiguration configuration) 
+        public BossesController(IHttpClientFactory clientFactory, IConfiguration configuration) 
             : base(clientFactory, configuration) { }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JournalEncounter>> GetJournalEncounter(int id)
+        public async Task<ActionResult<Boss>> GetBoss(int id)
         {
             var client = _clientFactory.CreateClient();
 
@@ -53,9 +53,9 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var journalEncounter = await JsonSerializer.DeserializeAsync<JournalEncounter>(await content);
+                var boss = await JsonSerializer.DeserializeAsync<Boss>(await content);
 
-                return Ok(journalEncounter);
+                return Ok(boss);
             }
 
             return StatusCode((int)response.StatusCode);
@@ -74,7 +74,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<JournalEncounter>>> SearchJournalEncountersByBossName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchBossesByBossName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -100,7 +100,7 @@ namespace WowDash.WebUI.Controllers
                 var content = response.Content.ReadAsStreamAsync();
                 var searchResult = await JsonSerializer.DeserializeAsync<BlizzardSearchResult>(await content);
 
-                return Ok(searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
+                return Ok(searchResult.Results.Select(r => new SearchResult { Id = r.Data.Id, Name = r.Data.Name.en_US })
                                             .ToList());
             }
 
@@ -120,7 +120,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<JournalEncounter>>> SearchJournalEncountersByInstanceName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchBossesByDungeonName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -146,7 +146,7 @@ namespace WowDash.WebUI.Controllers
                 var content = response.Content.ReadAsStreamAsync();
                 var searchResult = await JsonSerializer.DeserializeAsync<BlizzardSearchResult>(await content);
 
-                return Ok(searchResult.Results.Select(r => new JournalEncounter { Id = r.Data.Id, Name = r.Data.Name.en_US })
+                return Ok(searchResult.Results.Select(r => new SearchResult { Id = r.Data.Id, Name = r.Data.Name.en_US })
                                             .ToList());
             }
 

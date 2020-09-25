@@ -106,13 +106,13 @@ namespace WowDash.UnitTests.Tasks
             var firstTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
             firstTask.GameDataReferences.Add(new GameDataReference(
                 expectedFirstId,
-                GameDataReference.GameDataType.JournalInstance,
+                GameDataReference.GameDataType.Dungeon,
                 null,
                 "Karazhan"));
             var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
             secondTask.GameDataReferences.Add(new GameDataReference(
                 expectedFirstId,
-                GameDataReference.GameDataType.JournalInstance,
+                GameDataReference.GameDataType.Dungeon,
                 null,
                 "Karazhan"));
             var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
@@ -123,7 +123,7 @@ namespace WowDash.UnitTests.Tasks
                 "Frostmourne"));
             thirdTask.GameDataReferences.Add(new GameDataReference(
                 expectedThirdId,
-                GameDataReference.GameDataType.JournalInstance,
+                GameDataReference.GameDataType.Dungeon,
                 null,
                 "Icecrown Citadel"));
 
@@ -159,19 +159,19 @@ namespace WowDash.UnitTests.Tasks
             var firstTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
             firstTask.GameDataReferences.Add(new GameDataReference(
                 expectedFirstId,
-                GameDataReference.GameDataType.QuestArea,
+                GameDataReference.GameDataType.Zone,
                 null,
                 "Deadwind Pass"));
             var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
             secondTask.GameDataReferences.Add(new GameDataReference(
                 expectedSecondId,
-                GameDataReference.GameDataType.QuestArea,
+                GameDataReference.GameDataType.Zone,
                 null,
                 "Icecrown"));
             var thirdTask = new Task(DefaultPlayer.Id, TaskType.General);
             thirdTask.GameDataReferences.Add(new GameDataReference(
                 expectedThirdId,
-                GameDataReference.GameDataType.JournalInstance,
+                GameDataReference.GameDataType.Dungeon,
                 null,
                 "Icecrown Citadel"));
 
@@ -190,7 +190,7 @@ namespace WowDash.UnitTests.Tasks
 
             // Assert
             taskList.Should().HaveCount(2);
-            taskList.Any(t => t.GameDataReferences.All(gdr => gdr.Type == GameDataReference.GameDataType.QuestArea)).Should().BeTrue();
+            taskList.Any(t => t.GameDataReferences.All(gdr => gdr.Type == GameDataReference.GameDataType.Zone)).Should().BeTrue();
         }
 
         [Test]
@@ -357,7 +357,7 @@ namespace WowDash.UnitTests.Tasks
                 RefreshFrequency = RefreshFrequency.Weekly,
                 GameDataReferences = new List<GameDataReference>
                 { 
-                    new GameDataReference(759, GameDataReference.GameDataType.JournalInstance, null, "Ulduar")
+                    new GameDataReference(759, GameDataReference.GameDataType.Dungeon, null, "Ulduar")
                 }
             };
             var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
@@ -366,7 +366,7 @@ namespace WowDash.UnitTests.Tasks
                 RefreshFrequency = RefreshFrequency.Weekly,
                 GameDataReferences = new List<GameDataReference>
                 {
-                    new GameDataReference(759, GameDataReference.GameDataType.JournalInstance, null, "Ulduar")
+                    new GameDataReference(759, GameDataReference.GameDataType.Dungeon, null, "Ulduar")
                 }
             };
             var thirdTask = new Task(DefaultPlayer.Id, TaskType.Collectible)
@@ -375,7 +375,7 @@ namespace WowDash.UnitTests.Tasks
                 RefreshFrequency = RefreshFrequency.Weekly,
                 GameDataReferences = new List<GameDataReference>
                 {
-                    new GameDataReference(759, GameDataReference.GameDataType.JournalInstance, null, "Ulduar")
+                    new GameDataReference(759, GameDataReference.GameDataType.Dungeon, null, "Ulduar")
                 }
             };
             var fourthTask = new Task(DefaultPlayer.Id, TaskType.Collectible);

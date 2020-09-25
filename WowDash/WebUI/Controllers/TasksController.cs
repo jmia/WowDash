@@ -97,7 +97,7 @@ namespace WowDash.WebUI.Controllers
         public ActionResult<ICollection<FilterListSourceResponse>> GetPlayerDungeonsList(Guid playerId)
         {
             var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId && 
-                t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.JournalInstance));
+                t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.Dungeon));
 
             var references = tasks.SelectMany(t => t.GameDataReferences);
             var distinctReferences = references.DistinctBy(r => r.GameId);
@@ -118,7 +118,7 @@ namespace WowDash.WebUI.Controllers
         public ActionResult<ICollection<FilterListSourceResponse>> GetPlayerZonesList(Guid playerId)
         {
             var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId &&
-                t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.QuestArea));
+                t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.Zone));
 
             var references = tasks.SelectMany(t => t.GameDataReferences);
             var distinctReferences = references.DistinctBy(r => r.GameId);
@@ -537,7 +537,7 @@ namespace WowDash.WebUI.Controllers
                     // Filter to all tasks that have game references that are dungeons and match the supplied dungeonId list
                     tasks = tasks.Where(t => t.GameDataReferences
                         // This is like 3 loops? Help?
-                        .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.JournalInstance && 
+                        .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.Dungeon && 
                             dungeonIds.Contains((int)gdr.GameId)));
                 }
             }
@@ -555,7 +555,7 @@ namespace WowDash.WebUI.Controllers
 
                     // Filter to all tasks that have game references that are zones and match the supplied zoneId list
                     tasks = tasks.Where(t => t.GameDataReferences
-                        .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.QuestArea &&
+                        .Any(gdr => gdr.GameId != null && gdr.Type == GameDataReference.GameDataType.Zone &&
                             zoneIds.Contains((int)gdr.GameId)));
                 }
             }

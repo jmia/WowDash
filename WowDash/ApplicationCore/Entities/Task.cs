@@ -69,24 +69,24 @@ namespace WowDash.ApplicationCore.Entities
         /// `0` for Achievement<br />
         /// `1` for Item<br />
         /// `2` for ItemSet<br />
-        /// `3` for JournalInstance (Dungeon or raid)<br />
-        /// `4` for JournalEncounter (Boss)<br />
+        /// `3` for Dungeon<br />
+        /// `4` for Boss<br />
         /// `5` for NPC (Manually entered)<br />
         /// `6` for Pet (Battle pets)<br />
         /// `7` for Quest<br />
-        /// `8` for QuestArea (Zone)
+        /// `8` for Zone
         /// </summary>
         public enum GameDataType
         {
             Achievement,
             Item,               // Dropped items (e.g. gear, toys, recipes)
             ItemSet,
-            JournalInstance,    // Dungeon or Raid
-            JournalEncounter,   // Boss
+            Dungeon,            // Dungeon or Raid
+            Boss,
             Npc,                // ** Manually entered, Wowhead only
             Pet,                // Battle pets
             Quest,
-            QuestArea           // Zone
+            Zone
         }
 
     }

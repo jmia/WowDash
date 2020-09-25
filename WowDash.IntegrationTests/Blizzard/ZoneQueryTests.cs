@@ -10,10 +10,10 @@ using WowDash.ApplicationCore.Models;
 namespace WowDash.IntegrationTests.Blizzard
 {
     [TestFixture]
-    public class QuestAreaQueryTests : IntegrationTestBase
+    public class ZoneQueryTests : IntegrationTestBase
     {
         [Test]
-        public async Task GetQuestArea_ReturnsQuestArea()
+        public async Task GetZone_ReturnsZone()
         {
             var expectedGameId = 15;
             var expectedName = "Dustwallow Marsh";
@@ -30,7 +30,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<QuestArea>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<Zone>(response, options);
 
             // Assert
             result.Id.Should().Be(expectedGameId);
@@ -38,7 +38,7 @@ namespace WowDash.IntegrationTests.Blizzard
         }
 
         [Test]
-        public async Task SearchQuestAreasByName_ReturnsList()
+        public async Task SearchZonesByName_ReturnsList()
         {
             var searchTerm = "zul";
 
@@ -54,7 +54,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<QuestArea>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<SearchResult>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();
