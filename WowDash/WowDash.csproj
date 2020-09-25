@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -40,13 +40,6 @@
     <None Remove="$(SpaRoot)**" />
     <None Remove="ApplicationCore\Interfaces\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Infrastructure\Migrations\20200827000939_FakeMigration.cs" />
-    <Compile Remove="Infrastructure\Migrations\20200827000939_FakeMigration.Designer.cs" />
-    <Compile Remove="Infrastructure\Migrations\20200920221835_JustChecking.cs" />
-    <Compile Remove="Infrastructure\Migrations\20200920221835_JustChecking.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
