@@ -30,7 +30,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<JournalInstance>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<Dungeon>(response, options);
 
             // Assert
             result.Id.Should().Be(expectedGameId);
@@ -54,7 +54,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<JournalInstance>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<Dungeon>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();

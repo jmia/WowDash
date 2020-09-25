@@ -3,18 +3,21 @@
 namespace WowDash.ApplicationCore.Models
 {
     /// <summary>
-    /// Represents a JSON object for a zone
+    /// Represents a JSON object for all zones
     /// returned from a Blizzard API GET request.
     /// </summary>
-    public class QuestArea
+    public class ZoneIndex
+    {
+        [JsonPropertyName("areas")]
+        public Area[] Areas { get; set; }
+    }
+
+    public class Area
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
-
         [JsonPropertyName("name")]
         public string Name { get; set; }
-
-        [JsonPropertyName("area")]
-        public string Area { set => Name = value; } // This property needs to be redirected when it comes in for naming convention.
     }
+
 }

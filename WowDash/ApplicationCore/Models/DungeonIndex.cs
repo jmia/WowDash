@@ -6,10 +6,10 @@ namespace WowDash.ApplicationCore.Models
     /// Represents a JSON object for all dungeons
     /// returned from a Blizzard API GET request.
     /// </summary>
-    public class JournalInstanceIndex
+    public class DungeonIndex
     {
         [JsonPropertyName("instances")]
-        public JournalInstance[] Instances { get; set; }
+        public Dungeon[] Dungeons { get; set; }
     }
 
 }

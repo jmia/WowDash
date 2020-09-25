@@ -31,7 +31,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<QuestArea>> GetQuestArea(int id)
+        public async Task<ActionResult<Zone>> GetQuestArea(int id)
         {
             var client = _clientFactory.CreateClient();
 
@@ -54,7 +54,7 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var questArea = await JsonSerializer.DeserializeAsync<QuestArea>(await content);
+                var questArea = await JsonSerializer.DeserializeAsync<Zone>(await content);
 
                 return Ok(questArea);
             }
@@ -74,7 +74,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<QuestArea>>> SearchQuestAreasByName(string name)
+        public async Task<ActionResult<IEnumerable<Zone>>> SearchQuestAreasByName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -97,7 +97,7 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var index = await JsonSerializer.DeserializeAsync<QuestAreaIndex>(await content);
+                var index = await JsonSerializer.DeserializeAsync<ZoneIndex>(await content);
 
                 var results = index.Areas.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
 

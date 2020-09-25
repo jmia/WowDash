@@ -31,7 +31,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JournalInstance>> GetJournalInstance(int id)
+        public async Task<ActionResult<Dungeon>> GetJournalInstance(int id)
         {
             var client = _clientFactory.CreateClient();
 
@@ -54,7 +54,7 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var journalInstance = await JsonSerializer.DeserializeAsync<JournalInstance>(await content);
+                var journalInstance = await JsonSerializer.DeserializeAsync<Dungeon>(await content);
 
                 return Ok(journalInstance);
             }
@@ -75,7 +75,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<JournalInstance>>> SearchJournalInstancesByName(string name)
+        public async Task<ActionResult<IEnumerable<Dungeon>>> SearchJournalInstancesByName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -98,9 +98,9 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var index = await JsonSerializer.DeserializeAsync<JournalInstanceIndex>(await content);
+                var index = await JsonSerializer.DeserializeAsync<DungeonIndex>(await content);
 
-                var results = index.Instances.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                var results = index.Dungeons.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 return Ok(results);
             }

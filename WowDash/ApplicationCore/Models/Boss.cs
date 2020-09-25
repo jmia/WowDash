@@ -6,7 +6,7 @@ namespace WowDash.ApplicationCore.Models
     /// Represents a JSON object for a boss fight
     /// returned from a Blizzard API GET request.
     /// </summary>
-    public class JournalEncounter
+    public class Boss
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -15,7 +15,7 @@ namespace WowDash.ApplicationCore.Models
         [JsonPropertyName("items")]
         public ItemWrapper[] Items { get; set; }
         [JsonPropertyName("instance")]
-        public JournalInstance Instance { get; set; }
+        public Dungeon Instance { get; set; }
 
         /// <summary>
         /// A wrapper class for a collection of items.

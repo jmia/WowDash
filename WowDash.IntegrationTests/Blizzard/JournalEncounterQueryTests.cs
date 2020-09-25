@@ -30,7 +30,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<JournalEncounter>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<Boss>(response, options);
 
             // Assert
             result.Id.Should().Be(expectedGameId);
@@ -54,7 +54,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<JournalEncounter>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<Boss>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();
@@ -78,7 +78,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<JournalEncounter>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<Boss>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();
