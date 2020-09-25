@@ -13,9 +13,9 @@ namespace WowDash.WebUI.Controllers
 {
     [Route("api/zones")]
     [ApiController]
-    public class QuestAreasController : BaseBlizzardApiController
+    public class ZonesController : BaseBlizzardApiController
     {
-        public QuestAreasController(IHttpClientFactory clientFactory, IConfiguration configuration)
+        public ZonesController(IHttpClientFactory clientFactory, IConfiguration configuration)
             : base(clientFactory, configuration) { }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Zone>> GetQuestArea(int id)
+        public async Task<ActionResult<Zone>> GetZone(int id)
         {
             var client = _clientFactory.CreateClient();
 
@@ -54,9 +54,9 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var questArea = await JsonSerializer.DeserializeAsync<Zone>(await content);
+                var zone = await JsonSerializer.DeserializeAsync<Zone>(await content);
 
-                return Ok(questArea);
+                return Ok(zone);
             }
 
             return StatusCode((int)response.StatusCode);
@@ -74,7 +74,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Zone>>> SearchQuestAreasByName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchZonesByName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -99,7 +99,10 @@ namespace WowDash.WebUI.Controllers
                 var content = response.Content.ReadAsStreamAsync();
                 var index = await JsonSerializer.DeserializeAsync<ZoneIndex>(await content);
 
-                var results = index.Areas.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                var results = index.Areas.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                    .Take(50)
+                    .Select(z => new SearchResult() { Id = z.Id, Name = z.Name })
+                    .ToList();
 
                 return Ok(results);
             }

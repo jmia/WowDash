@@ -76,7 +76,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Achievement>>> SearchAchievementsByName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchAchievementsByName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -101,7 +101,10 @@ namespace WowDash.WebUI.Controllers
                 var content = response.Content.ReadAsStreamAsync();
                 var index = await JsonSerializer.DeserializeAsync<AchievementIndex>(await content);
 
-                var results = index.Achievements.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                var results = index.Achievements.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                    .Take(50)
+                    .Select(a => new SearchResult() { Id = a.Id, Name = a.Name })
+                    .ToList();
 
                 return Ok(results);
             }

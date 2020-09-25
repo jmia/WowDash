@@ -74,7 +74,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Item>>> SearchItemsByItemName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchItemsByItemName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -100,7 +100,7 @@ namespace WowDash.WebUI.Controllers
                 var content = response.Content.ReadAsStreamAsync();
                 var searchResult = await JsonSerializer.DeserializeAsync<BlizzardSearchResult>(await content);
 
-                return Ok(searchResult.Results.Select(r => new Item { Id = r.Data.Id, Name = r.Data.Name.en_US })
+                return Ok(searchResult.Results.Select(r => new SearchResult { Id = r.Data.Id, Name = r.Data.Name.en_US })
                                             .ToList());
             }
 

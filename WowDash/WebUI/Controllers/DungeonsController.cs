@@ -13,9 +13,9 @@ namespace WowDash.WebUI.Controllers
 {
     [Route("api/dungeons")]
     [ApiController]
-    public class JournalInstancesController : BaseBlizzardApiController
+    public class DungeonsController : BaseBlizzardApiController
     {
-        public JournalInstancesController(IHttpClientFactory clientFactory, IConfiguration configuration)
+        public DungeonsController(IHttpClientFactory clientFactory, IConfiguration configuration)
             : base(clientFactory, configuration) { }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Dungeon>> GetJournalInstance(int id)
+        public async Task<ActionResult<Dungeon>> GetDungeon(int id)
         {
             var client = _clientFactory.CreateClient();
 
@@ -54,9 +54,9 @@ namespace WowDash.WebUI.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStreamAsync();
-                var journalInstance = await JsonSerializer.DeserializeAsync<Dungeon>(await content);
+                var dungeon = await JsonSerializer.DeserializeAsync<Dungeon>(await content);
 
-                return Ok(journalInstance);
+                return Ok(dungeon);
             }
 
             return StatusCode((int)response.StatusCode);
@@ -75,7 +75,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Dungeon>>> SearchJournalInstancesByName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchDungeonsByName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -100,7 +100,9 @@ namespace WowDash.WebUI.Controllers
                 var content = response.Content.ReadAsStreamAsync();
                 var index = await JsonSerializer.DeserializeAsync<DungeonIndex>(await content);
 
-                var results = index.Dungeons.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
+                var results = index.Dungeons.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                    .Take(50)
+                    .Select(d => new SearchResult() { Id = d.Id, Name = d.Name }).ToList();
 
                 return Ok(results);
             }

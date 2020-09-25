@@ -43,32 +43,23 @@ namespace WowDash.WebUI.Controllers
 
             request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
 
-            try
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return NotFound();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return Unauthorized();
+
+            if (response.IsSuccessStatusCode)
             {
-                var response = await client.SendAsync(request);
+                var content = response.Content.ReadAsStreamAsync();
+                var achievement = await JsonSerializer.DeserializeAsync<ItemSet>(await content);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var achievement = await JsonSerializer.DeserializeAsync<ItemSet>(await content);
-
-                    return Ok(achievement);
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
+                return Ok(achievement);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'GetItemSet': " + ex.Message);
-            }
+
+            return StatusCode((int)response.StatusCode);
         }
 
         /// <summary>
@@ -84,7 +75,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<ItemSet>>> SearchItemSetsByName(string name)
+        public async Task<ActionResult<IEnumerable<SearchResult>>> SearchItemSetsByName(string name)
         {
             var client = _clientFactory.CreateClient();
 
@@ -96,34 +87,28 @@ namespace WowDash.WebUI.Controllers
 
             request.Headers.TryAddWithoutValidation("Authorization", $"Bearer {access_token}");
 
-            try
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return NotFound();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return Unauthorized();
+
+            if (response.IsSuccessStatusCode)
             {
-                var response = await client.SendAsync(request);
+                var content = response.Content.ReadAsStreamAsync();
+                var index = await JsonSerializer.DeserializeAsync<ItemSetIndex>(await content);
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return NotFound();
+                var results = index.ItemSets.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+                    .Take(50)
+                    .Select(i => new SearchResult() { Id = i.Id, Name = i.Name })
+                    .ToList();
 
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return Unauthorized();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStreamAsync();
-                    var index = await JsonSerializer.DeserializeAsync<ItemSetIndex>(await content);
-
-                    var results = index.ItemSets.Where(a => a.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    return Ok(results);
-                }
-                else
-                {
-                    throw new Exception("The response was status code " + response.StatusCode);
-                }
+                return Ok(results);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Unhandled status code from 'SearchItemSetsByName': " + ex.Message);
-            }
+
+            return StatusCode((int)response.StatusCode);
         }
     }
 }
