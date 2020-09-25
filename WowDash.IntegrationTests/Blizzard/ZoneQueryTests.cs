@@ -10,16 +10,16 @@ using WowDash.ApplicationCore.Models;
 namespace WowDash.IntegrationTests.Blizzard
 {
     [TestFixture]
-    public class JournalInstanceQueryTests : IntegrationTestBase
+    public class ZoneQueryTests : IntegrationTestBase
     {
         [Test]
-        public async Task GetJournalInstance_ReturnsJournalInstance()
+        public async Task GetZone_ReturnsZone()
         {
-            var expectedGameId = 751;
-            var expectedName = "Black Temple";
+            var expectedGameId = 15;
+            var expectedName = "Dustwallow Marsh";
 
             // Act
-            var httpResponse = await Client.GetAsync($"/api/dungeons/{expectedGameId}");
+            var httpResponse = await Client.GetAsync($"/api/zones/{expectedGameId}");
 
             httpResponse.EnsureSuccessStatusCode();
 
@@ -30,7 +30,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<Dungeon>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<Zone>(response, options);
 
             // Assert
             result.Id.Should().Be(expectedGameId);
@@ -38,12 +38,12 @@ namespace WowDash.IntegrationTests.Blizzard
         }
 
         [Test]
-        public async Task SearchJournalInstancesByName_ReturnsList()
+        public async Task SearchZonesByName_ReturnsList()
         {
-            var searchTerm = "karazhan";
+            var searchTerm = "zul";
 
             // Act
-            var httpResponse = await Client.GetAsync($"/api/dungeons/search/{searchTerm}");
+            var httpResponse = await Client.GetAsync($"/api/zones/search/{searchTerm}");
 
             httpResponse.EnsureSuccessStatusCode();
 
@@ -54,7 +54,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<Dungeon>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<SearchResult>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();

@@ -40,7 +40,7 @@ namespace WowDash.IntegrationTests.Blizzard
         }
 
         [Test]
-        public async Task SearchItemsByName_ReturnsItemList()
+        public async Task SearchItemsByName_ReturnsList()
         {
             var searchTerm = "thunder";
 
@@ -56,7 +56,7 @@ namespace WowDash.IntegrationTests.Blizzard
                 PropertyNameCaseInsensitive = true,
             };
 
-            var result = await JsonSerializer.DeserializeAsync<IEnumerable<Item>>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<IEnumerable<SearchResult>>(response, options);
 
             // Assert
             result.Should().NotBeEmpty();
