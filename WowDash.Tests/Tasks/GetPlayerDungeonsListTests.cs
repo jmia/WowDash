@@ -30,15 +30,15 @@ namespace WowDash.UnitTests.Tasks
 
             var firstTask = new Task(DefaultPlayer.Id, TaskType.General) {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(101, GameDataReference.GameDataType.JournalInstance, null, karazhan) }
+                { new GameDataReference(101, GameDataReference.GameDataType.Dungeon, null, karazhan) }
             };
             var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible) {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(101, GameDataReference.GameDataType.JournalInstance, null, karazhan) }
+                { new GameDataReference(101, GameDataReference.GameDataType.Dungeon, null, karazhan) }
             };
             var thirdTask = new Task(DefaultPlayer.Id, TaskType.Collectible) {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(103, GameDataReference.GameDataType.JournalInstance, null, grimrailDepot) }
+                { new GameDataReference(103, GameDataReference.GameDataType.Dungeon, null, grimrailDepot) }
             };
 
             Context.Tasks.AddRange(firstTask, secondTask, thirdTask);
@@ -62,7 +62,7 @@ namespace WowDash.UnitTests.Tasks
             var firstTask = new Task(DefaultPlayer.Id, TaskType.General)
             {
                 GameDataReferences = new List<GameDataReference>()
-                { new GameDataReference(101, GameDataReference.GameDataType.QuestArea, null, "Deadwind Pass") }
+                { new GameDataReference(101, GameDataReference.GameDataType.Zone, null, "Deadwind Pass") }
             };
             var secondTask = new Task(DefaultPlayer.Id, TaskType.Collectible);
 
