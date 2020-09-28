@@ -73,7 +73,6 @@ namespace WowDash.WebUI
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;   // TODO: Remove this when there's a real app to look at
                 c.DefaultModelsExpandDepth(-1);
             });
 
