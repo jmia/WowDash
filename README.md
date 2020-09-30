@@ -45,7 +45,7 @@ Add-Migration [FakeMigration] -OutputDir ./Infrastructure/Migrations
 
 - [Starter Template](https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b)
 - [Clean Architecture](https://jasontaylor.dev/clean-architecture-getting-started/) (and accompanying [video](https://www.youtube.com/watch?v=5OtUm1BLmG0))
-- [Okta's Opinion](https://developer.okta.com/blog/2018/08/27/build-crud-app-vuejs-netcore)
+- [Basic HTTP Authentication in VueJS](https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b)
 
 ##### OAuth2.0
 
