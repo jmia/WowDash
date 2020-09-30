@@ -9,6 +9,7 @@ using WowDash.Infrastructure;
 using System.Reflection;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace WowDash.WebUI
 {
@@ -26,6 +27,10 @@ namespace WowDash.WebUI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.AddHttpClient();
 
@@ -61,6 +66,8 @@ namespace WowDash.WebUI
             }
 
             dbContext.Database.Migrate();
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
