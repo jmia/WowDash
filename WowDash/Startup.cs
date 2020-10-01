@@ -40,7 +40,12 @@ namespace WowDash.WebUI
 
                     options.ClientId = googleAuthNSection["ClientId"];
                     options.ClientSecret = googleAuthNSection["ClientSecret"];
-            });
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "webApi";
+                    options.Audience = "https://localhost:5000/";
+                });
 
             services.AddHttpClient();
 
@@ -105,11 +110,14 @@ namespace WowDash.WebUI
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
 
-                endpoints.MapToVueCliProxy(
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapToVueCliProxy(
                     "{*path}",
                     new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
                     npmScript: "serve",
                     regex: "Compiled Successfully");
+                }
             });
 
             app.UseSpa(spa =>
