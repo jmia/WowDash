@@ -1,17 +1,18 @@
 <template>
-  <div id="app">
-    <HelloWorld msg="why is this suddenly not h1"/>
+  <div>
+    <!-- probably put layout stuff here, yeah? -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+// Received a decent head-start from:
+// https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b
+// https://jasonwatmore.com/post/2018/09/21/vuejs-basic-http-authentication-tutorial-example
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  name: 'App'
 }
 </script>
 

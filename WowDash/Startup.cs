@@ -104,20 +104,26 @@ namespace WowDash.WebUI
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapToVueCliProxy(
+                    "{*path}",
+                    new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
+                    npmScript: "serve",
+                    regex: "Compiled Successfully");
             });
 
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "WebUI/ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    // run npm process with client app
-                    spa.UseVueCli(npmScript: "serve", port: 8080);
-                    // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
-                    // app should be already running before starting a .NET client:
-                    // spa.UseProxyToSpaDevelopmentServer("http://localhost:8080"); // your Vue app port
-                }
+                //if (env.IsDevelopment())
+                //{
+                //    // run npm process with client app
+                //    spa.UseVueCli(npmScript: "serve", port: 8080);
+                //    // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
+                //    // app should be already running before starting a .NET client:
+                //    // spa.UseProxyToSpaDevelopmentServer("http://localhost:8080"); // your Vue app port
+                //}
             });
         }
     }
