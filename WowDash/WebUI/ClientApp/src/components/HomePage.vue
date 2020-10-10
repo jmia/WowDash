@@ -1,11 +1,22 @@
 <template>
     <div class="text-center">
-        <h1>You're on the home page</h1>
+        <div>You're on the home page</div>
     </div>
 </template>
 
 <script>
+
 export default {
-    name: 'HomePage'
+    name: 'HomePage',
+    components: {
+    },
+    data: () => ({
+        
+    }),
+    methods: {
+    }
 }
 </script>
+
+<style>
+</style>

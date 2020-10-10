@@ -1,6 +1,9 @@
 <template>
   <div>
     <!-- probably put layout stuff here, yeah? -->
+    <router-link to="/">Home</router-link> |
+    <router-link to="/login">Login</router-link> |
+    <router-link to="/register">Register</router-link>
     <router-view></router-view>
   </div>
 </template>
@@ -12,16 +15,20 @@
 // https://jasonwatmore.com/post/2018/09/21/vuejs-basic-http-authentication-tutorial-example
 
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    let googleScript = document.createElement('script')
+    googleScript.setAttribute('src', 'https://apis.google.com/js/api:client.js')
+    document.head.appendChild(googleScript)
+  },
+  data () {
+    return {
+    }
+  },
+  methods: {
+  }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 </style>

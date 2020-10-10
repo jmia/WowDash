@@ -9,6 +9,7 @@ using WowDash.Infrastructure;
 using System.Reflection;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace WowDash.WebUI
 {
@@ -26,6 +27,25 @@ namespace WowDash.WebUI
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
+
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    IConfigurationSection googleAuthNSection =
+                        Configuration.GetSection("Authentication:Google");
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "webApi";
+                    options.Audience = "https://localhost:5000/";
+                });
 
             services.AddHttpClient();
 
@@ -62,6 +82,8 @@ namespace WowDash.WebUI
 
             dbContext.Database.Migrate();
 
+            app.UseAuthentication();
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -78,8 +100,6 @@ namespace WowDash.WebUI
 
             app.UseRouting();
 
-            // TODO: Should this use MVC?
-            // app.UseMvc();
 
 
             app.UseEndpoints(endpoints =>
@@ -88,25 +108,28 @@ namespace WowDash.WebUI
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
 
-                endpoints.MapToVueCliProxy(
-                    "{*path}",
-                    new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
-                    npmScript: "serve",
-                    regex: "Compiled Successfully");
+                //if (env.IsDevelopment())
+                //{
+                //    endpoints.MapToVueCliProxy(
+                //    "{*path}",
+                //    new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
+                //    npmScript: "serve",
+                //    regex: "Compiled Successfully");
+                //}
             });
 
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "WebUI/ClientApp";
 
-                //if (env.IsDevelopment())
-                //{
+                if (env.IsDevelopment())
+                {
                 //    // run npm process with client app
-                //    spa.UseVueCli(npmScript: "serve", port: 8080);
+                        spa.UseVueCli(npmScript: "serve", port: 8080);
                 //    // if you just prefer to proxy requests from client app, use proxy to SPA dev server instead,
                 //    // app should be already running before starting a .NET client:
-                //    // spa.UseProxyToSpaDevelopmentServer("http://localhost:8080"); // your Vue app port
-                //}
+                     // spa.UseProxyToSpaDevelopmentServer("http://localhost:8080"); // your Vue app port
+                }
             });
         }
     }
