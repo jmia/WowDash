@@ -8,7 +8,6 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 - [.Net Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
 - Entity Framework Core 3.1.5
 - [Vue 2.6](https://vuejs.org/v2/guide/) and [Vuex](https://vuex.vuejs.org/)
-- [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
 - [TailwindCSS](https://tailwindcss.com/)
 
 ### This application is tested with:
@@ -30,14 +29,14 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 
 ### References
 
-#### .NET Core
+#### Back-end
 - [.NET Template for SPA with Vue](https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b)
 - [Clean Architecture](https://jasontaylor.dev/clean-architecture-getting-started/) (and accompanying [video](https://www.youtube.com/watch?v=5OtUm1BLmG0))
 
-#### Vue
+#### Front-end
 - [Basic HTTP Authentication in VueJS](https://jasonwatmore.com/post/2018/09/21/vuejs-basic-http-authentication-tutorial-example)
 
-#### TailwindCSS
+#### Design
 - [Admin Template Night](https://github.com/tailwindtoolbox/Admin-Template-Night)
 
 -----
