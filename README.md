@@ -7,7 +7,7 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 ### This application is built with:
 - [.Net Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
 - Entity Framework Core 3.1.5
-- [Vue 2.6](https://vuejs.org/v2/guide/) and [Vuex]
+- [Vue 2.6](https://vuejs.org/v2/guide/) and [Vuex](https://vuex.vuejs.org/)
 - [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/sql-server/?view=sql-server-ver15)
 - [TailwindCSS](https://tailwindcss.com/)
 
