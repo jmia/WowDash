@@ -15,5 +15,8 @@ module.exports = {
           /^router-link(|-exact)-active$/
         ],
       },
+      future: {
+        removeDeprecatedGapUtilities: true,
+      },
     }
   }
