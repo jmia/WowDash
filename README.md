@@ -24,6 +24,7 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 ### This application leverages the following `npm` packages:
 - [axios](https://www.axios.com/)
 - [vue-formulate](https://vueformulate.com/)
+- [font-awesome](https://fontawesome.com/)
 
 -----
 
