@@ -11,13 +11,6 @@
 </template>
 
 <script>
-
-// Received a decent head-start from:
-// https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b
-// https://jasonwatmore.com/post/2018/09/21/vuejs-basic-http-authentication-tutorial-example
-// https://github.com/tailwindtoolbox/Admin-Template-Night
-
-
 import AppBar from './components/AppBar'
 
 export default {
