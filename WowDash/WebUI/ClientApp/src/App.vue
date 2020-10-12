@@ -54,4 +54,13 @@ export default {
     @apply rounded;
     @apply shadow;
   }
+  .checkbox-text {
+    @apply text-left;
+    @apply pl-2; 
+    @apply text-gray-400;
+  }
+  .checkbox-size {
+    @apply w-4;
+    @apply h-4;
+  }
 </style>
