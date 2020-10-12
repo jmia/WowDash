@@ -1,94 +1,7 @@
 <template>
   <div class="flex flex-wrap">
     <div class="w-1/3 l:w-1/4 xl:w-1/6 p-3">
-      <!--Filter Menu-->
-      <div class="bg-gray-900 border border-gray-800 rounded shadow p-2">
-        <div class="flex flex-row items-start">
-          <div class="flex-1 text-center">
-            <h5 class="font-bold uppercase text-blue-400">Filters</h5>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Task</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>General</li>
-                <li>Achievement</li>
-                <li>Collectible</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Collectible</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>Item</li>
-                <li>Item Set</li>
-                <li>Mount</li>
-                <li>Pet</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Character</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>Scully</li>
-                <li>Chakwas</li>
-                <li>Temperance</li>
-                <li>Meraddison</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Dungeon</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>Icecrown Citadel</li>
-                <li>Black Temple</li>
-                <li>Ahn'kahet: The Old Kingdom</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Zone</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>The Cape of Stranglethorn</li>
-                <li>Nagrand</li>
-                <li>Netherstorm</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Refresh</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>Daily</li>
-                <li>Weekly</li>
-                <li>Never</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Other</h3>
-              <ul class="text-1xl text-left pl-6 text-gray-400 list-disc">
-                <li>Favourites Only</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="font-bold text-2xl text-gray-600">Sort By</h3>
-              <select
-                name="cars"
-                id="cars"
-                class="bg-gray-400 rounded w-auto p-1 m-2 mb-8 text-sm"
-              >
-                <option value="alpha_asc">Alphabet A-Z</option>
-                <option value="alpha_desc">Alphabet Z-A</option>
-                <option value="priority_asc">Priority Low-High</option>
-                <option value="priority_desc">Priority High-Low</option>
-              </select>
-            </div>
-            <button
-              class="bg-blue-400 w-3/4 font-bold text-center p-1 m-2 border-gray-800 rounded shadow"
-            >
-              Apply Filters</button
-            ><br />
-            <button
-              class="bg-gray-800 w-3/4 font-bold text-center text-gray-400 p-1 m-2 border-blue-400 rounded shadow"
-            >
-              Clear Filters
-            </button>
-          </div>
-        </div>
-      </div>
-      <!--/Filter Menu-->
+        <FilterBar />
     </div>
     <div class="w-2/3 l:w-3/4 xl:w-5/6 p-3">
       <!-- Action Buttons -->
@@ -112,9 +25,9 @@
       <!-- /Action Buttons -->
 
       <!--Card List-->
-      <div class="w-full bg-gray-900 border border-gray-800 rounded shadow">
+      <div class="w-full dark-rounded">
         <div class="border-b border-gray-800 p-3">
-          <h5 class="font-bold uppercase text-blue-400">Tasks</h5>
+          <h5 class="table-title">Tasks</h5>
         </div>
 
         <!-- Card -->
@@ -327,8 +240,13 @@
 </template>
 
 <script>
+import FilterBar from './FilterBar'
+
 export default {
   name: "Dashboard",
+  components: {
+      FilterBar
+  }
 };
 </script>
 

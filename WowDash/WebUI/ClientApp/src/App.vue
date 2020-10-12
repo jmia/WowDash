@@ -42,4 +42,16 @@ export default {
   .bg-black-alt  {
     background:#191919;
   }
+  .table-title {
+    @apply font-bold;
+    @apply uppercase;
+    @apply text-blue-400;
+  }
+  .dark-rounded {
+    @apply bg-gray-900;
+    @apply border;
+    @apply border-gray-800;
+    @apply rounded;
+    @apply shadow;
+  }
 </style>
