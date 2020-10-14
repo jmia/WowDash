@@ -30,10 +30,10 @@ namespace WowDash.WebUI.Controllers.Authentication
             _context = context;
         }
 
-        public IActionResult OnGetAsync()
-        {
-            return RedirectToPage("./Login");
-        }
+        //public IActionResult OnGetAsync()
+        //{
+        //    return RedirectToPage("./Login");
+        //}
 
         // POST api/<UsersController>
         [HttpPost("register")]
