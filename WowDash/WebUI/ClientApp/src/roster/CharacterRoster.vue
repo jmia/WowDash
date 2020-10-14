@@ -7,10 +7,6 @@
         ><font-awesome-icon icon="plus" /> Add New Character</a
       >
     </div>
-    <!-- /Action Buttons -->
-
-    <!--Console Content-->
-
     <div class="flex flex-wrap justify-start cursor-default">
       <CharacterCard
         v-for="(item, index) in characters"
@@ -26,8 +22,6 @@
         :realm="characters[index].realm"
       />
     </div>
-
-    <!--/ Console Content-->
   </div>
 </template>
 
