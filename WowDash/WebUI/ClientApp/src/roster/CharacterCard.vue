@@ -57,17 +57,7 @@
 
 <script>
 export default {
-  //   characterId: "100df6f5-8ec4-4848-a1fd-08d86586cf1a",
-  //   playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-  //   gameId: null,
-  //   name: "Scully",
-  //   gender: 1,
-  //   level: 120,
-  //   class: "Hunter",
-  //   race: "Blood Elf",
-  //   realm: "area-52",
   name: "CharacterCard",
-  //props: ['characterId','name','gender','level','class','race','realm'],
   props: {
     characterId: {
       type: String,
@@ -173,6 +163,7 @@ export default {
 </script>
 
 <style scoped>
+/* Factions */
 .horde {
   @apply text-red-400;
 }
@@ -182,7 +173,7 @@ export default {
 .neutral {
   @apply text-gray-500;
 }
-
+/* Classes */
 .deathknight {
   @apply text-indigo-700;
 }
