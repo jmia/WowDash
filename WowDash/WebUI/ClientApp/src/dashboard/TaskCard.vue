@@ -7,26 +7,34 @@
         <div>
           <div class="inline-flex w-auto font-bold text-2xl text-gray-300 mb-1">
             <a
-              href="https://www.wowhead.com/item=50818/invincibles-reins"
+              :href="descriptionHref"
               class="hover:underline"
               target="_blank"
-              >Invincible's Reins</a
+              >{{ description }}</a
             >
             <sub
-              class="fas fa-caret-up fa-fw text-red-400"
-              title="priority: highest"
-            ><font-awesome-icon icon="caret-up" /></sub>
+              v-if="priority != 2"
+              class="ml-1"
+              :class="'priority-' + priorities[priority]"
+              ><font-awesome-icon
+                :icon="priorityIcon"
+                :title="'priority: ' + priorities[priority]"
+            /></sub>
           </div>
         </div>
         <div class="w-auto">
           <button class="mr-4">
-            <span class="text-yellow-400"><font-awesome-icon icon="star" /></span>
+            <span class="text-yellow-400"
+              ><font-awesome-icon icon="star"
+            /></span>
           </button>
           <button class="mr-4">
             <span class="text-blue-400"><font-awesome-icon icon="edit" /></span>
           </button>
           <button class="mr-4">
-            <span class="text-blue-400"><font-awesome-icon icon="trash" /></span>
+            <span class="text-blue-400"
+              ><font-awesome-icon icon="trash"
+            /></span>
           </button>
           <button
             class="bg-green-400 text-gray-800 font-bold text-center p-1 border-gray-800 rounded shadow"
@@ -37,101 +45,308 @@
       </div>
       <div class="inline-flex items-start mb-2 text-xs text-center">
         <div
+          v-if="collectibleType != null"
           class="text-gray-400 border-gray-400 border rounded-full p-1 pr-2 pl-2 w-auto uppercase ml-1 cursor-default"
         >
-          mount
+          {{ collectibleTypes[collectibleType] }}
         </div>
         <div
-          class="text-blue-400 border-blue-400 border rounded-full p-1 pr-2 pl-2 w-auto uppercase ml-1 cursor-default"
+          v-else-if="taskType == 1"
+          class="text-gray-400 border-gray-400 border rounded-full p-1 pr-2 pl-2 w-auto uppercase ml-1 cursor-default"
         >
-          weekly
+          {{ taskTypes[taskType] }}
+        </div>
+        <div
+          v-if="refreshFrequency != 0"
+          class="border rounded-full p-1 pr-2 pl-2 w-auto uppercase ml-1 cursor-default"
+          :class="refreshFrequencyStyle"
+        >
+          {{ refreshFrequencies[refreshFrequency] }}
         </div>
       </div>
-
       <div class="mb-2">
-        <div class="hover:underline font-bold">
-          <span class="mr-2 text-gray-400"><font-awesome-icon icon="user-secret" /></span
-          ><a
-            href="https://www.wowhead.com/npc=36597/the-lich-king"
-            target="_blank"
-            >The Lich King</a
-          >
-        </div>
-        <div class="hover:underline font-bold">
-          <span class="mr-2 text-gray-400"><font-awesome-icon icon="map-marked-alt" /></span
-          ><a href="https://www.wowhead.com/icecrown-citadel" target="_blank"
-            >Icecrown Citadel</a
-          >
-        </div>
+        <TaskGameDataReference
+          v-for="(item, index) in referenceLinkList"
+          :item="item"
+          :index="index"
+          :key="item.id"
+          :gameId="item.gameId"
+          :dataType="item.type"
+          :subclass="item.subclass"
+          :description="item.description"
+        />
       </div>
 
       <div>
-        I've been trying to get this sucker for 15 years, why am I still
-        bothering? It's a flying undead horse. You figure it out.
+        {{ notes }}
       </div>
 
-      <hr class="border-b-1 border-gray-700 my-2 mx-4" />
+      <template v-if="characters.length">
+        <hr class="border-b-1 border-gray-700 my-2 mx-4" />
 
-      <div class="text-xs uppercase">Character Attempts</div>
+        <div class="text-xs uppercase">Character Attempts</div>
 
-      <div
-        class="inline-flex flex-wrap items-start text-sm mb-2 mt-2 text-center"
-      >
-        <button
-          class="bg-orange-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
+        <div
+          class="inline-flex flex-wrap items-start text-sm mb-2 mt-2 text-center"
         >
-          Chakwas
-        </button>
-        <button
-          class="bg-green-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Scully
-        </button>
-        <button
-          class="bg-gray-600 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1 line-through"
-        >
-          Temperance
-        </button>
-        <button
-          class="bg-purple-700 text-gray-400 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Cadidylus
-        </button>
-        <button
-          class="bg-gray-600 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1 line-through"
-        >
-          Oleander
-        </button>
-        <button
-          class="bg-yellow-700 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Diabetty
-        </button>
-        <button
-          class="bg-yellow-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Candor
-        </button>
-        <button
-          class="bg-purple-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Meraddison
-        </button>
-        <button
-          class="bg-indigo-700 text-gray-400 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Orbrand
-        </button>
-      </div>
+          <TaskCharacterButton
+            v-for="(item, index) in characters"
+            :item="item"
+            :index="index"
+            :key="item.id"
+            :taskId="taskId"
+            :characterId="item.characterId"
+            :name="item.name"
+            :playableClass="item.class"
+            :isActive="item.isActive"
+          />
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
+import TaskCharacterButton from "./TaskCharacterButton";
+import TaskGameDataReference from "./TaskGameDataReference";
+
 export default {
   name: "TaskCard",
+  components: {
+    TaskCharacterButton,
+    TaskGameDataReference,
+  },
+  data() {
+    return {
+      characters: [
+        // If the structure of this changes (e.g. "id" is "characterId"),
+        // check the component info above and the template in TaskCharacterButton.vue
+        {
+          characterId: "fake",
+          name: "Chakwas",
+          class: "Druid",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Scully",
+          class: "Hunter",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Temperance",
+          class: "Paladin",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Meraddison",
+          class: "Warlock",
+          isActive: false,
+        },
+        {
+          characterId: "fake",
+          name: "Cadidylus",
+          class: "Demon Hunter",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Orbrand",
+          class: "Death Knight",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Diabetty",
+          class: "Warrior",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Candor",
+          class: "Rogue",
+          isActive: false,
+        },
+        {
+          characterId: "fake",
+          name: "Oleander",
+          class: "Mage",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Mozart",
+          class: "Monk",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Rienne",
+          class: "Shaman",
+          isActive: true,
+        },
+        {
+          characterId: "fake",
+          name: "Rashael",
+          class: "Priest",
+          isActive: true,
+        },
+      ],
+      // Super tightly bound to back end logic, will need refactoring
+      // maybe just change to a get request for a view model collection of all these
+      taskTypes: ["general", "achievement", "collectible"],
+      collectibleTypes: ["item", "gear set", "mount", "battle pet"],
+      priorities: ["lowest", "low", "medium", "high", "highest"],
+      refreshFrequencies: ["never", "daily", "weekly"],
+      sources: ["dungeon", "quest", "vendor", "world drop", "other"],
+      gameDataTypes: [
+        "achievement",
+        "item",
+        "item set",
+        "dungeon",
+        "boss",
+        "npc",
+        "pet",
+        "quest",
+        "zone",
+      ],
+    };
+  },
+  props: {
+    taskId: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    gameDataReferences: {
+      type: Array,
+    },
+    isFavourite: {
+      type: Boolean,
+    },
+    notes: {
+      type: String,
+    },
+    taskType: {
+      type: Number,
+    },
+    collectibleType: {
+      type: Number,
+    },
+    source: {
+      type: Number,
+    },
+    priority: {
+      type: Number,
+    },
+    refreshFrequency: {
+      type: Number,
+    },
+  },
+  computed: {
+    // Dynamic Wowhead tooltip & link generation
+    descriptionHref: function () {
+      var baseUrl = "https://www.wowhead.com/";
+
+      var matchingDescriptions = this.gameDataReferences.filter(
+        (g) => g.description.toLowerCase() == this.description.toLowerCase()
+      );
+
+      if (matchingDescriptions.length) {
+        var match = matchingDescriptions[0];
+        switch (match.type) {
+          case 0: // achievement
+            return (
+              baseUrl +
+              (Number.isInteger(match.gameId)
+                ? "achievement=" + match.gameId
+                : "search?q=" + encodeURI(match.description.toLowerCase()))
+            );
+          case 1: // item
+            return (
+              baseUrl +
+              (Number.isInteger(match.gameId)
+                ? "item=" + match.gameId
+                : "search?q=" + encodeURI(match.description.toLowerCase()))
+            );
+          case 2: // item set
+            return (
+              baseUrl +
+              (Number.isInteger(match.gameId)
+                ? "item-set=" + match.gameId
+                : "search?q=" + encodeURI(match.description.toLowerCase()))
+            );
+          default:
+            // everything else
+            break;
+        }
+      }
+      return baseUrl + "search?q=" + encodeURI(this.description.toLowerCase());
+    },
+    // Change colour and style based on priority
+    priorityIcon: function () {
+      if (this.priority > 2) {
+        return "caret-up";
+      } else if (this.priority < 2) {
+        return "caret-down";
+      } else {
+        return null;
+      }
+    },
+    refreshFrequencyStyle: function () {
+      return this.refreshFrequencies[this.refreshFrequency];
+    },
+    // Save the TaskGameDataReference the trouble of deciding which things
+    // to display, and send in a list of only the ones we want links for
+    // This is all veryyyy brute force, definitely some room for elegance here
+    referenceLinkList: function () {
+      var result;
+
+      // GameDataTypes: 3,4,5,7,8. Exclude 7 if there's no 1 in the list anywhere
+      // i.e. If it's a quest, we want it passed as a link if the primary
+      // goal is an item and not the quest itself
+      if (this.gameDataReferences.some((r) => r.type == 1)) {
+        result = this.gameDataReferences.filter((r) =>
+          [3, 4, 5, 7, 8].includes(r.type)
+        );
+      } else {
+        result = this.gameDataReferences.filter((r) =>
+          [3, 4, 5, 8].includes(r.type)
+        );
+      }
+      console.log(result);
+      return result;
+    },
+  },
 };
 </script>
 
 <style scoped>
+/* Priority */
+.priority-lowest {
+  @apply text-blue-400;
+}
+.priority-low {
+  @apply text-green-400;
+}
+.priority-high {
+  @apply text-yellow-400;
+}
+.priority-highest {
+  @apply text-red-400;
+}
+
+/* Refresh Frequency */
+.daily {
+  @apply text-purple-400;
+  @apply border-purple-400;
+}
+.weekly {
+  @apply text-blue-400;
+  @apply border-blue-400;
+}
 </style>

@@ -2,7 +2,7 @@ module.exports = {
     theme: {
       extend: {
         colors: {
-          'tan': '#C79C6E',
+          'tan': '#C79C6E'
         }
       }
     },
