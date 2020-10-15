@@ -10,7 +10,7 @@
               href="https://www.wowhead.com/item=50818/invincibles-reins"
               class="hover:underline"
               target="_blank"
-              >Invincible's Reins</a
+              >{{ description }}</a
             >
             <sub
               class="fas fa-caret-up fa-fw text-red-400"
@@ -66,8 +66,7 @@
       </div>
 
       <div>
-        I've been trying to get this sucker for 15 years, why am I still
-        bothering? It's a flying undead horse. You figure it out.
+        {{ notes }}
       </div>
 
       <hr class="border-b-1 border-gray-700 my-2 mx-4" />
@@ -77,61 +76,84 @@
       <div
         class="inline-flex flex-wrap items-start text-sm mb-2 mt-2 text-center"
       >
-        <button
-          class="bg-orange-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Chakwas
-        </button>
-        <button
-          class="bg-green-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Scully
-        </button>
-        <button
-          class="bg-gray-600 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1 line-through"
-        >
-          Temperance
-        </button>
-        <button
-          class="bg-purple-700 text-gray-400 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Cadidylus
-        </button>
-        <button
-          class="bg-gray-600 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1 line-through"
-        >
-          Oleander
-        </button>
-        <button
-          class="bg-yellow-700 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Diabetty
-        </button>
-        <button
-          class="bg-yellow-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Candor
-        </button>
-        <button
-          class="bg-purple-400 text-gray-800 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Meraddison
-        </button>
-        <button
-          class="bg-indigo-700 text-gray-400 rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
-        >
-          Orbrand
-        </button>
+        <TaskCharacterButton v-for="(item, index) in characters"
+        :item="item"
+        :index="index"
+        :key="item.id" 
+        :taskId="taskId"
+        :characterId="item.characterId"
+        :name="item.name"
+        :playableClass="item.class" 
+        :isActive="item.isActive" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import TaskCharacterButton from './TaskCharacterButton'
+
 export default {
   name: "TaskCard",
+  components: {
+    TaskCharacterButton
+  },
+  data() {
+    return {
+      characters: [
+        // If the structure of this changes (e.g. "id" is "characterId"), 
+        // check the component info above and the template in TaskCharacterButton.vue
+        { characterId: "fake", name: "Chakwas", class: "Druid", isActive: true },
+        { characterId: "fake", name: "Scully", class: "Hunter", isActive: true },
+        { characterId: "fake", name: "Temperance", class: "Paladin", isActive: true },
+        { characterId: "fake", name: "Meraddison", class: "Warlock", isActive: true },
+        { characterId: "fake", name: "Cadidylus", class: "Demon Hunter", isActive: true },
+        { characterId: "fake", name: "Orbrand", class: "Death Knight", isActive: true },
+        { characterId: "fake", name: "Diabetty", class: "Warrior", isActive: true },
+        { characterId: "fake", name: "Candor", class: "Rogue", isActive: false },
+        { characterId: "fake", name: "Oleander", class: "Mage", isActive: true },
+        { characterId: "fake", name: "Mozart", class: "Monk", isActive: true },
+        { characterId: "fake", name: "Rienne", class: "Shaman", isActive: true },
+        { characterId: "fake", name: "Rashael", class: "Priest", isActive: true },
+      ]
+    }
+  },
+  props: {
+    taskId: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
+    },
+    gameDataReferences: {
+      type: Array,
+    },
+    isFavourite: {
+      type: Boolean
+    },
+    notes: {
+      type: String
+    },
+    taskType: {
+      type: Number
+    },
+    collectibleType: {
+      type: Number
+    },
+    source: {
+      type: Number
+    },
+    priority: {
+      type: Number
+    },
+    refreshFrequency: {
+      type: Number
+    }
+  },
 };
 </script>
 
 <style scoped>
+
 </style>

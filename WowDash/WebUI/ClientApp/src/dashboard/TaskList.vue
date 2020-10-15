@@ -26,7 +26,22 @@
         <h5 class="table-title">Tasks</h5>
       </div>
 
-      <TaskCard />
+      <TaskCard 
+        v-for="(item, index) in tasks"
+        :item="item" 
+        :index="index"
+        :key="item.taskId"
+        :taskId="item.taskId"
+        :description="item.description"
+        :gameDataReferences="item.gameDataReferences"
+        :isFavourite="item.isFavourite"
+        :notes="item.notes"
+        :taskType="item.taskType"
+        :collectibleType="item.collectibleType"
+        :source="item.source"
+        :priority="item.priority"
+        :refreshFrequency="item.refreshFrequency"
+        />
     </div>
     <!--/Card List-->
   </div>
@@ -39,6 +54,48 @@ export default {
   name: "TaskList",
   components: {
       TaskCard
+  },
+  data() {
+    return {
+      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
+      tasks: [
+        {
+          "taskId": "22129c9d-0518-4fad-86d0-08d8706ce7cb",
+          //"playerId": "d8a57467-008e-4ebb-286a-08d86586cf0f",
+          "description": "Invincible's Reins",
+          "gameDataReferences": [
+            {
+              "id": 2,
+              "gameId": 758,
+              "type": 3,
+              "subclass": null,
+              "description": "Icecrown Citadel"
+            },
+            {
+              "id": 3,
+              "gameId": 1636,
+              "type": 4,
+              "subclass": null,
+              "description": "The Lich King"
+            },
+            {
+              "id": 4,
+              "gameId": 50818,
+              "type": 1,
+              "subclass": "Mount",
+              "description": "Invincible's Reins"
+            }
+          ],
+          "isFavourite": false,
+          "notes": null,
+          "taskType": 2,
+          "collectibleType": 2,
+          "source": 0,
+          "priority": 3,
+          "refreshFrequency": 2
+        }
+      ]
+    }
   }
 };
 </script>

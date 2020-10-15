@@ -13,13 +13,13 @@
         :item="item"
         :index="index"
         :key="item.characterId"
-        :characterId="characters[index].characterId"
-        :name="characters[index].name"
-        :gender="characters[index].gender"
-        :level="characters[index].level"
-        :playableClass="characters[index].class"
-        :race="characters[index].race"
-        :realm="characters[index].realm"
+        :characterId="item.characterId"
+        :name="item.name"
+        :gender="item.gender"
+        :level="item.level"
+        :playableClass="item.class"
+        :race="item.race"
+        :realm="item.realm"
       />
     </div>
   </div>
@@ -30,6 +30,9 @@ import CharacterCard from "./CharacterCard";
 
 export default {
   name: "CharacterRoster",
+  components: {
+    CharacterCard,
+  },
   data() {
     return {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
@@ -102,10 +105,7 @@ export default {
         },
       ],
     };
-  },
-  components: {
-    CharacterCard,
-  },
+  }
 };
 </script>
 

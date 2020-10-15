@@ -61,6 +61,7 @@ export default {
   props: {
     characterId: {
       type: String,
+      required: true,
     },
     name: {
       type: String,
@@ -190,7 +191,7 @@ export default {
   @apply text-blue-300;
 }
 .monk {
-  @apply text-green-600;
+  @apply text-teal-400;
 }
 .paladin {
   @apply text-pink-400;
