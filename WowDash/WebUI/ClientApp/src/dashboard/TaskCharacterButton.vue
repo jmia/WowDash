@@ -22,6 +22,7 @@ export default {
         }
     },
     computed: {
+        // Style the background of the button by in-game class colour
         formattedClass: function () {
             var characterClass = this.playableClass.toLowerCase().replace(/ /g, "");
             if (this.isActive) {
@@ -41,7 +42,7 @@ export default {
     @apply text-gray-800;
     @apply line-through;
 }
-/* Classes */
+/* Playable Classes */
 .deathknight {
   @apply bg-indigo-700;
   @apply text-gray-400;

@@ -6,17 +6,18 @@
       <div class="w-full inline-flex justify-between items-center">
         <div>
           <div class="inline-flex w-auto font-bold text-2xl text-gray-300 mb-1">
-            <!-- TODO, still need to do dynamic link generation -->
             <a
-              href="https://www.wowhead.com/item=50818/invincibles-reins"
+              :href="descriptionHref"
               class="hover:underline"
               target="_blank"
               >{{ description }}</a
             >
-            <!-- Overkill for its own component? -->
-            <sub class="ml-1" :class="'priority-' + priorities[priority]"
+            <sub
+              v-if="priority != 2"
+              class="ml-1"
+              :class="'priority-' + priorities[priority]"
               ><font-awesome-icon
-                icon="caret-up"
+                :icon="priorityIcon"
                 :title="'priority: ' + priorities[priority]"
             /></sub>
           </div>
@@ -43,7 +44,6 @@
         </div>
       </div>
       <div class="inline-flex items-start mb-2 text-xs text-center">
-        <!-- These are based on game data references -->
         <div
           v-if="collectibleType != null"
           class="text-gray-400 border-gray-400 border rounded-full p-1 pr-2 pl-2 w-auto uppercase ml-1 cursor-default"
@@ -54,7 +54,7 @@
           v-else-if="taskType == 1"
           class="text-gray-400 border-gray-400 border rounded-full p-1 pr-2 pl-2 w-auto uppercase ml-1 cursor-default"
         >
-          achievement
+          {{ taskTypes[taskType] }}
         </div>
         <div
           v-if="refreshFrequency != 0"
@@ -64,24 +64,17 @@
           {{ refreshFrequencies[refreshFrequency] }}
         </div>
       </div>
-
       <div class="mb-2">
-        <div class="hover:underline font-bold">
-          <span class="mr-2 text-gray-400"
-            ><font-awesome-icon icon="user-secret" /></span
-          ><a
-            href="https://www.wowhead.com/npc=36597/the-lich-king"
-            target="_blank"
-            >The Lich King</a
-          >
-        </div>
-        <div class="hover:underline font-bold">
-          <span class="mr-2 text-gray-400"
-            ><font-awesome-icon icon="map-marked-alt" /></span
-          ><a href="https://www.wowhead.com/icecrown-citadel" target="_blank"
-            >Icecrown Citadel</a
-          >
-        </div>
+        <TaskGameDataReference
+          v-for="(item, index) in referenceLinkList"
+          :item="item"
+          :index="index"
+          :key="item.id"
+          :gameId="item.gameId"
+          :dataType="item.type"
+          :subclass="item.subclass"
+          :description="item.description"
+        />
       </div>
 
       <div>
@@ -115,11 +108,13 @@
 
 <script>
 import TaskCharacterButton from "./TaskCharacterButton";
+import TaskGameDataReference from "./TaskGameDataReference";
 
 export default {
   name: "TaskCard",
   components: {
     TaskCharacterButton,
+    TaskGameDataReference,
   },
   data() {
     return {
@@ -180,11 +175,12 @@ export default {
           class: "Mage",
           isActive: true,
         },
-        { 
-          characterId: "fake", 
-          name: "Mozart", 
-          class: "Monk", 
-          isActive: true },
+        {
+          characterId: "fake",
+          name: "Mozart",
+          class: "Monk",
+          isActive: true,
+        },
         {
           characterId: "fake",
           name: "Rienne",
@@ -252,10 +248,50 @@ export default {
     },
   },
   computed: {
+    // Dynamic Wowhead tooltip & link generation
+    descriptionHref: function () {
+      var baseUrl = "https://www.wowhead.com/";
+
+      var matchingDescriptions = this.gameDataReferences.filter(
+        (g) => g.description.toLowerCase() == this.description.toLowerCase()
+      );
+
+      if (matchingDescriptions.length) {
+        var match = matchingDescriptions[0];
+        switch (match.type) {
+          case 0: // achievement
+            return (
+              baseUrl +
+              (Number.isInteger(match.gameId)
+                ? "achievement=" + match.gameId
+                : "search?q=" + encodeURI(match.description.toLowerCase()))
+            );
+          case 1: // item
+            return (
+              baseUrl +
+              (Number.isInteger(match.gameId)
+                ? "item=" + match.gameId
+                : "search?q=" + encodeURI(match.description.toLowerCase()))
+            );
+          case 2: // item set
+            return (
+              baseUrl +
+              (Number.isInteger(match.gameId)
+                ? "item-set=" + match.gameId
+                : "search?q=" + encodeURI(match.description.toLowerCase()))
+            );
+          default:
+            // everything else
+            break;
+        }
+      }
+      return baseUrl + "search?q=" + encodeURI(this.description.toLowerCase());
+    },
+    // Change colour and style based on priority
     priorityIcon: function () {
-      if (this.priority > 3) {
+      if (this.priority > 2) {
         return "caret-up";
-      } else if (this.priority < 3) {
+      } else if (this.priority < 2) {
         return "caret-down";
       } else {
         return null;
@@ -264,12 +300,33 @@ export default {
     refreshFrequencyStyle: function () {
       return this.refreshFrequencies[this.refreshFrequency];
     },
+    // Save the TaskGameDataReference the trouble of deciding which things
+    // to display, and send in a list of only the ones we want links for
+    // This is all veryyyy brute force, definitely some room for elegance here
+    referenceLinkList: function () {
+      var result;
+
+      // GameDataTypes: 3,4,5,7,8. Exclude 7 if there's no 1 in the list anywhere
+      // i.e. If it's a quest, we want it passed as a link if the primary
+      // goal is an item and not the quest itself
+      if (this.gameDataReferences.some((r) => r.type == 1)) {
+        result = this.gameDataReferences.filter((r) =>
+          [3, 4, 5, 7, 8].includes(r.type)
+        );
+      } else {
+        result = this.gameDataReferences.filter((r) =>
+          [3, 4, 5, 8].includes(r.type)
+        );
+      }
+      console.log(result);
+      return result;
+    },
   },
 };
 </script>
 
 <style scoped>
-/* Priority Styling */
+/* Priority */
 .priority-lowest {
   @apply text-blue-400;
 }
