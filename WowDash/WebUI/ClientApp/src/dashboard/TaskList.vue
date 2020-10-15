@@ -88,7 +88,7 @@ export default {
           ],
           "isFavourite": false,
           "notes": null,
-          "taskType": 2,
+          "taskType": 0,
           "collectibleType": 2,
           "source": 0,
           "priority": 3,
