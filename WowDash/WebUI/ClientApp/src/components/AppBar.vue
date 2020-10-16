@@ -88,9 +88,8 @@
       </div>
 
       <div
+        v-show="menuVisible"
         class="w-full flex-grow lg:flex lg:items-center lg:w-auto mt-2 lg:mt-0 bg-gray-900 z-20"
-        :class="{ hidden: !navContentShow }"
-        ref="navContentRef"
       >
         <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
           <li class="mr-6 my-2 md:my-0">
@@ -250,6 +249,10 @@
 
 <script>
 import Popper from "popper.js";
+
+// Finally properly fixed display/hide of nav content on 
+// small screens with the help of:
+// https://stackoverflow.com/questions/58157764/how-do-i-dynamically-show-a-mobile-menu-with-tailwind-and-vue-js
 const tailwindConfig = require("../../tailwind.config");
 
 export default {
@@ -257,16 +260,17 @@ export default {
   data() {
     return {
       helpfulLinksShow: false,
-      navContentShow: true,
+      navContentShow: false,
+      lgBreakPoint: Number(tailwindConfig.theme.screens.lg.replace("px", "")),
       userMenuShow: false,
+      windowWidth: 0,
       wowheadSearchTerm: "",
     };
   },
-  mounted: function () {
-    var mdBreakpoint = Number(
-      tailwindConfig.theme.screens.md.replace("px", "")
-    );
-    this.navContentShow = this.windowWidth > mdBreakpoint;
+  computed: {
+    menuVisible() {
+      return this.windowWidth > this.lgBreakPoint ? true : this.navContentShow;
+    },
   },
   methods: {
     searchWowhead: function () {
@@ -300,6 +304,16 @@ export default {
     toggleNavContent: function () {
       this.navContentShow = !this.navContentShow;
     },
+    updateWindowSize() {
+      this.windowWidth = window.innerWidth;
+    },
+  },
+  mounted: function () {
+    this.updateWindowSize();
+    window.addEventListener("resize", this.updateWindowSize);
+  },
+  beforeDestroyed: function () {
+    window.removeEventListener("resize", this.updateWindowSize);
   },
 };
 </script>
