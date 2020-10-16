@@ -25,11 +25,11 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 - [axios](https://www.axios.com/)
 - [vue-formulate](https://vueformulate.com/)
 - [font-awesome](https://fontawesome.com/)
-- [vue-dropdown-menu](https://innologica.github.io/vue-dropdown-menu/)
 
 -----
 
 ### References
+Some code snippets and concepts were lifted from the following sources.
 
 #### Back-end
 - [.NET Template for SPA with Vue](https://medium.com/software-ateliers/asp-net-core-vue-template-with-custom-configuration-using-cli-3-0-8288e18ae80b)
@@ -40,6 +40,7 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 
 #### Design
 - [Admin Template Night](https://github.com/tailwindtoolbox/Admin-Template-Night)
+- [Tailwind Starter Kit](https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/vue/alerts)
 
 -----
 
