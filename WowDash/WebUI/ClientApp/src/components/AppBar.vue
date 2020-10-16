@@ -20,8 +20,9 @@
         <div class="flex relative float-right">
           <div class="relative text-sm text-gray-100">
             <button
-              id="userButton"
               class="flex items-center focus:outline-none mr-3"
+              @click="toggleUserMenu"
+              ref="btnUserMenuRef"
             >
               <div class="text-blue-400 pr-3">
                 <font-awesome-icon icon="user" />
@@ -46,35 +47,37 @@
               </svg>
             </button>
             <div
-              id="userMenu"
-              class="bg-gray-900 rounded shadow-md mt-2 absolute top-0 right-0 min-w-full overflow-auto z-30 invisible"
+              v-show="userMenuShow"
+              @click="toggleUserMenu"
+              class="bg-gray-800 text-gray-400 z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
+              style="min-width: 12rem"
+              ref="popoverUserMenuRef"
             >
-              <ul class="list-reset">
-                <li>
-                    <router-link to="/profile">
-                  <span 
-                    class="px-4 py-2 block text-gray-100 hover:bg-gray-800 no-underline hover:no-underline"
-                    >Profile</span
-                  >
-                    </router-link>
-                </li>
-                <li><hr class="border-t mx-2 border-gray-400" /></li>
-                <li>
-                  <a
-                    href="#"
-                    class="px-4 py-2 block text-gray-100 hover:bg-gray-800 no-underline hover:no-underline"
-                    >Logout</a
-                  >
-                </li>
-              </ul>
+              <router-link to="/profile">
+                <span
+                  class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+                >
+                  Profile
+                </span>
+              </router-link>
+              <div
+                class="h-0 my-2 border border-solid border-t-0 border-gray-400 opacity-25"
+              ></div>
+              <router-link to="/login">
+                <span
+                  class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+                >
+                  Logout
+                </span>
+              </router-link>
             </div>
           </div>
 
           <!-- Mobile Menu -->
           <div class="block lg:hidden pr-4">
             <button
-              id="nav-toggle"
               class="flex items-center text-gray-500 hover:text-gray-100 hover:border-teal-500 appearance-none focus:outline-none"
+              @click="toggleNavContent"
             >
               <div class="pl-1 pr-1 fill-current text-gray-100">
                 <font-awesome-icon icon="bars" />
@@ -85,47 +88,158 @@
       </div>
 
       <div
-        class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 bg-gray-900 z-20"
-        id="nav-content"
+        class="w-full flex-grow lg:flex lg:items-center lg:w-auto mt-2 lg:mt-0 bg-gray-900 z-20"
+        :class="{ hidden: !navContentShow }"
+        ref="navContentRef"
       >
         <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
           <li class="mr-6 my-2 md:my-0">
-            <div
-              class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400"
-            >
-              <router-link to="/">
-                <span class="mr-3"><font-awesome-icon icon="tasks" /></span
-                ><span class="pb-1 md:pb-0 text-sm"
-                  >Dashboard</span
-                ></router-link
+            <router-link to="/">
+              <div
+                class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-blue-400"
               >
-            </div>
+                <span class="mr-3"><font-awesome-icon icon="tasks" /></span
+                ><span class="pb-1 md:pb-0 text-sm">Dashboard</span>
+              </div>
+            </router-link>
           </li>
           <li class="mr-6 my-2 md:my-0">
-            <div
-              class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-purple-400"
-            >
-              <router-link to="/roster">
+            <router-link to="/roster">
+              <div
+                class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900 hover:border-purple-400"
+              >
                 <span class="mr-3"><font-awesome-icon icon="user-ninja" /></span
                 ><span class="pb-1 md:pb-0 text-sm">Roster</span>
-              </router-link>
-            </div>
+              </div>
+            </router-link>
           </li>
         </ul>
 
+        <div class="text-sm text-gray-100">
+          <div class="">
+            <button
+              class="inline-flex items-center text-gray-500 text-sm rounded shadow hover:text-gray-100 hover:shadow-lg outline-none focus:outline-none"
+              @click="toggleHelpfulLinks"
+              ref="btnHelpfulLinksRef"
+            >
+              Helpful Links
+              <svg
+                class="pl-2 h-2 fill-current text-gray-100"
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 129 129"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                enable-background="new 0 0 129 129"
+              >
+                <g>
+                  <path
+                    d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                  />
+                </g>
+              </svg>
+            </button>
+            <div
+              v-show="helpfulLinksShow"
+              @click="toggleHelpfulLinks"
+              class="bg-gray-800 text-gray-400 z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
+              style="min-width: 12rem"
+              ref="popoverHelpfulLinksRef"
+            >
+              <p class="text-gray-600 uppercase font-bold px-2">Tools</p>
+              <a
+                href="https://www.wowhead.com/planner"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                Character Planner
+              </a>
+              <a
+                href="https://www.wowhead.com/classes"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                Class Guides
+              </a>
+              <a
+                href="https://www.wowhead.com/talent-calc"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                Talent Calculator
+              </a>
+              <div
+                class="h-0 my-2 border border-solid border-t-0 border-gray-400 opacity-25"
+              ></div>
+              <p class="text-gray-600 uppercase font-bold px-2">Economy</p>
+              <a
+                href="https://www.dataforazeroth.com/calculator"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                Data for Azeroth Calculator
+              </a>
+              <a
+                href="https://theunderminejournal.com/"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                The Undermine Journal
+              </a>
+              <a
+                href="https://wah.jonaskf.net/"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                WoW Auction Helper (WAH)
+              </a>
+              <a
+                href="https://www.reddit.com/r/woweconomy/"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                /r/woweconomy
+              </a>
+              <div
+                class="h-0 my-2 border border-solid border-t-0 border-gray-400 opacity-25"
+              ></div>
+              <p class="text-gray-600 uppercase font-bold px-2">Help</p>
+              <a
+                href="https://worldofwarcraft.com/en-us/game/status/us"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                Realm Status
+              </a>
+              <a
+                href="https://twitter.com/BlizzardCS"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                @BlizzardCS
+              </a>
+              <a
+                href="https://us.forums.blizzard.com/en/wow/"
+                target="_blank"
+                class="text-sm py-2 px-4 font-normal block w-full whitespace-no-wrap bg-transparent hover:text-gray-100"
+              >
+                WoW Forums
+              </a>
+            </div>
+          </div>
+        </div>
         <div class="relative pull-right pl-4 pr-4 md:pr-0">
           <form id="searchWowhead" v-on:submit.prevent="searchWowhead">
             <input
-                type="search"
-                placeholder="Search Wowhead"
-                v-model="wowheadSearchTerm"
-                class="w-full bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 pl-10 appearance-none leading-normal"
+              type="search"
+              placeholder="Search Wowhead"
+              v-model="wowheadSearchTerm"
+              class="w-full bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 pl-10 appearance-none leading-normal"
             />
             <div
-                class="absolute search-icon"
-                style="top: 0.375rem; left: 1.75rem"
+              class="absolute search-icon"
+              style="top: 0.375rem; left: 1.75rem"
             >
-                <img src="@/assets/wowheadicon.png" class="pt-1" />
+              <img src="@/assets/wowheadicon.png" class="pt-1" />
             </div>
           </form>
         </div>
@@ -135,79 +249,58 @@
 </template>
 
 <script>
-
-// Toggle dropdown list
-// Came with the CSS template, need to fix up later
-/*https://gist.github.com/slavapas/593e8e50cf4cc16ac972afcbad4f70c8*/
-
-document.onclick = check;
-
-function check(e) {
-
-var userMenuDiv = document.getElementById("userMenu");
-var userMenu = document.getElementById("userButton");
-
-var navMenuDiv = document.getElementById("nav-content");
-var navMenu = document.getElementById("nav-toggle");
-
-  var target = (e && e.target) || (event && event.srcElement);
-
-  //User Menu
-  if (!checkParent(target, userMenuDiv)) {
-    // click NOT on the menu
-    if (checkParent(target, userMenu)) {
-      // click on the link
-      if (userMenuDiv.classList.contains("invisible")) {
-        userMenuDiv.classList.remove("invisible");
-      } else {
-        userMenuDiv.classList.add("invisible");
-      }
-    } else {
-      // click both outside link and outside menu, hide menu
-      userMenuDiv.classList.add("invisible");
-    }
-  }
-
-  //Nav Menu
-  if (!checkParent(target, navMenuDiv)) {
-    // click NOT on the menu
-    if (checkParent(target, navMenu)) {
-      // click on the link
-      if (navMenuDiv.classList.contains("hidden")) {
-        navMenuDiv.classList.remove("hidden");
-      } else {
-        navMenuDiv.classList.add("hidden");
-      }
-    } else {
-      // click both outside link and outside menu, hide menu
-      navMenuDiv.classList.add("hidden");
-    }
-  }
-}
-
-function checkParent(t, elm) {
-  while (t.parentNode) {
-    if (t == elm) {
-      return true;
-    }
-    t = t.parentNode;
-  }
-  return false;
-}
+import Popper from "popper.js";
+const tailwindConfig = require("../../tailwind.config");
 
 export default {
   name: "AppBar",
-  data () {
-      return {
-          wowheadSearchTerm: ""
-      }
+  data() {
+    return {
+      helpfulLinksShow: false,
+      navContentShow: true,
+      userMenuShow: false,
+      wowheadSearchTerm: "",
+    };
+  },
+  mounted: function () {
+    var mdBreakpoint = Number(
+      tailwindConfig.theme.screens.md.replace("px", "")
+    );
+    this.navContentShow = this.windowWidth > mdBreakpoint;
   },
   methods: {
-        searchWowhead: function() {
-            console.log(this.wowheadSearchTerm);
-            window.open('https://www.wowhead.com/search?q=' + this.wowheadSearchTerm);
-        }
-    }
+    searchWowhead: function () {
+      console.log(this.wowheadSearchTerm);
+      window.open("https://www.wowhead.com/search?q=" + this.wowheadSearchTerm);
+    },
+    toggleHelpfulLinks: function () {
+      if (this.helpfulLinksShow) {
+        this.helpfulLinksShow = false;
+      } else {
+        this.helpfulLinksShow = true;
+        new Popper(
+          this.$refs.btnHelpfulLinksRef,
+          this.$refs.popoverHelpfulLinksRef,
+          {
+            placement: "bottom-start",
+          }
+        );
+      }
+    },
+    toggleUserMenu: function () {
+      if (this.userMenuShow) {
+        this.userMenuShow = false;
+      } else {
+        this.userMenuShow = true;
+        new Popper(this.$refs.btnUserMenuRef, this.$refs.popoverUserMenuRef, {
+          placement: "bottom-start",
+        });
+      }
+    },
+    toggleNavContent: function () {
+      this.navContentShow = !this.navContentShow;
+    },
+  },
 };
 </script>
 
