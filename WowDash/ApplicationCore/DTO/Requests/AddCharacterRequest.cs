@@ -16,6 +16,7 @@ namespace WowDash.ApplicationCore.DTO.Requests
         public CharacterGender Gender { get; set; }
         public int? Level { get; set; }
         public string Class { get; set; }
+        public string Specialization { get; set; }
         public string Race { get; set; }
         public string Realm { get; set; }
 
@@ -28,6 +29,7 @@ namespace WowDash.ApplicationCore.DTO.Requests
             CharacterGender gender,
             int? level,
             string @class,
+            string specialization,
             string race,
             string realm)
         {
@@ -37,6 +39,7 @@ namespace WowDash.ApplicationCore.DTO.Requests
             Gender = gender;
             Level = level;
             Class = @class;
+            Specialization = specialization;
             Race = race;
             Realm = realm;
         }

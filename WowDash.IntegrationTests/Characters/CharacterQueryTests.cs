@@ -28,6 +28,7 @@ namespace WowDash.IntegrationTests.Characters
             var expectedName = "Starling";
             var expectedGender = CharacterGender.Female;
             var expectedLevel = 60;
+            var expectedSpecialization = "Outlaw";
             var expectedClass = "Rogue";
             var expectedRace = "Undead";
             var expectedRealm = "dark-iron";
@@ -35,7 +36,7 @@ namespace WowDash.IntegrationTests.Characters
             var character = await AddAsync(
                 new Character(
                     defaultPlayerId, expectedGameId, expectedName, expectedGender, expectedLevel, expectedClass,
-                    expectedRace, expectedRealm));
+                    expectedSpecialization, expectedRace, expectedRealm));
 
             // Act
             var httpResponse = await Client.GetAsync($"/api/characters/{character.Id}");
@@ -59,6 +60,7 @@ namespace WowDash.IntegrationTests.Characters
             foundCharacter.Name.Should().Be(expectedName);
             foundCharacter.GameId.Should().Be(expectedGameId);
             foundCharacter.Class.Should().Be(expectedClass);
+            foundCharacter.Specialization.Should().Be(expectedSpecialization);
             foundCharacter.Race.Should().Be(expectedRace);
             foundCharacter.Level.Should().Be(expectedLevel);
             foundCharacter.Gender.Should().Be(expectedGender);
@@ -73,12 +75,13 @@ namespace WowDash.IntegrationTests.Characters
             var expectedGender = CharacterGender.Female;
             var expectedLevel = 60;
             var expectedClass = "Rogue";
+            var expectedSpecialization = "Outlaw";
             var expectedRace = "Undead";
             var expectedRealm = "dark-iron";
 
             await AddAsync(new Character(
                     defaultPlayerId, expectedGameId, expectedName, expectedGender, expectedLevel, expectedClass,
-                    expectedRace, expectedRealm));
+                    expectedSpecialization, expectedRace, expectedRealm));
 
             // Act
             var httpResponse = await Client.GetAsync($"/api/characters/roster/{defaultPlayerId}");
@@ -106,6 +109,7 @@ namespace WowDash.IntegrationTests.Characters
             foundCharacter.Name.Should().Be(expectedName);
             foundCharacter.GameId.Should().Be(expectedGameId);
             foundCharacter.Class.Should().Be(expectedClass);
+            foundCharacter.Specialization.Should().Be(expectedSpecialization);
             foundCharacter.Race.Should().Be(expectedRace);
             foundCharacter.Level.Should().Be(expectedLevel);
             foundCharacter.Gender.Should().Be(expectedGender);

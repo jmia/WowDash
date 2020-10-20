@@ -25,6 +25,7 @@ namespace WowDash.UnitTests.Characters
             // Arrange
             var expectedName = "Meraddison";
             var expectedClass = "Warlock";
+            var expectedSpecialization = "Affliction";
             var expectedLevel = 120;
             var expectedRealm = "area-52";
             var expectedRace = "Undead";
@@ -32,7 +33,7 @@ namespace WowDash.UnitTests.Characters
             int? expectedGameId = null;
 
             var dto = new AddCharacterRequest(DefaultPlayer.Id, expectedGameId, expectedName, expectedGender,
-                expectedLevel, expectedClass, expectedRace, expectedRealm);
+                expectedLevel, expectedClass, expectedSpecialization, expectedRace, expectedRealm);
 
             // Act
             var result = _controller.AddCharacter(dto);
@@ -51,19 +52,19 @@ namespace WowDash.UnitTests.Characters
             foundCharacter.Realm.Should().Be(expectedRealm);
         }
 
-        [TestCase(null, null, default, null, null, null, null)]
-        [TestCase(123456789, null, default, null, null, null, null)]
-        [TestCase(123456789, "Rhuue", default, null, null, null, null)]
-        [TestCase(123456789, "Zenebatos", CharacterGender.Male, null, null, null, null)]
-        [TestCase(123456789, "Rhuue", CharacterGender.Female, 100, null, null, null)]
-        [TestCase(123456789, "Rhuue", CharacterGender.Female, 100, "Hunter", null, null)]
-        [TestCase(123456789, "Rhuue", CharacterGender.Female, 100, "Hunter", "Vulpera", null)]
+        [TestCase(null, null, default, null, null, null, null, null)]
+        [TestCase(123456789, null, default, null, null, null, null, null)]
+        [TestCase(123456789, "Rhuue", default, null, null, null, null, null)]
+        [TestCase(123456789, "Zenebatos", CharacterGender.Male, null, null, null, null, null)]
+        [TestCase(123456789, "Rhuue", CharacterGender.Female, 100, null, null, null, null)]
+        [TestCase(123456789, "Rhuue", CharacterGender.Female, 100, "Hunter", null, null, null)]
+        [TestCase(123456789, "Rhuue", CharacterGender.Female, 100, "Hunter", "Marksmanship", "Vulpera", null)]
         public void GivenSomeNullOrDefaultProperties_AddsCharacter(int? gameId, string name,
-            CharacterGender gender, int? level, string @class, string race, string realm)
+            CharacterGender gender, int? level, string @class, string specialization, string race, string realm)
         {
             // Arrange
             var dto = new AddCharacterRequest(DefaultPlayer.Id, gameId, name, gender,
-                level, @class, race, realm);
+                level, @class, specialization, race, realm);
 
             // Act
             var result = _controller.AddCharacter(dto);
@@ -76,6 +77,7 @@ namespace WowDash.UnitTests.Characters
             foundCharacter.Name.Should().Be(name);
             foundCharacter.GameId.Should().Be(gameId);
             foundCharacter.Class.Should().Be(@class);
+            foundCharacter.Specialization.Should().Be(specialization);
             foundCharacter.Race.Should().Be(race);
             foundCharacter.Level.Should().Be(level);
             foundCharacter.Gender.Should().Be(gender);
@@ -86,7 +88,7 @@ namespace WowDash.UnitTests.Characters
         public void GivenAnInvalidPlayerId_ReturnsNotFound()
         {
             // Arrange
-            var dto = new AddCharacterRequest(TestConstants.AllOnesGuid, null, null, default, null, null, null, null);
+            var dto = new AddCharacterRequest(TestConstants.AllOnesGuid, null, null, default, null, null, null, null, null);
 
             // Act
             var result = _controller.AddCharacter(dto);

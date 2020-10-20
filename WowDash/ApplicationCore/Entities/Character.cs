@@ -18,6 +18,7 @@ namespace WowDash.ApplicationCore.Entities
         public CharacterGender Gender { get; set; }
         public int? Level { get; set; }
         public string Class { get; set; }
+        public string Specialization { get; set; }
         public string Race { get; set; }
         /// <summary>
         /// The home realm of the character in kebab-case.
@@ -27,7 +28,7 @@ namespace WowDash.ApplicationCore.Entities
         public Character() { }      // TODO: Update SeedData method and take this out if not needed
 
         public Character(Guid playerId, int? gameId, string name, CharacterGender gender, int? level, string @class,
-            string race, string realm)
+            string specialization, string race, string realm)
         {
             PlayerId = playerId;
             GameId = gameId;
@@ -35,6 +36,7 @@ namespace WowDash.ApplicationCore.Entities
             Gender = gender;
             Level = level;
             Class = @class;
+            Specialization = specialization;
             Race = race;
             Realm = realm;
 
