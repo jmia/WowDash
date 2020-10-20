@@ -28,7 +28,7 @@ namespace WowDash.UnitTests.Tasks
             Context.SaveChanges();
 
             var description = "Double Agent";
-            var dto = new SetAchievementTaskDetailsRequest(task.Id, description, default);
+            var dto = new SetAchievementTaskDetailsRequest(task.Id, description, default, default);
 
             // Act
             var result = _controller.SetAchievementTaskDetails(dto);
@@ -47,7 +47,7 @@ namespace WowDash.UnitTests.Tasks
             Context.SaveChanges();
 
             var priority = Priority.Highest;
-            var dto = new SetAchievementTaskDetailsRequest(task.Id, null, priority);
+            var dto = new SetAchievementTaskDetailsRequest(task.Id, null, default, priority);
 
             // Act
             var result = _controller.SetAchievementTaskDetails(dto);
@@ -58,7 +58,7 @@ namespace WowDash.UnitTests.Tasks
         }
 
         [Test]
-        public void GivenAllValidValues_SetsDefaultRefreshPriority()
+        public void GivenAllValidValues_UpdatesTaskInDatabase()
         {
             // Arrange
             var task = new Task(DefaultPlayer.Id, TaskType.General);
@@ -67,14 +67,17 @@ namespace WowDash.UnitTests.Tasks
 
             var description = "Double Agent";
             var priority = Priority.Highest;
-            var dto = new SetAchievementTaskDetailsRequest(task.Id, description, priority);
+            var refresh = RefreshFrequency.Weekly;
+            var dto = new SetAchievementTaskDetailsRequest(task.Id, description, refresh, priority);
 
             // Act
             var result = _controller.SetAchievementTaskDetails(dto);
 
             // Assert
             var foundTask = Context.Tasks.Find(result.Value);
-            foundTask.RefreshFrequency.Should().Be(RefreshFrequency.Never);
+            foundTask.Description.Should().Be(description);
+            foundTask.Priority.Should().Be(priority);
+            foundTask.RefreshFrequency.Should().Be(refresh);
         }
     }
 }

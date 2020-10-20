@@ -201,9 +201,7 @@ namespace WowDash.WebUI.Controllers
 
             task.Description = request.Description;
             task.Priority = request.Priority;
-
-            // Achievements never recur
-            task.RefreshFrequency = RefreshFrequency.Never;
+            task.RefreshFrequency = request.RefreshFrequency;
 
             _context.SaveChanges();
 

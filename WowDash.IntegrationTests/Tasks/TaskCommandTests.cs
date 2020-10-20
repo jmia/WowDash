@@ -159,6 +159,7 @@ namespace WowDash.IntegrationTests.Tasks
             //{
             //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             //    "description": "string",
+            //    "refreshFrequency": 0
             //    "priority": 0
             //}
 
@@ -167,6 +168,7 @@ namespace WowDash.IntegrationTests.Tasks
 
             var expectedDescription = "Reach Level 100";
             var expectedPriority = Priority.Low;
+            var expectedRefresh = RefreshFrequency.Weekly;
             string json;
 
             var options = new JsonWriterOptions
@@ -181,6 +183,7 @@ namespace WowDash.IntegrationTests.Tasks
                     writer.WriteStartObject();
                     writer.WriteString("taskId", task.Id);
                     writer.WriteString("description", expectedDescription);
+                    writer.WriteNumber("refreshFrequency", (int)expectedRefresh);
                     writer.WriteNumber("priority", (int)expectedPriority);
                     writer.WriteEndObject();
                 }
@@ -204,7 +207,7 @@ namespace WowDash.IntegrationTests.Tasks
             foundTask.Should().NotBeNull();
             foundTask.PlayerId.Should().Be(defaultPlayerId);
             foundTask.Description.Should().Be(expectedDescription);
-            foundTask.RefreshFrequency.Should().Be(RefreshFrequency.Never);
+            foundTask.RefreshFrequency.Should().Be(expectedRefresh);
             foundTask.Priority.Should().Be(expectedPriority);
         }
 
