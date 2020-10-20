@@ -63,7 +63,7 @@ namespace WowDash.WebUI.Controllers
             foreach (var tc in taskCharacters)
             {
                 var character = _context.Characters.Find(tc.CharacterId);
-                characterList.Add(new CharacterForTaskResponse(character.Id, character.Name, character.Class));
+                characterList.Add(new CharacterForTaskResponse(character.Id, character.Name, character.Class, tc.IsActive));
             }
 
             return new GetCharactersForTaskResponse(taskId, characterList);
