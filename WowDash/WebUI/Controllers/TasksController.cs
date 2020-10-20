@@ -48,7 +48,7 @@ namespace WowDash.WebUI.Controllers
             // Map GameDataReference entities to the GameDataReferenceItem DTO
             var gameDataReferences = task.GameDataReferences.Select(gdr =>
                 new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
-                .ToList();
+                .OrderBy(gdr => gdr.Type).ToList();
 
             return new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
                 task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency);
@@ -72,7 +72,7 @@ namespace WowDash.WebUI.Controllers
             var references = tasks.SelectMany(t => t.GameDataReferences);
             var distinctReferences = references.DistinctBy(r => r.GameId);
 
-            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).ToList();
+            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).OrderBy(r => r.Name).ToList();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace WowDash.WebUI.Controllers
             var references = tasks.SelectMany(t => t.GameDataReferences);
             var distinctReferences = references.DistinctBy(r => r.GameId);
 
-            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).ToList();
+            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).OrderBy(r => r.Name).ToList();
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace WowDash.WebUI.Controllers
             {
                 var gameDataReferences = task.GameDataReferences.Select(gdr =>
                     new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
-                    .ToList();
+                    .OrderBy(gdr => gdr.Type).ToList();
                 
                 taskList.Add(new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
                     task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency));
