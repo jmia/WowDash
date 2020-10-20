@@ -128,13 +128,6 @@ namespace WowDash.WebUI.Controllers
             return new GetTasksResponse(filterModel.PlayerId, taskList);
         }
 
-        /// <summary>
-        /// Creates a new task.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <response code="200">Returns the ID of the created task.</response>
-        /// <response code="400">If the request is null or missing required fields.</response>
-        /// <response code="404">If the player was not found in the database.</response>
         //[HttpPost]
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[ProducesResponseType(StatusCodes.Status200OK)]
