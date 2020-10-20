@@ -24,7 +24,7 @@ namespace WowDash.IntegrationTests.Tasks
         }
 
         [Test]
-        public async System.Threading.Tasks.Task InitializeTaskEndpoint_AddsTask()
+        public async System.Threading.Tasks.Task AddTaskEndpoint_AddsTask()
         {
             // {
             //    "playerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -57,6 +57,54 @@ namespace WowDash.IntegrationTests.Tasks
 
             // Act
             var httpResponse = await Client.PostAsync("/api/tasks", content);
+
+            httpResponse.EnsureSuccessStatusCode();
+
+            var response = await httpResponse.Content.ReadAsStreamAsync();
+            var result = await JsonSerializer.DeserializeAsync<Guid>(response);
+
+            var foundTask = await FindAsync<Task>(result);
+
+            // Assert
+            foundTask.Should().NotBeNull();
+            foundTask.PlayerId.Should().Be(defaultPlayerId);
+            foundTask.TaskType.Should().Be(expectedTaskType);
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task UpdateTaskEndpoint_UpdatesTask()
+        {
+            // {
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            // };
+
+            // Arrange
+            var task = await AddAsync(new Task(defaultPlayerId, TaskType.General));
+            var expectedTaskType = TaskType.Achievement;
+            string json;
+
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream, options))
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("taskId", task.Id);
+                    writer.WriteNumber("taskType", (int)expectedTaskType);
+                    writer.WriteEndObject();
+                }
+
+                json = Encoding.UTF8.GetString(stream.ToArray());
+            }
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var httpResponse = await Client.PutAsync("/api/tasks", content);
 
             httpResponse.EnsureSuccessStatusCode();
 
