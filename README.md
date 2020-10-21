@@ -8,7 +8,7 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 - [.Net Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1)
 - Entity Framework Core 3.1.5
 - [Vue 2.6](https://vuejs.org/v2/guide/) and [Vuex](https://vuex.vuejs.org/)
-- [TailwindCSS](https://tailwindcss.com/)
+- [TailwindCSS](https://tailwindcss.com/) :sparkles:
 
 ### This application is tested with:
 - [NUnit](https://docs.nunit.org/)
@@ -48,4 +48,8 @@ Some code snippets and concepts were lifted from the following sources.
 
 ```
 Add-Migration <ImperativeMigrationName> -OutputDir ./Infrastructure/Migrations
+```
+```
+netstat -ano | findstr :<PORT>
+taskkill /PID <PID> /F
 ```
