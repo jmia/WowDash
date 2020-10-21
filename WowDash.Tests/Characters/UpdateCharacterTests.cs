@@ -34,6 +34,7 @@ namespace WowDash.UnitTests.Characters
 
             var expectedName = "Meraddison";
             var expectedClass = "Warlock";
+            var expectedSpecialization = "Affliction";
             var expectedLevel = 120;
             var expectedRealm = "area-52";
             var expectedRace = "Undead";
@@ -41,7 +42,7 @@ namespace WowDash.UnitTests.Characters
             int? expectedGameId = null;
 
             var dto = new UpdateCharacterRequest(character.Id, expectedGameId, expectedName, expectedGender,
-                expectedLevel, expectedClass, expectedRace, expectedRealm);
+                expectedLevel, expectedClass, expectedSpecialization, expectedRace, expectedRealm);
 
             // Act
             var result = _controller.UpdateCharacter(dto);
@@ -79,6 +80,7 @@ namespace WowDash.UnitTests.Characters
 
             string expectedName = null;
             string expectedClass = null;
+            string expectedSpecialization = null;
             int? expectedLevel = null;
             var expectedRealm = "area-52";
             var expectedRace = "Undead";
@@ -86,7 +88,7 @@ namespace WowDash.UnitTests.Characters
             int? expectedGameId = null;
 
             var dto = new UpdateCharacterRequest(character.Id, expectedGameId, expectedName, expectedGender,
-                expectedLevel, expectedClass, expectedRace, expectedRealm);
+                expectedLevel, expectedClass, expectedSpecialization, expectedRace, expectedRealm);
 
             // Act
             var result = _controller.UpdateCharacter(dto);
@@ -99,6 +101,7 @@ namespace WowDash.UnitTests.Characters
             foundCharacter.Name.Should().Be(expectedName);
             foundCharacter.GameId.Should().BeNull();
             foundCharacter.Class.Should().Be(expectedClass);
+            foundCharacter.Specialization.Should().Be(expectedSpecialization);
             foundCharacter.Race.Should().Be(expectedRace);
             foundCharacter.Level.Should().Be(expectedLevel);
             foundCharacter.Gender.Should().Be(expectedGender);
@@ -109,7 +112,7 @@ namespace WowDash.UnitTests.Characters
         public void GivenAnInvalidCharacterId_ReturnsNotFound()
         {
             // Arrange
-            var dto = new UpdateCharacterRequest(TestConstants.AllOnesGuid, null, null, default, null, null, null, null);
+            var dto = new UpdateCharacterRequest(TestConstants.AllOnesGuid, null, null, default, null, null, null, null, null);
 
             // Act
             var result = _controller.UpdateCharacter(dto);

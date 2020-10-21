@@ -28,7 +28,7 @@ namespace WowDash.UnitTests.TaskCharacters
         {
             // Arrange
             var task = new Task(DefaultPlayer.Id, TaskType.General);
-            var character = new Character(DefaultPlayer.Id, null, "Stella", CharacterGender.Female, null, "Paladin", "Blood Elf", "magtheridon");
+            var character = new Character(DefaultPlayer.Id, null, "Stella", CharacterGender.Female, null, "Paladin", "Holy", "Blood Elf", "magtheridon");
 
             Context.Tasks.Add(task);
             Context.Characters.Add(character);
@@ -57,7 +57,7 @@ namespace WowDash.UnitTests.TaskCharacters
         public void GivenAnInvalidTaskId_ReturnsNotFound()
         {
             // Arrange
-            var character = new Character(DefaultPlayer.Id, null, "Stella", CharacterGender.Female, null, "Paladin", "Blood Elf", "magtheridon");
+            var character = new Character(DefaultPlayer.Id, null, "Stella", CharacterGender.Female, null, "Paladin", "Holy", "Blood Elf", "magtheridon");
 
             Context.Characters.Add(character);
             Context.SaveChanges();

@@ -25,9 +25,9 @@ namespace WowDash.UnitTests.Characters
         {
             // Arrange
             var character = new Character(DefaultPlayer.Id, null, "Mozart", CharacterGender.Female, null, "Monk",
-                "Pandaren", "area-52");
+                "Brewmaster", "Pandaren", "area-52");
             var secondCharacter = new Character(DefaultPlayer.Id, null, "Oleander", CharacterGender.Female, null, "Mage",
-                "Undead", "area-52");
+                "Frost", "Undead", "area-52");
 
             Context.Characters.AddRange(character, secondCharacter);
             Context.SaveChanges();

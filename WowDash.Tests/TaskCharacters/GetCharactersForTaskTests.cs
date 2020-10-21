@@ -33,7 +33,10 @@ namespace WowDash.UnitTests.TaskCharacters
             Context.SaveChanges();
 
             var firstTaskCharacter = new TaskCharacter(firstCharacter.Id, task.Id);
-            var secondTaskCharacter = new TaskCharacter(secondCharacter.Id, task.Id);
+            var secondTaskCharacter = new TaskCharacter(secondCharacter.Id, task.Id)
+            {
+                IsActive = false
+            };
 
             Context.TaskCharacters.AddRange(firstTaskCharacter, secondTaskCharacter);
             Context.SaveChanges();
@@ -46,6 +49,7 @@ namespace WowDash.UnitTests.TaskCharacters
             result.Value.Characters.Count.Should().Be(2);
             result.Value.Characters.Any(c => c.CharacterId == firstCharacter.Id).Should().BeTrue();
             result.Value.Characters.Any(c => c.CharacterId == secondCharacter.Id).Should().BeTrue();
+            result.Value.Characters.Where(c => c.CharacterId == secondCharacter.Id).FirstOrDefault().IsActive.Should().BeFalse();
         }
 
         [Test]

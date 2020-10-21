@@ -27,10 +27,11 @@ namespace WowDash.UnitTests.Characters
             var expectedName = "Mozart";
             var expectedGender = CharacterGender.Female;
             var expectedClass = "Monk";
+            var expectedSpecialization = "Brewmaster";
             var expectedRace = "Pandaren";
             var expectedRealm = "area-52";
             var character = new Character(DefaultPlayer.Id, null, expectedName, expectedGender, null, expectedClass,
-                expectedRace, expectedRealm);
+                expectedSpecialization, expectedRace, expectedRealm);
 
             Context.Characters.Add(character);
             Context.SaveChanges();
@@ -41,11 +42,11 @@ namespace WowDash.UnitTests.Characters
             // Assert
             response.Value.Should().NotBeNull();
             Assert.IsInstanceOf<CharacterResponse>(response.Value);
-            response.Value.PlayerId.Should().Be(DefaultPlayer.Id);
             response.Value.GameId.Should().BeNull();
             response.Value.Name.Should().Be(expectedName);
             response.Value.Gender.Should().Be(expectedGender);
             response.Value.Class.Should().Be(expectedClass);
+            response.Value.Specialization.Should().Be(expectedSpecialization);
             response.Value.Race.Should().Be(expectedRace);
             response.Value.Realm.Should().Be(expectedRealm);
         }

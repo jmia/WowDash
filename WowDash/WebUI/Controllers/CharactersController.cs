@@ -44,12 +44,12 @@ namespace WowDash.WebUI.Controllers
                 new CharacterResponse()
                 {
                     CharacterId = c.Id,
-                    PlayerId = c.PlayerId,
                     GameId = c.GameId,
                     Name = c.Name,
                     Gender = c.Gender,
                     Level = c.Level,
                     Class = c.Class,
+                    Specialization = c.Specialization,
                     Race = c.Race,
                     Realm = c.Realm
                 }
@@ -79,12 +79,12 @@ namespace WowDash.WebUI.Controllers
             return new CharacterResponse()
             {
                 CharacterId = character.Id,
-                PlayerId = character.PlayerId,
                 GameId = character.GameId,
                 Name = character.Name,
                 Gender = character.Gender,
                 Level = character.Level,
                 Class = character.Class,
+                Specialization = character.Specialization,
                 Race = character.Race,
                 Realm = character.Realm
             };
@@ -108,7 +108,7 @@ namespace WowDash.WebUI.Controllers
                 return NotFound();
 
             var character = new Character(player.Id, request.GameId, request.Name, request.Gender, request.Level,
-                request.Class, request.Race, request.Realm);
+                request.Class, request.Specialization, request.Race, request.Realm);
 
             _context.Characters.Add(character);
             _context.SaveChanges();
@@ -139,6 +139,7 @@ namespace WowDash.WebUI.Controllers
             character.Gender = request.Gender;
             character.Level = request.Level;
             character.Class = request.Class;
+            character.Specialization = request.Specialization;
             character.Race = request.Race;
             character.Realm = request.Realm;
 

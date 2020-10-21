@@ -18,7 +18,7 @@ namespace WowDash.ApplicationCore.Entities
         public virtual ICollection<TaskCharacter> TaskCharacters { get; set; }
         public bool IsFavourite { get; set; }
         public string Notes { get; set; }
-        public TaskType TaskType { get; private set; }
+        public TaskType TaskType { get; set; }
         public CollectibleType? CollectibleType { get; set; }
         public Source? Source { get; set; }
         public Priority Priority { get; set; }

@@ -48,40 +48,10 @@ namespace WowDash.WebUI.Controllers
             // Map GameDataReference entities to the GameDataReferenceItem DTO
             var gameDataReferences = task.GameDataReferences.Select(gdr =>
                 new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
-                .ToList();
+                .OrderBy(gdr => gdr.Type).ToList();
 
             return new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
                 task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency);
-        }
-
-        /// <summary>
-        /// Gets all favourite tasks for a player.
-        /// </summary>
-        /// <param name="playerId">The ID of the player.</param>
-        /// <response code="200">Returns the resource.</response>
-        /// <response code="400">If the request is null or missing required fields.</response>
-        [HttpGet("favourites/{playerId}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<GetFavouriteTasksResponse> GetFavouriteTasks(Guid playerId)
-        {
-            var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId && t.IsFavourite == true);
-
-            var taskList = new List<TaskResponse>();
-
-            foreach (var task in tasks)
-            {
-                // Map GameDataReference entities to the GameDataReferenceItem DTO
-                var gameDataReferences = task.GameDataReferences.Select(gdr =>
-                    new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
-                    .ToList();
-
-                taskList.Add(new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
-                    task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency));
-            }
-
-            return new GetFavouriteTasksResponse(playerId, taskList);
         }
 
         /// <summary>
@@ -102,7 +72,7 @@ namespace WowDash.WebUI.Controllers
             var references = tasks.SelectMany(t => t.GameDataReferences);
             var distinctReferences = references.DistinctBy(r => r.GameId);
 
-            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).ToList();
+            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).OrderBy(r => r.Name).ToList();
         }
 
         /// <summary>
@@ -123,7 +93,7 @@ namespace WowDash.WebUI.Controllers
             var references = tasks.SelectMany(t => t.GameDataReferences);
             var distinctReferences = references.DistinctBy(r => r.GameId);
 
-            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).ToList();
+            return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).OrderBy(r => r.Name).ToList();
         }
 
         /// <summary>
@@ -149,7 +119,7 @@ namespace WowDash.WebUI.Controllers
             {
                 var gameDataReferences = task.GameDataReferences.Select(gdr =>
                     new GameDataReferenceItem(gdr.Id, gdr.GameId, gdr.Type, gdr.Subclass, gdr.Description))
-                    .ToList();
+                    .OrderBy(gdr => gdr.Type).ToList();
                 
                 taskList.Add(new TaskResponse(task.Id, task.PlayerId, task.Description, gameDataReferences, task.IsFavourite,
                     task.Notes, task.TaskType, task.CollectibleType, task.Source, task.Priority, task.RefreshFrequency));
@@ -158,27 +128,92 @@ namespace WowDash.WebUI.Controllers
             return new GetTasksResponse(filterModel.PlayerId, taskList);
         }
 
+        //[HttpPost]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
+        //{
+        //    var player = _context.Players.Find(request.PlayerId);
+
+        //    if (player is null)
+        //        return NotFound();
+
+        //    var task = new Task(player.Id, request.TaskType);
+
+        //    _context.Tasks.Add(task);
+        //    _context.SaveChanges();
+
+        //    return task.Id;
+        //}
+
         /// <summary>
-        /// Creates a new task.
+        /// The second biggest cop-out method of all time.
+        /// One day I will have a beautiful task-based UI that will
+        /// use all the beautiful commands I split up and tested
+        /// so lovingly.
         /// </summary>
         /// <param name="request"></param>
-        /// <response code="200">Returns the ID of the created task.</response>
-        /// <response code="400">If the request is null or missing required fields.</response>
-        /// <response code="404">If the player was not found in the database.</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Guid> InitializeTask(InitializeTaskRequest request)
+        public ActionResult<Guid> AddTask(AddTaskRequest request)
         {
             var player = _context.Players.Find(request.PlayerId);
 
             if (player is null)
                 return NotFound();
 
-            var task = new Task(player.Id, request.TaskType);
+            var task = new Task(request.PlayerId, request.TaskType)
+            {
+                Description = request.Description,
+                IsFavourite = request.IsFavourite,
+                Notes = request.Notes,
+                CollectibleType = request.CollectibleType,
+                Source = request.Source,
+                Priority = request.Priority,
+                RefreshFrequency = request.RefreshFrequency
+            };
+
+            task.GameDataReferences = request.GameDataReferenceItems.Select(ri =>
+                    new GameDataReference(ri.GameId, ri.Type, ri.Subclass, ri.Description))
+                .ToList();
 
             _context.Tasks.Add(task);
+            _context.SaveChanges();
+
+            return task.Id;
+        }
+
+        /// <summary>
+        /// The biggest cop-out method of all time.
+        /// </summary>
+        /// <param name="request"></param>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> UpdateTask(UpdateTaskRequest request)
+        {
+            var task = _context.Tasks.Find(request.TaskId);
+
+            if (task is null)
+                return NotFound();
+
+            task.TaskType = request.TaskType;
+            task.Description = request.Description;
+            task.IsFavourite = request.IsFavourite;
+            task.Notes = request.Notes;
+            task.CollectibleType = request.CollectibleType;
+            task.Source = request.Source;
+            task.Priority = request.Priority;
+            task.RefreshFrequency = request.RefreshFrequency;
+
+            task.GameDataReferences = request.GameDataReferenceItems.Select(ri =>
+                    new GameDataReference(ri.GameId, ri.Type, ri.Subclass, ri.Description))
+                .ToList();
+
             _context.SaveChanges();
 
             return task.Id;
@@ -231,9 +266,7 @@ namespace WowDash.WebUI.Controllers
 
             task.Description = request.Description;
             task.Priority = request.Priority;
-
-            // Achievements never recur
-            task.RefreshFrequency = RefreshFrequency.Never;
+            task.RefreshFrequency = request.RefreshFrequency;
 
             _context.SaveChanges();
 
@@ -432,6 +465,12 @@ namespace WowDash.WebUI.Controllers
         internal void ApplyFilters(ref IQueryable<Task> tasks, FilterModel filterModel)
         {
             // Don't Panic.
+
+            // IsFavourite
+            if (filterModel.IsFavourite)
+            {
+                tasks = tasks.Where(t => t.IsFavourite == true);
+            }
 
             // TaskType
             if (!string.IsNullOrWhiteSpace(filterModel.TaskType))

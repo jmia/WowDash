@@ -38,6 +38,7 @@ namespace WowDash.ApplicationCore.DTO.Common
         /// The refresh frequencies to filter on, separated by "|".
         /// </summary>
         public string RefreshFrequency { get; set; }
+        public bool IsFavourite { get; set; } = false;
         /// <summary>
         /// Whether the filter should return only tasks with assigned
         /// task characters that are active for this lockout (refresh frequency).

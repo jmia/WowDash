@@ -133,42 +133,6 @@ namespace WowDash.IntegrationTests.Tasks
         }
 
         [Test]
-        public async System.Threading.Tasks.Task GetFavouriteTasks_ReturnsTasks()
-        {
-            // Arrange
-            var expectedFavourite = true;
-
-            var task = new Task(defaultPlayerId, TaskType.Collectible)
-            {
-                IsFavourite = expectedFavourite
-            };
-
-            await AddAsync(task);
-
-            // Act
-            var httpResponse = await Client.GetAsync($"/api/tasks/favourites/{defaultPlayerId}");
-
-            httpResponse.EnsureSuccessStatusCode();
-
-            var response = await httpResponse.Content.ReadAsStreamAsync();
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
-            var result = await JsonSerializer.DeserializeAsync<GetFavouriteTasksResponse>(response, options);
-
-            // Assert
-            result.PlayerId.Should().Be(defaultPlayerId);
-            result.Tasks.Should().NotBeEmpty().And.HaveCount(1);
-
-            var foundTask = result.Tasks.FirstOrDefault();
-
-            foundTask.IsFavourite.Should().BeTrue();
-        }
-
-        [Test]
         public async System.Threading.Tasks.Task GetPlayerDungeonsList_ReturnsList()
         {
             // Arrange
