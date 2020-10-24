@@ -12,7 +12,7 @@
               v-for="type in taskTypes"
               v-bind:key="type.id"
             >
-            <!-- This little blank space trick for aligning checkboxes 
+              <!-- This little blank space trick for aligning checkboxes 
             is from: https://twitter.com/adamwathan/status/1217864323466432516 -->
               <div class="flex items-center">
                 &#8203;
@@ -58,19 +58,19 @@
             <div
               class="flex items-start"
               v-for="character in characterList"
-              v-bind:key="character.id"
+              v-bind:key="character.characterId"
             >
               <div class="flex items-center">
                 &#8203;
                 <input
                   type="checkbox"
-                  v-bind:id="character.value"
-                  v-bind:value="character.id"
+                  v-bind:id="character.characterId"
+                  v-bind:value="character.characterId"
                   class="checkbox-size"
                 />
               </div>
-              <label v-bind:for="character.value" class="ml-2">{{
-                character.display
+              <label v-bind:for="character.characterId" class="ml-2">{{
+                character.name
               }}</label>
             </div>
           </div>
@@ -81,30 +81,46 @@
             <div
               class="flex items-start"
               v-for="dungeon in dungeonList"
-              v-bind:key="dungeon.id"
+              v-bind:key="dungeon.gameId"
             >
               <div class="flex items-center">
                 &#8203;
                 <input
                   type="checkbox"
-                  v-bind:id="dungeon.value"
-                  v-bind:value="dungeon.id"
+                  v-bind:id="dungeon.gameId"
+                  v-bind:value="dungeon.gameId"
                   class="checkbox-size"
                 />
               </div>
-              <label v-bind:for="dungeon.value" class="ml-2">{{
-                dungeon.display
+              <label v-bind:for="dungeon.gameId" class="ml-2">{{
+                dungeon.name
               }}</label>
             </div>
           </div>
-        </div>    <!-- You get the gist... have to build out logic using Vue Formulate later anyway, it'll all be gutted -->
+        </div>
+        <!-- You get the gist... have to build out logic using Vue Formulate later anyway, it'll all be gutted -->
         <div>
           <h3 class="filter-bar-category">Zone</h3>
-          <ul class="checkbox-text">
-            <li>The Cape of Stranglethorn</li>
-            <li>Nagrand</li>
-            <li>Netherstorm</li>
-          </ul>
+          <div class="checkbox-text">
+            <div
+              class="flex items-start"
+              v-for="zone in zoneList"
+              v-bind:key="zone.gameId"
+            >
+              <div class="flex items-center">
+                &#8203;
+                <input
+                  type="checkbox"
+                  v-bind:id="zone.gameId"
+                  v-bind:value="zone.gameId"
+                  class="checkbox-size"
+                />
+              </div>
+              <label v-bind:for="zone.gameId" class="ml-2">{{
+                zone.name
+              }}</label>
+            </div>
+          </div>
         </div>
         <div>
           <h3 class="filter-bar-category">Refresh</h3>
@@ -126,6 +142,7 @@
             name="cars"
             id="cars"
             class="bg-gray-400 rounded w-auto p-1 m-2 mb-8 text-sm"
+            v-model="filterModel.sortBy"
           >
             <option value="alpha_asc">Alphabet A-Z</option>
             <option value="alpha_desc">Alphabet Z-A</option>
@@ -154,9 +171,40 @@ export default {
   name: "FilterBar",
   data() {
     return {
+      //     /// The characters to filter on, separated by "|".
+      //     public string CharacterId { get; set; }
+      //     /// The task types to filter on, separated by "|".
+      //     public string TaskType { get; set; }
+      //     /// The collection types to filter on, separated by "|".
+      //     public string CollectibleType { get; set; }
+      //     /// The dungeon IDs to filter on, separated by "|".
+      //     public string DungeonId { get; set; }
+      //     /// The zone IDs to filter on, separated by "|".
+      //     public string ZoneId { get; set; }
+      //     /// The refresh frequencies to filter on, separated by "|".
+      //     public string RefreshFrequency { get; set; }
+      //     public bool IsFavourite { get; set; } = false;
+      //     /// <summary>
+      //     /// Whether the filter should return only tasks with assigned
+      //     /// task characters that are active for this lockout (refresh frequency).
+      //     /// </summary>
+      //     public bool OnlyActiveAttempts { get; set; } = false;
+      //     /// The property on which to sort,
+      //     /// can be "priority" or "alpha",
+      //     /// suffixed with "_asc" or "_desc."
+      //     public string SortBy { get; set; }
       filterModel: {
-        // all the props for the filter model class
-        // probably need some computed ones in here
+        // entries are separated by |
+        playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
+        characterId: "", // guid
+        taskType: "", // int
+        collectibleType: "", // int
+        dungeonId: "", // int
+        zoneId: "", // int
+        refreshFrequency: "", // int
+        isFavourite: false,
+        onlyActiveAttempts: false,
+        sortBy: "alpha_asc", // priority_asc priority_desc alpha_asc alpha_desc
       },
       taskTypes: [
         { id: 0, value: "general", display: "General" }, // TODO: Remove this domain logic from the front-end
@@ -191,12 +239,52 @@ export default {
           display: "Meraddison",
         },
       ],
-      dungeonList: [
-        { id: 101, value: 101, display: "Icecrown Citadel" },
-        { id: 102, value: 102, display: "Black Temple" },
-        { id: 103, value: 103, display: "Ahn'kahet: The Old Kingdom" },
-      ],
+      dungeonList: [],
+      zoneList: [],
     };
+  },
+  mounted: function () {
+    let vm = this;
+    // TODO: Change these to grab current player
+
+    // Populate list of dungeons
+    this.$http
+      .get(`/api/tasks/dungeon-index/${vm.filterModel.playerId}`)
+      .then(function (response) {
+        if (response.status == 200) {
+          vm.dungeonList = response.data;
+        }
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
+    // Populate list of zones
+    this.$http
+      .get(`/api/tasks/zone-index/${vm.filterModel.playerId}`)
+      .then(function (response) {
+        if (response.status == 200) {
+          vm.zoneList = response.data;
+        }
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
+    // Populate character roster
+    this.$http
+      .get(`/api/tasks/character-index/${vm.filterModel.playerId}`)
+      .then(function (response) {
+        if (response.status == 200) {
+          console.log(response.data);
+          vm.characterList = response.data;
+        }
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
+
   },
 };
 </script>

@@ -101,7 +101,6 @@ export default {
           if (response.status == 200) {
             vm.$http.get(`/api/tasks/${task.taskId}`)
             .then(function (response) {
-              console.log(response);
               vm.tasks.splice(index, 1, response.data);
             })
             .catch(function (error) {
