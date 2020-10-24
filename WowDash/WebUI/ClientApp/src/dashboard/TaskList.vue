@@ -41,6 +41,7 @@
         :source="item.source"
         :priority="item.priority"
         :refreshFrequency="item.refreshFrequency"
+        @set-favourite="setFavourite(item, index)"
       />
     </div>
     <!--/Card List-->
@@ -60,6 +61,56 @@ export default {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
       tasks: [],
     };
+  },
+  methods: {
+    setFavourite: function(task, index) {
+      let vm = this;
+      if (task.isFavourite) {
+        // Unmark as fave and refresh
+        this.$http.patch(`/api/tasks/favourites/remove`, {
+          taskId: task.taskId
+        })
+        .then(function (response) {
+          if (response.status == 200) {
+            vm.$http.get(`/api/tasks/${task.taskId}`)
+            .then(function (response) {
+              console.log(response);
+              vm.tasks.splice(index, 1, response.data);
+            })
+            .catch(function (error) {
+              console.log('had an error');
+              console.log(error);
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log('had an error');
+          console.log(error);
+        });
+      } else {
+        // Mark as fave and refresh
+        this.$http.patch(`/api/tasks/favourites/add`, {
+          taskId: task.taskId
+        })
+        .then(function (response) {
+          if (response.status == 200) {
+            vm.$http.get(`/api/tasks/${task.taskId}`)
+            .then(function (response) {
+              console.log(response);
+              vm.tasks.splice(index, 1, response.data);
+            })
+            .catch(function (error) {
+              console.log('had an error');
+              console.log(error);
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log('had an error');
+          console.log(error);
+        });
+      }
+    }
   },
   mounted: function () {
     let vm = this;

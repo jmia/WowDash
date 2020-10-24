@@ -23,9 +23,10 @@
           </div>
         </div>
         <div class="w-auto">
-          <button class="mr-4">
+          <button class="mr-4" @click="$emit('set-favourite')">
             <span class="text-yellow-400"
-              ><font-awesome-icon icon="star"
+              ><font-awesome-icon :icon="['fas', 'star']" v-if="isFavourite"
+            /><font-awesome-icon :icon="['far', 'star']" v-else
             /></span>
           </button>
           <button class="mr-4">
@@ -324,12 +325,9 @@ export default {
   },
   methods: {
     markAttempt: function (character) {
-      console.log(character.isActive);
-      console.log(this.taskId);
-      console.log(character.characterId);
       let vm = this;
-
       if (character.isActive) {
+        // Set as inactive
         this.$http
           .patch(`/api/task-characters/complete`, {
             characterId: character.characterId,
@@ -354,6 +352,7 @@ export default {
             console.log(error);
           });
       } else {
+        // Set as active
         this.$http
           .patch(`/api/task-characters/revert`, {
             characterId: character.characterId,
