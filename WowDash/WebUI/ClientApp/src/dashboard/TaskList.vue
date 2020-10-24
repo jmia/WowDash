@@ -57,101 +57,26 @@ export default {
   },
   data() {
     return {
-      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-      tasks: [
-        {
-          taskId: "22129c9d-0518-4fad-86d0-08d8706ce7cb",
-          //"playerId": "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          description: "Battle for Azeroth Pathfinder, Part Two",
-          gameDataReferences: [
-            {
-              id: 2,
-              gameId: 758,
-              type: 3,
-              subclass: null,
-              description: "Icecrown Citadel",
-            },
-            {
-              id: 3,
-              gameId: 1636,
-              type: 4,
-              subclass: null,
-              description: "The Lich King",
-            },
-            {
-              id: 4,
-              gameId: 50818,
-              type: 1,
-              subclass: "Mount",
-              description: "Invincible's Reins",
-            },
-            {
-              id: 5,
-              gameId: null,
-              type: 7,
-              subclass: null,
-              description: "Gambling Debt",
-            },
-            {
-              id: 6,
-              gameId: 11509,
-              type: 7,
-              subclass: null,
-              description: 'Street "Cred"',
-            },
-            {
-              id: 7,
-              gameId: 1458,
-              type: 5,
-              subclass: null,
-              description: "Telurinon Moonshadow",
-            },
-            {
-              id: 8,
-              gameId: null,
-              type: 5,
-              subclass: null,
-              description: "Daleohm",
-            },
-            {
-              id: 9,
-              gameId: null,
-              type: 8,
-              subclass: null,
-              description: "Zul'Drak",
-            },
-            {
-              id: 10,
-              gameId: 13250,
-              type: 0,
-              subclass: null,
-              description: "Battle for Azeroth Pathfinder, Part Two",
-            },
-            {
-              id: 10,
-              gameId: 12940,
-              type: 1,
-              subclass: null,
-              description: "Dal'Rend's Sacred Charge",
-            },
-            {
-              id: 12,
-              gameId: 1190,
-              type: 2,
-              subclass: null,
-              description: "Battlegear of Winged Triumph",
-            },
-          ],
-          isFavourite: false,
-          notes: null,
-          taskType: 0,
-          collectibleType: 0,
-          source: 0,
-          priority: 2,
-          refreshFrequency: 2,
-        },
-      ],
+      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
+      tasks: [],
     };
+  },
+  mounted: function () {
+    let vm = this;
+    this.$http
+      .get("/api/tasks", {
+        params: {
+          playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
+        },
+      })
+      .then(function (response) {
+        vm.playerId = response.data.playerId;
+        vm.tasks = response.data.tasks;
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
   },
 };
 </script>

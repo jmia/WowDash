@@ -99,6 +99,7 @@
             :name="item.name"
             :playableClass="item.class"
             :isActive="item.isActive"
+            @mark-attempt="markAttempt(item)"
           />
         </div>
       </template>
@@ -318,9 +319,78 @@ export default {
           [3, 4, 5, 8].includes(r.type)
         );
       }
-      console.log(result);
       return result;
     },
+  },
+  methods: {
+    markAttempt: function (character) {
+      console.log(character.isActive);
+      console.log(this.taskId);
+      console.log(character.characterId);
+      let vm = this;
+
+      if (character.isActive) {
+        this.$http
+          .patch(`/api/task-characters/complete`, {
+            characterId: character.characterId,
+            taskId: vm.taskId,
+          })
+          .then(function (response) {
+            if (response.status == 204) {
+              console.log("we did it. refresh the page.");
+              vm.$http
+                .get(`/api/task-characters/task/${vm.taskId}`)
+                .then(function (response) {
+                  vm.characters = response.data.characters;
+                })
+                .catch(function (error) {
+                  console.log("had an error");
+                  console.log(error);
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      } else {
+        this.$http
+          .patch(`/api/task-characters/revert`, {
+            characterId: character.characterId,
+            taskId: vm.taskId,
+          })
+          .then(function (response) {
+            if (response.status == 204) {
+              console.log("we did it. refresh the page.");
+              vm.$http
+                .get(`/api/task-characters/task/${vm.taskId}`)
+                .then(function (response) {
+                  vm.characters = response.data.characters;
+                })
+                .catch(function (error) {
+                  console.log("had an error");
+                  console.log(error);
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
+  },
+  mounted: function () {
+    let vm = this;
+    this.$http
+      .get(`/api/task-characters/task/${vm.taskId}`)
+      .then(function (response) {
+        vm.characters = response.data.characters;
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
   },
 };
 </script>

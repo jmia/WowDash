@@ -1,46 +1,56 @@
 <template>
-    <button class="rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1" :class="formattedClass">{{ name }}</button>
+  <button
+    class="rounded-full p-2 pl-3 pr-3 mb-1 w-auto ml-1"
+    :class="formattedClass"
+    @click="$emit('mark-attempt')"
+  >
+    {{ name }}
+  </button>
 </template>
 
 <script>
 export default {
-    name: 'TaskCharacterButton',
-    props: {
-        characterId: {
-            type: String,
-            required: true
-        },
-        name: {
-            type: String
-        },
-        playableClass: {
-            type: String
-        },
-        isActive: {
-            type: Boolean,
-            required: true
-        }
+  name: "TaskCharacterButton",
+  props: {
+    taskId: {
+      type: String,
+      required: true,
     },
-    computed: {
-        // Style the background of the button by in-game class colour
-        formattedClass: function () {
-            var characterClass = this.playableClass.toLowerCase().replace(/ /g, "");
-            if (this.isActive) {
-                return characterClass;
-            } else {
-                return "attempt-complete"
-            }
-        }
-    }
-}
+    characterId: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+    },
+    playableClass: {
+      type: String,
+    },
+    isActive: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  computed: {
+    // Style the background of the button by in-game class colour
+    formattedClass: function () {
+      var characterClass = this.playableClass.toLowerCase().replace(/ /g, "");
+      if (this.isActive) {
+        return characterClass;
+      } else {
+        return "attempt-complete";
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
 /* Active Status */
 .attempt-complete {
-    @apply bg-gray-600;
-    @apply text-gray-800;
-    @apply line-through;
+  @apply bg-gray-600;
+  @apply text-gray-800;
+  @apply line-through;
 }
 /* Playable Classes */
 .deathknight {
