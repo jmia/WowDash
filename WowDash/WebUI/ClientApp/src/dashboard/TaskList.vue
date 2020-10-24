@@ -9,11 +9,13 @@
       >
       <button
         class="bg-blue-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
+        @click="refreshDailies"
       >
         <font-awesome-icon icon="sync-alt" /> Refresh Dailies
       </button>
       <button
         class="bg-blue-400 p-2 font-bold text-center border-gray-800 rounded shadow"
+        @click="refreshWeeklies"
       >
         <font-awesome-icon icon="sync-alt" /> Refresh Weeklies
       </button>
@@ -63,6 +65,32 @@ export default {
     };
   },
   methods: {
+    refreshDailies: function() {
+      let vm = this;
+      this.$http.post(`/api/task-characters/refresh/daily`)
+      .then(function (response) {
+        if (response.status == 204) {
+          window.location.reload();
+        }
+      })
+      .catch(function (error) {
+        console.log('had an error');
+        console.log(error);
+      });
+    },
+    refreshWeeklies() {
+      let vm = this;
+      this.$http.post(`/api/task-characters/refresh/weekly`)
+      .then(function (response) {
+        if (response.status == 204) {
+          window.location.reload();
+        }
+      })
+      .catch(function (error) {
+        console.log('had an error');
+        console.log(error);
+      });
+    },
     setFavourite: function(task, index) {
       let vm = this;
       if (task.isFavourite) {
@@ -117,7 +145,7 @@ export default {
     this.$http
       .get("/api/tasks", {
         params: {
-          playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
+          playerId: vm.playerId, // will eventually be replaced with logged-in user
         },
       })
       .then(function (response) {

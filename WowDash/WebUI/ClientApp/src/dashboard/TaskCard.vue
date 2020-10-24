@@ -390,7 +390,7 @@ export default {
         console.log("had an error");
         console.log(error);
       });
-  },
+  }
 };
 </script>
 
