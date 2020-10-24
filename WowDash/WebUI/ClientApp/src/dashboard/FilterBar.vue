@@ -123,18 +123,83 @@
           </div>
         </div>
         <div>
+          <h3 class="filter-bar-category">Source</h3>
+          <div class="checkbox-text">
+            <div
+              class="flex items-start"
+              v-for="source in sources"
+              v-bind:key="source.id"
+            >
+              <div class="flex items-center">
+                &#8203;
+                <input
+                  type="checkbox"
+                  v-bind:id="source.value"
+                  v-bind:value="source.id"
+                  class="checkbox-size"
+                />
+              </div>
+              <label v-bind:for="source.value" class="ml-2">{{
+                source.display
+              }}</label>
+            </div>
+          </div>
+        </div>
+        <div>
           <h3 class="filter-bar-category">Refresh</h3>
-          <ul class="checkbox-text">
-            <li>Daily</li>
-            <li>Weekly</li>
-            <li>Never</li>
-          </ul>
+          <div class="checkbox-text">
+            <div
+              class="flex items-start"
+              v-for="frequency in refreshFrequencies"
+              v-bind:key="frequency.id"
+            >
+              <div class="flex items-center">
+                &#8203;
+                <input
+                  type="checkbox"
+                  v-bind:id="frequency.value"
+                  v-bind:value="frequency.id"
+                  class="checkbox-size"
+                />
+              </div>
+              <label v-bind:for="frequency.value" class="ml-2">{{
+                frequency.display
+              }}</label>
+            </div>
+          </div>
         </div>
         <div>
           <h3 class="filter-bar-category">Other</h3>
-          <ul class="checkbox-text">
-            <li>Favourites Only</li>
-          </ul>
+          <div class="checkbox-text">
+            <div class="flex items-start">
+              <div class="flex items-center">
+                &#8203;
+                <input
+                  type="checkbox"
+                  id="favouritesOnly"
+                  v-model="filterModel.isFavourite"
+                  class="checkbox-size"
+                />
+              </div>
+              <label for="favouritesOnly" class="ml-2"> Favourites Only</label>
+            </div>
+          </div>
+          <div class="checkbox-text">
+            <div class="flex items-start">
+              <div class="flex items-center">
+                &#8203;
+                <input
+                  type="checkbox"
+                  id="activeAttempts"
+                  v-model="filterModel.onlyActiveAttempts"
+                  class="checkbox-size"
+                />
+              </div>
+              <label for="activeAttempts" class="ml-2">
+                Active Attempts Remaining</label
+              >
+            </div>
+          </div>
         </div>
         <div>
           <h3 class="filter-bar-category">Sort By</h3>
@@ -217,6 +282,18 @@ export default {
         { id: 2, value: "mount", display: "Mounts" },
         { id: 3, value: "pet", display: "Battle Pets" },
       ],
+      refreshFrequencies: [
+        { id: 0, value: "never", display: "Never" },
+        { id: 1, value: "daily", display: "Daily" },
+        { id: 2, value: "weekly", display: "Weekly" },
+      ],
+      sources: [
+        { id: 0, value: "dungeon", display: "Dungeon" },
+        { id: 1, value: "quest", display: "Quest" },
+        { id: 2, value: "vendor", display: "Vendor" },
+        { id: 3, value: "worldDrop", display: "World Drop" },
+        { id: 4, value: "other", display: "Other" },
+      ],
       characterList: [
         {
           id: "cbf62c90-5358-4059-a04d-f798cb2d300c",
@@ -284,7 +361,6 @@ export default {
         console.log("had an error");
         console.log(error);
       });
-
   },
 };
 </script>
