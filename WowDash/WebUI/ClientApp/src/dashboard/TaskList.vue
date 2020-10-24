@@ -67,7 +67,6 @@ export default {
   },
   methods: {
     refreshDailies: function() {
-      let vm = this;
       this.$http.post(`/api/task-characters/refresh/daily`)
       .then(function (response) {
         if (response.status == 204) {
@@ -80,7 +79,6 @@ export default {
       });
     },
     refreshWeeklies() {
-      let vm = this;
       this.$http.post(`/api/task-characters/refresh/weekly`)
       .then(function (response) {
         if (response.status == 204) {
@@ -147,7 +145,7 @@ export default {
     // while also properly composing components to manage
     // their own data
     query: function(value) {
-
+          console.log(value);
     }
   },
   mounted: function () {
