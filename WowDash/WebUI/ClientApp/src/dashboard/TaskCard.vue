@@ -23,9 +23,10 @@
           </div>
         </div>
         <div class="w-auto">
-          <button class="mr-4">
+          <button class="mr-4" @click="$emit('set-favourite')">
             <span class="text-yellow-400"
-              ><font-awesome-icon icon="star"
+              ><font-awesome-icon :icon="['fas', 'star']" v-if="isFavourite"
+            /><font-awesome-icon :icon="['far', 'star']" v-else
             /></span>
           </button>
           <button class="mr-4">
@@ -99,6 +100,7 @@
             :name="item.name"
             :playableClass="item.class"
             :isActive="item.isActive"
+            @mark-attempt="markAttempt(item)"
           />
         </div>
       </template>
@@ -121,78 +123,6 @@ export default {
       characters: [
         // If the structure of this changes (e.g. "id" is "characterId"),
         // check the component info above and the template in TaskCharacterButton.vue
-        {
-          characterId: "fake",
-          name: "Chakwas",
-          class: "Druid",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Scully",
-          class: "Hunter",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Temperance",
-          class: "Paladin",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Meraddison",
-          class: "Warlock",
-          isActive: false,
-        },
-        {
-          characterId: "fake",
-          name: "Cadidylus",
-          class: "Demon Hunter",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Orbrand",
-          class: "Death Knight",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Diabetty",
-          class: "Warrior",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Candor",
-          class: "Rogue",
-          isActive: false,
-        },
-        {
-          characterId: "fake",
-          name: "Oleander",
-          class: "Mage",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Mozart",
-          class: "Monk",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Rienne",
-          class: "Shaman",
-          isActive: true,
-        },
-        {
-          characterId: "fake",
-          name: "Rashael",
-          class: "Priest",
-          isActive: true,
-        },
       ],
       // Super tightly bound to back end logic, will need refactoring
       // maybe just change to a get request for a view model collection of all these
@@ -318,10 +248,77 @@ export default {
           [3, 4, 5, 8].includes(r.type)
         );
       }
-      console.log(result);
       return result;
     },
   },
+  methods: {
+    markAttempt: function (character) {
+      let vm = this;
+      if (character.isActive) {
+        // Set as inactive
+        this.$http
+          .patch(`/api/task-characters/complete`, {
+            characterId: character.characterId,
+            taskId: vm.taskId,
+          })
+          .then(function (response) {
+            if (response.status == 204) {
+              console.log("we did it. refresh the page.");
+              vm.$http
+                .get(`/api/task-characters/task/${vm.taskId}`)
+                .then(function (response) {
+                  vm.characters = response.data.characters;
+                })
+                .catch(function (error) {
+                  console.log("had an error");
+                  console.log(error);
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      } else {
+        // Set as active
+        this.$http
+          .patch(`/api/task-characters/revert`, {
+            characterId: character.characterId,
+            taskId: vm.taskId,
+          })
+          .then(function (response) {
+            if (response.status == 204) {
+              console.log("we did it. refresh the page.");
+              vm.$http
+                .get(`/api/task-characters/task/${vm.taskId}`)
+                .then(function (response) {
+                  vm.characters = response.data.characters;
+                })
+                .catch(function (error) {
+                  console.log("had an error");
+                  console.log(error);
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
+  },
+  mounted: function () {
+    let vm = this;
+    this.$http
+      .get(`/api/task-characters/task/${vm.taskId}`)
+      .then(function (response) {
+        vm.characters = response.data.characters;
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
+  }
 };
 </script>
 

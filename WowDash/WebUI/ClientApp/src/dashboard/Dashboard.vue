@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-wrap">
     <div class="w-1/3 l:w-1/4 xl:w-1/6 p-3">
-        <FilterBar />
+        <FilterBar @update-query="updateQuery"/>
     </div>
     <div class="w-2/3 l:w-3/4 xl:w-5/6 p-3">
-        <TaskList />
+        <TaskList :query="query"/>
     </div>
   </div>
 </template>
@@ -18,6 +18,17 @@ export default {
   components: {
       FilterBar,
       TaskList
+  },
+  data() {
+    return {
+      query: ""
+    }
+  },
+  methods: {
+    updateQuery: function(event) {
+      console.log('what to set query as?');
+      console.log(event);
+    }
   }
 };
 </script>

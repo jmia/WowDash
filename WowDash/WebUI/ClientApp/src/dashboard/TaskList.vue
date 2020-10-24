@@ -9,11 +9,13 @@
       >
       <button
         class="bg-blue-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
+        @click="refreshDailies"
       >
         <font-awesome-icon icon="sync-alt" /> Refresh Dailies
       </button>
       <button
         class="bg-blue-400 p-2 font-bold text-center border-gray-800 rounded shadow"
+        @click="refreshWeeklies"
       >
         <font-awesome-icon icon="sync-alt" /> Refresh Weeklies
       </button>
@@ -41,6 +43,7 @@
         :source="item.source"
         :priority="item.priority"
         :refreshFrequency="item.refreshFrequency"
+        @set-favourite="setFavourite(item, index)"
       />
     </div>
     <!--/Card List-->
@@ -55,103 +58,114 @@ export default {
   components: {
     TaskCard,
   },
+  props: ["query"],
   data() {
     return {
-      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-      tasks: [
-        {
-          taskId: "22129c9d-0518-4fad-86d0-08d8706ce7cb",
-          //"playerId": "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          description: "Battle for Azeroth Pathfinder, Part Two",
-          gameDataReferences: [
-            {
-              id: 2,
-              gameId: 758,
-              type: 3,
-              subclass: null,
-              description: "Icecrown Citadel",
-            },
-            {
-              id: 3,
-              gameId: 1636,
-              type: 4,
-              subclass: null,
-              description: "The Lich King",
-            },
-            {
-              id: 4,
-              gameId: 50818,
-              type: 1,
-              subclass: "Mount",
-              description: "Invincible's Reins",
-            },
-            {
-              id: 5,
-              gameId: null,
-              type: 7,
-              subclass: null,
-              description: "Gambling Debt",
-            },
-            {
-              id: 6,
-              gameId: 11509,
-              type: 7,
-              subclass: null,
-              description: 'Street "Cred"',
-            },
-            {
-              id: 7,
-              gameId: 1458,
-              type: 5,
-              subclass: null,
-              description: "Telurinon Moonshadow",
-            },
-            {
-              id: 8,
-              gameId: null,
-              type: 5,
-              subclass: null,
-              description: "Daleohm",
-            },
-            {
-              id: 9,
-              gameId: null,
-              type: 8,
-              subclass: null,
-              description: "Zul'Drak",
-            },
-            {
-              id: 10,
-              gameId: 13250,
-              type: 0,
-              subclass: null,
-              description: "Battle for Azeroth Pathfinder, Part Two",
-            },
-            {
-              id: 10,
-              gameId: 12940,
-              type: 1,
-              subclass: null,
-              description: "Dal'Rend's Sacred Charge",
-            },
-            {
-              id: 12,
-              gameId: 1190,
-              type: 2,
-              subclass: null,
-              description: "Battlegear of Winged Triumph",
-            },
-          ],
-          isFavourite: false,
-          notes: null,
-          taskType: 0,
-          collectibleType: 0,
-          source: 0,
-          priority: 2,
-          refreshFrequency: 2,
-        },
-      ],
+      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
+      tasks: [],
     };
+  },
+  methods: {
+    refreshDailies: function() {
+      let vm = this;
+      this.$http.post(`/api/task-characters/refresh/daily`)
+      .then(function (response) {
+        if (response.status == 204) {
+          window.location.reload();
+        }
+      })
+      .catch(function (error) {
+        console.log('had an error');
+        console.log(error);
+      });
+    },
+    refreshWeeklies() {
+      let vm = this;
+      this.$http.post(`/api/task-characters/refresh/weekly`)
+      .then(function (response) {
+        if (response.status == 204) {
+          window.location.reload();
+        }
+      })
+      .catch(function (error) {
+        console.log('had an error');
+        console.log(error);
+      });
+    },
+    setFavourite: function(task, index) {
+      let vm = this;
+      if (task.isFavourite) {
+        // Unmark as fave and refresh
+        this.$http.patch(`/api/tasks/favourites/remove`, {
+          taskId: task.taskId
+        })
+        .then(function (response) {
+          if (response.status == 200) {
+            vm.$http.get(`/api/tasks/${task.taskId}`)
+            .then(function (response) {
+              console.log(response);
+              vm.tasks.splice(index, 1, response.data);
+            })
+            .catch(function (error) {
+              console.log('had an error');
+              console.log(error);
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log('had an error');
+          console.log(error);
+        });
+      } else {
+        // Mark as fave and refresh
+        this.$http.patch(`/api/tasks/favourites/add`, {
+          taskId: task.taskId
+        })
+        .then(function (response) {
+          if (response.status == 200) {
+            vm.$http.get(`/api/tasks/${task.taskId}`)
+            .then(function (response) {
+              console.log(response);
+              vm.tasks.splice(index, 1, response.data);
+            })
+            .catch(function (error) {
+              console.log('had an error');
+              console.log(error);
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log('had an error');
+          console.log(error);
+        });
+      }
+    }
+  },
+  watch: {
+    // This isn't my favourite way to pass state
+    // I'm trying to avoid using Vuex as long as possible
+    // while also properly composing components to manage
+    // their own data
+    query: function(value) {
+
+    }
+  },
+  mounted: function () {
+    let vm = this;
+    this.$http
+      .get("/api/tasks", {
+        params: {
+          playerId: vm.playerId, // will eventually be replaced with logged-in user
+        },
+      })
+      .then(function (response) {
+        vm.playerId = response.data.playerId;
+        vm.tasks = response.data.tasks;
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
   },
 };
 </script>

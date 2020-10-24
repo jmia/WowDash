@@ -12,11 +12,13 @@ import GSignInButton from 'vue-google-signin-button';
 // Styling imports
 import '@/assets/css/tailwind.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faBars, faCaretUp, faCaretDown, faCrow, faDungeon, faEdit, faExclamation, faMale, faMapMarkedAlt, faMars, faPlus, faSkullCrossbones, faStar, faSyncAlt, faTasks, faTrash, faUser, faUserNinja, faUserSecret, faVenus } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faCaretUp, faCaretDown, faCrow, faDungeon, faEdit, faExclamation, faMale, faMapMarkedAlt, faMars, faPlus, faSkullCrossbones, faSyncAlt, faTasks, faTrash, faUser, faUserNinja, faUserSecret, faVenus } from '@fortawesome/free-solid-svg-icons'
+import { faStar as fasStar } from '@fortawesome/free-solid-svg-icons'
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // Add font-awesome icons
-library.add(faBars, faCaretUp, faCaretDown, faCrow, faDungeon, faEdit, faExclamation, faMale, faMapMarkedAlt, faMars, faPlus, faSkullCrossbones, faStar, faSyncAlt, faTasks, faTrash, faUser, faUserNinja, faUserSecret, faVenus)
+library.add(faBars, faCaretUp, faCaretDown, faCrow, faDungeon, faEdit, faExclamation, faMale, faMapMarkedAlt, faMars, faPlus, faSkullCrossbones, farStar, fasStar, faSyncAlt, faTasks, faTrash, faUser, faUserNinja, faUserSecret, faVenus)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // Assign axios to global
