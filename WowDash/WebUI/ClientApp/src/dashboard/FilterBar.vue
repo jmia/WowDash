@@ -135,6 +135,7 @@
         </div>
         <button
           class="bg-blue-400 w-3/4 font-bold text-center p-1 m-2 border-gray-800 rounded shadow"
+          @click="$emit('update-query', filterModel)"
         >
           Apply Filters</button
         ><br />
@@ -153,6 +154,10 @@ export default {
   name: "FilterBar",
   data() {
     return {
+      filterModel: {
+        // all the props for the filter model class
+        // probably need some computed ones in here
+      },
       taskTypes: [
         { id: 0, value: "general", display: "General" }, // TODO: Remove this domain logic from the front-end
         { id: 1, value: "achievement", display: "Achievement" },

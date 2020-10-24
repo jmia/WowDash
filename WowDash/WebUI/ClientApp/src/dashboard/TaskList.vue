@@ -58,6 +58,7 @@ export default {
   components: {
     TaskCard,
   },
+  props: ["query"],
   data() {
     return {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
@@ -138,6 +139,15 @@ export default {
           console.log(error);
         });
       }
+    }
+  },
+  watch: {
+    // This isn't my favourite way to pass state
+    // I'm trying to avoid using Vuex as long as possible
+    // while also properly composing components to manage
+    // their own data
+    query: function(value) {
+
     }
   },
   mounted: function () {
