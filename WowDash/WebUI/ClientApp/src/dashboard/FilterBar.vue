@@ -16,24 +16,10 @@
           <div>
             <h3 class="filter-bar-category">Collectible</h3>
             <div class="checkbox-text">
-              <div
-                class="flex items-start"
-                v-for="type in collectibleTypes"
-                v-bind:key="type.id"
-              >
-                <div class="flex items-center">
-                  &#8203;
-                  <input
-                    type="checkbox"
-                    v-bind:id="type.value"
-                    v-bind:value="type.id"
-                    class="checkbox-size"
-                  />
-                </div>
-                <label v-bind:for="type.value" class="ml-2">{{
-                  type.display
-                }}</label>
-              </div>
+              <FormulateInput
+              type="checkbox"
+              name="collectibleType"
+              :options="collectibleTypes" />
             </div>
           </div>
           <div>
@@ -243,44 +229,25 @@ export default {
         { value: "2", label: "Collectible" },
       ],
       collectibleTypes: [
-        { id: 0, value: "item", display: "Gear and Items" },
-        { id: 1, value: "itemSet", display: "Dungeon Sets" },
-        { id: 2, value: "mount", display: "Mounts" },
-        { id: 3, value: "pet", display: "Battle Pets" },
+        { value: "0", label: "Gear and Items" },
+        { value: "1", label: "Dungeon Sets" },
+        { value: "2", label: "Mounts" },
+        { value: "3", label: "Battle Pets" },
       ],
       refreshFrequencies: [
-        { id: 0, value: "never", display: "Never" },
-        { id: 1, value: "daily", display: "Daily" },
-        { id: 2, value: "weekly", display: "Weekly" },
+        { value: "0", label: "Never" },
+        { value: "1", label: "Daily" },
+        { value: "2", label: "Weekly" },
       ],
       sources: [
-        { id: 0, value: "dungeon", display: "Dungeon" },
-        { id: 1, value: "quest", display: "Quest" },
-        { id: 2, value: "vendor", display: "Vendor" },
-        { id: 3, value: "worldDrop", display: "World Drop" },
-        { id: 4, value: "other", display: "Other" },
+        { value: "0", label: "Dungeon" },
+        { value: "1", label: "Quest" },
+        { value: "2", label: "Vendor" },
+        { value: "3", label: "World Drop" },
+        { value: "4", label: "Other" },
       ],
       characterList: [
-        {
-          id: "cbf62c90-5358-4059-a04d-f798cb2d300c",
-          value: "cbf62c90-5358-4059-a04d-f798cb2d300c",
-          display: "Scully",
-        },
-        {
-          id: "92100f04-7a0c-4138-809b-73a8cdaf7d6b",
-          value: "92100f04-7a0c-4138-809b-73a8cdaf7d6b",
-          display: "Chakwas",
-        },
-        {
-          id: "859cfab5-725c-4310-b5e4-9d8e92533109",
-          value: "859cfab5-725c-4310-b5e4-9d8e92533109",
-          display: "Temperance",
-        },
-        {
-          id: "4f42b206-b106-42c2-9d3e-29ded8128b75",
-          value: "4f42b206-b106-42c2-9d3e-29ded8128b75",
-          display: "Meraddison",
-        },
+        
       ],
       dungeonList: [],
       zoneList: [],
@@ -337,6 +304,7 @@ export default {
       .then(function (response) {
         if (response.status == 200) {
           console.log(response.data);
+          // TODO: This needs to be a label & value
           vm.characterList = response.data;
         }
       })
@@ -348,10 +316,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .filter-bar-category {
   @apply font-bold;
   @apply text-2xl;
   @apply text-gray-600;
 }
+
+.formulate-input-element {
+  display: inline-block !important;
+}
+
 </style>
