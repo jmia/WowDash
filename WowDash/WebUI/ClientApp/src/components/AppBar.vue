@@ -274,7 +274,6 @@ export default {
   },
   methods: {
     searchWowhead: function () {
-      console.log(this.wowheadSearchTerm);
       window.open("https://www.wowhead.com/search?q=" + this.wowheadSearchTerm);
     },
     toggleHelpfulLinks: function () {

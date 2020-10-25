@@ -26,8 +26,7 @@ export default {
   },
   methods: {
     updateQuery: function(event) {
-      console.log('what to set query as?');
-      console.log(event);
+      this.query = event;
     }
   }
 };
