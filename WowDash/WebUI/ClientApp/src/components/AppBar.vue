@@ -250,7 +250,7 @@
 <script>
 import Popper from "popper.js";
 
-// Finally properly fixed display/hide of nav content on 
+// Finally properly fixed display/hide of nav content on
 // small screens with the help of:
 // https://stackoverflow.com/questions/58157764/how-do-i-dynamically-show-a-mobile-menu-with-tailwind-and-vue-js
 const tailwindConfig = require("../../tailwind.config");
@@ -274,7 +274,6 @@ export default {
   },
   methods: {
     searchWowhead: function () {
-      console.log(this.wowheadSearchTerm);
       window.open("https://www.wowhead.com/search?q=" + this.wowheadSearchTerm);
     },
     toggleHelpfulLinks: function () {

@@ -28,6 +28,12 @@
         <h5 class="table-title">Tasks</h5>
       </div>
 
+      <div
+        v-if="tasks.length == 0"
+        class="bg-gray-800 text-gray-500 text-xl p-2 pl-4 pr-4 flex flex-col justify-between leading-normal mb-3"
+      >
+        No tasks found.
+      </div>
       <TaskCard
         v-for="(item, index) in tasks"
         :item="item"
@@ -66,87 +72,131 @@ export default {
     };
   },
   methods: {
-    refreshDailies: function() {
-      this.$http.post(`/api/task-characters/refresh/daily`)
-      .then(function (response) {
-        if (response.status == 204) {
-          window.location.reload();
-        }
-      })
-      .catch(function (error) {
-        console.log('had an error');
-        console.log(error);
-      });
+    refreshDailies: function () {
+      this.$http
+        .post(`/api/task-characters/refresh/daily`)
+        .then(function (response) {
+          if (response.status == 204) {
+            window.location.reload();
+          }
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
     },
     refreshWeeklies() {
-      this.$http.post(`/api/task-characters/refresh/weekly`)
-      .then(function (response) {
-        if (response.status == 204) {
-          window.location.reload();
-        }
-      })
-      .catch(function (error) {
-        console.log('had an error');
-        console.log(error);
-      });
+      this.$http
+        .post(`/api/task-characters/refresh/weekly`)
+        .then(function (response) {
+          if (response.status == 204) {
+            window.location.reload();
+          }
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
     },
-    setFavourite: function(task, index) {
+    setFavourite: function (task, index) {
       let vm = this;
       if (task.isFavourite) {
         // Unmark as fave and refresh
-        this.$http.patch(`/api/tasks/favourites/remove`, {
-          taskId: task.taskId
-        })
-        .then(function (response) {
-          if (response.status == 200) {
-            vm.$http.get(`/api/tasks/${task.taskId}`)
-            .then(function (response) {
-              console.log(response);
-              vm.tasks.splice(index, 1, response.data);
-            })
-            .catch(function (error) {
-              console.log('had an error');
-              console.log(error);
-            });
-          }
-        })
-        .catch(function (error) {
-          console.log('had an error');
-          console.log(error);
-        });
+        this.$http
+          .patch(`/api/tasks/favourites/remove`, {
+            taskId: task.taskId,
+          })
+          .then(function (response) {
+            if (response.status == 200) {
+              vm.$http
+                .get(`/api/tasks/${task.taskId}`)
+                .then(function (response) {
+                  vm.tasks.splice(index, 1, response.data);
+                })
+                .catch(function (error) {
+                  console.log("had an error");
+                  console.log(error);
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
       } else {
         // Mark as fave and refresh
-        this.$http.patch(`/api/tasks/favourites/add`, {
-          taskId: task.taskId
-        })
-        .then(function (response) {
-          if (response.status == 200) {
-            vm.$http.get(`/api/tasks/${task.taskId}`)
-            .then(function (response) {
-              console.log(response);
-              vm.tasks.splice(index, 1, response.data);
-            })
-            .catch(function (error) {
-              console.log('had an error');
-              console.log(error);
-            });
-          }
-        })
-        .catch(function (error) {
-          console.log('had an error');
-          console.log(error);
-        });
+        this.$http
+          .patch(`/api/tasks/favourites/add`, {
+            taskId: task.taskId,
+          })
+          .then(function (response) {
+            if (response.status == 200) {
+              vm.$http
+                .get(`/api/tasks/${task.taskId}`)
+                .then(function (response) {
+                  vm.tasks.splice(index, 1, response.data);
+                })
+                .catch(function (error) {
+                  console.log("had an error");
+                  console.log(error);
+                });
+            }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
       }
-    }
+    },
   },
   watch: {
     // This isn't my favourite way to pass state
     // I'm trying to avoid using Vuex as long as possible
-    // while also properly composing components to manage
-    // their own data
-    query: function(value) {
-          console.log(value);
-    }
+    // while also properly composing components.
+    // I'm aware this sucks. I promise.
+    query: function (value) {
+      let vm = this;
+
+      // If they cleared filters, set it back to everything
+      if (value == "") {
+        this.$http
+          .get("/api/tasks", {
+            params: {
+              playerId: vm.playerId,
+            },
+          })
+          .then(function (response) {
+            vm.tasks = response.data.tasks;
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      } else {
+        this.$http
+          .get("/api/tasks", {
+            params: {
+              playerId: vm.playerId,
+              characterId: value.characterId ?? null,
+              collectibleType: value.collectibleType ?? null,
+              dungeonId: value.dungeonId ?? null,
+              isFavourite: value.isFavourite ?? false,
+              onlyActiveAttempts: value.onlyActiveAttempts ?? false,
+              refreshFrequency: value.refreshFrequency ?? null,
+              sortBy: value.sortBy ?? null,
+              taskType: value.taskType ?? null,
+              zoneId: value.zoneId ?? null,
+            },
+          })
+          .then(function (response) {
+            vm.tasks = response.data.tasks;
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
   },
   mounted: function () {
     let vm = this;
@@ -157,7 +207,6 @@ export default {
         },
       })
       .then(function (response) {
-        vm.playerId = response.data.playerId;
         vm.tasks = response.data.tasks;
       })
       .catch(function (error) {

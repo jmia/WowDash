@@ -25,8 +25,11 @@
         <div class="w-auto">
           <button class="mr-4" @click="$emit('set-favourite')">
             <span class="text-yellow-400"
-              ><font-awesome-icon :icon="['fas', 'star']" v-if="isFavourite"
-            /><font-awesome-icon :icon="['far', 'star']" v-else
+              ><font-awesome-icon
+                :icon="['fas', 'star']"
+                v-if="isFavourite" /><font-awesome-icon
+                :icon="['far', 'star']"
+                v-else
             /></span>
           </button>
           <button class="mr-4">
@@ -120,10 +123,7 @@ export default {
   },
   data() {
     return {
-      characters: [
-        // If the structure of this changes (e.g. "id" is "characterId"),
-        // check the component info above and the template in TaskCharacterButton.vue
-      ],
+      characters: [],
       // Super tightly bound to back end logic, will need refactoring
       // maybe just change to a get request for a view model collection of all these
       taskTypes: ["general", "achievement", "collectible"],
@@ -263,7 +263,6 @@ export default {
           })
           .then(function (response) {
             if (response.status == 204) {
-              console.log("we did it. refresh the page.");
               vm.$http
                 .get(`/api/task-characters/task/${vm.taskId}`)
                 .then(function (response) {
@@ -288,7 +287,6 @@ export default {
           })
           .then(function (response) {
             if (response.status == 204) {
-              console.log("we did it. refresh the page.");
               vm.$http
                 .get(`/api/task-characters/task/${vm.taskId}`)
                 .then(function (response) {
@@ -318,7 +316,7 @@ export default {
         console.log("had an error");
         console.log(error);
       });
-  }
+  },
 };
 </script>
 

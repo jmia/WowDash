@@ -69,14 +69,14 @@ namespace WowDash.WebUI.Controllers
             var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId && 
                 t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.Dungeon));
 
-            var references = tasks.SelectMany(t => t.GameDataReferences);
+            var references = tasks.SelectMany(t => t.GameDataReferences.Where(gdr => gdr.Type == GameDataReference.GameDataType.Dungeon));
             var distinctReferences = references.DistinctBy(r => r.GameId);
 
             return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).OrderBy(r => r.Name).ToList();
         }
 
         /// <summary>
-        /// Gets all favourite tasks for a player.
+        /// Gets a list of unique zone names for filtering.
         /// </summary>
         /// <param name="playerId">The ID of the player.</param>
         /// <response code="200">Returns the resource.</response>
@@ -90,10 +90,27 @@ namespace WowDash.WebUI.Controllers
             var tasks = _context.Tasks.AsNoTracking().Where(t => t.PlayerId == playerId &&
                 t.GameDataReferences.Any(gdr => gdr.Type == GameDataReference.GameDataType.Zone));
 
-            var references = tasks.SelectMany(t => t.GameDataReferences);
+            var references = tasks.SelectMany(t => t.GameDataReferences.Where(gdr => gdr.Type == GameDataReference.GameDataType.Zone));
             var distinctReferences = references.DistinctBy(r => r.GameId);
 
             return distinctReferences.Select(dr => new FilterListSourceResponse(dr.GameId, dr.Description)).OrderBy(r => r.Name).ToList();
+        }
+
+        /// <summary>
+        /// Gets a list of unique character names for filtering.
+        /// </summary>
+        /// <param name="playerId">The ID of the player.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        [HttpGet("character-index/{playerId}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ICollection<FilterListRosterResponse>> GetPlayerCharactersList(Guid playerId)
+        {
+            var characters = _context.Characters.AsNoTracking().Where(c => c.PlayerId == playerId).OrderBy(c => c.Name).ToList();
+
+            return characters.Select(c => new FilterListRosterResponse(c.Id, c.Name)).ToList();
         }
 
         /// <summary>
