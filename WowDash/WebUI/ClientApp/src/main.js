@@ -5,6 +5,9 @@ import axios from 'axios';
 import { router } from './_common';
 import App from './App.vue';
 
+// Form imports
+import VueFormulate from '@braid/vue-formulate'
+
 // Utility imports
 import './_common/whtooltips';
 import GSignInButton from 'vue-google-signin-button';
@@ -26,6 +29,9 @@ Vue.prototype.$http = axios;
 
 // Use google sign-in
 Vue.use(GSignInButton);
+
+// Use vue-formulate
+Vue.use(VueFormulate);
 
 Vue.config.productionTip = false;
 
