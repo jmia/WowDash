@@ -25,8 +25,11 @@
         <div class="w-auto">
           <button class="mr-4" @click="$emit('set-favourite')">
             <span class="text-yellow-400"
-              ><font-awesome-icon :icon="['fas', 'star']" v-if="isFavourite"
-            /><font-awesome-icon :icon="['far', 'star']" v-else
+              ><font-awesome-icon
+                :icon="['fas', 'star']"
+                v-if="isFavourite" /><font-awesome-icon
+                :icon="['far', 'star']"
+                v-else
             /></span>
           </button>
           <button class="mr-4">
@@ -313,7 +316,7 @@ export default {
         console.log("had an error");
         console.log(error);
       });
-  }
+  },
 };
 </script>
 

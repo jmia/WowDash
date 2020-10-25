@@ -28,7 +28,9 @@
             </div>
           </div>
           <div>
-            <h3 class="filter-bar-category">Character</h3>
+            <h3 v-show="characterList.length > 0" class="filter-bar-category">
+              Character
+            </h3>
             <div class="checkbox-text">
               <FormulateInput
                 type="checkbox"
@@ -38,7 +40,9 @@
             </div>
           </div>
           <div>
-            <h3 class="filter-bar-category">Dungeon</h3>
+            <h3 v-show="dungeonList.length > 0" class="filter-bar-category">
+              Dungeon
+            </h3>
             <div class="checkbox-text">
               <FormulateInput
                 type="checkbox"
@@ -49,7 +53,9 @@
           </div>
           <!-- You get the gist... have to build out logic using Vue Formulate later anyway, it'll all be gutted -->
           <div>
-            <h3 class="filter-bar-category">Zone</h3>
+            <h3 v-show="zoneList.length > 0" class="filter-bar-category">
+              Zone
+            </h3>
             <div class="checkbox-text">
               <FormulateInput
                 type="checkbox"
@@ -208,7 +214,7 @@ export default {
     },
   },
   methods: {
-    clearFilters: function() {
+    clearFilters: function () {
       this.formModel = {
         // entries are separated by |
         playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
@@ -222,7 +228,7 @@ export default {
         onlyActiveAttempts: false,
         sortBy: "", // priority_asc priority_desc alpha_asc alpha_desc
       };
-    }
+    },
   },
   mounted: function () {
     let vm = this;

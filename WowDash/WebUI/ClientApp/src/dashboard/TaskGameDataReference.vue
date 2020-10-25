@@ -65,7 +65,7 @@ export default {
           return (
             baseUrl +
             this.description
-              .replace(/ /g, "-")   // kebab-case
+              .replace(/ /g, "-") // kebab-case
               .replace(/[:']/g, "") // no funny business
               .toLowerCase()
           );

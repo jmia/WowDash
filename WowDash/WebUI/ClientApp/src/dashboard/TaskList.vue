@@ -152,7 +152,7 @@ export default {
   watch: {
     // This isn't my favourite way to pass state
     // I'm trying to avoid using Vuex as long as possible
-    // while also properly composing components. 
+    // while also properly composing components.
     // I'm aware this sucks. I promise.
     query: function (value) {
       let vm = this;
