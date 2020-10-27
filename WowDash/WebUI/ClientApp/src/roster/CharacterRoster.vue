@@ -18,6 +18,7 @@
         :gender="item.gender"
         :level="item.level"
         :playableClass="item.class"
+        :specialization="item.specialization"
         :race="item.race"
         :realm="item.realm"
       />
@@ -36,76 +37,21 @@ export default {
   data() {
     return {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-      characters: [
-        {
-          characterId: "fake",
-          //playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          //gameId: null,
-          name: "Scully",
-          gender: 1,
-          level: 120,
-          class: "Hunter",
-          race: "Blood Elf",
-          realm: "area-52",
-        },
-        {
-          characterId: "fake",
-          //playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          //gameId: null,
-          name: "Chakwas",
-          gender: 1,
-          level: 120,
-          class: "Druid",
-          race: "Highmountain Tauren",
-          realm: "area-52",
-        },
-        {
-          characterId: "fake",
-          //playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          //gameId: null,
-          name: "Meraddison",
-          gender: 1,
-          level: 120,
-          class: "Warlock",
-          race: "Undead",
-          realm: "area-52",
-        },
-        {
-          characterId: "fake",
-          //playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          //gameId: null,
-          name: "Temperance",
-          gender: 1,
-          level: 120,
-          class: "Paladin",
-          race: "Blood Elf",
-          realm: "area-52",
-        },
-        {
-          characterId: "fake",
-          //playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          //gameId: null,
-          name: "Diabetty",
-          gender: 1,
-          level: 120,
-          class: "Warrior",
-          race: "Gnome",
-          realm: "area-52",
-        },
-        {
-          characterId: "fake",
-          //playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-          //gameId: null,
-          name: "Addison",
-          gender: 1,
-          level: 120,
-          class: "rogue",
-          race: "Gnome",
-          realm: "steamwheedle-cartel",
-        },
-      ],
+      characters: [],
     };
   },
+  mounted: function() {
+    let vm = this;
+    this.$http
+      .get(`/api/characters/roster/${vm.playerId}`)
+      .then(function (response) {
+        vm.characters = response.data.characters;
+      })
+      .catch(function (error) {
+        console.log("had an error");
+        console.log(error);
+      });
+  }
 };
 </script>
 

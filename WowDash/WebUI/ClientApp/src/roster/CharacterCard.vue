@@ -37,7 +37,7 @@
             /></span>
             {{ race }}
           </div>
-          <div class="font-bold">{{ playableClass }}</div>
+          <div class="font-bold">{{ specialization }} {{ playableClass }}</div>
         </div>
 
         <hr class="border-b-1 border-gray-700 my-2 mx-4" />
@@ -75,6 +75,9 @@ export default {
       default: 0,
     },
     playableClass: {
+      type: String,
+    },
+    specialization: {
       type: String,
     },
     race: {
