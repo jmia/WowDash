@@ -22,7 +22,7 @@
                 ><font-awesome-icon icon="edit"
               /></span>
             </button>
-            <button class="mr-4">
+            <button class="mr-4" @click="deleteCharacter">
               <span class="text-blue-400"
                 ><font-awesome-icon icon="trash"
               /></span>
@@ -102,6 +102,7 @@ export default {
         paladin: require("@/assets/paladin-vector.png"),
         priest: require("@/assets/priest-vector.png"),
         rogue: require("@/assets/rogue-vector.png"),
+        shaman: require("@/assets/shaman-vector.png"),
         warlock: require("@/assets/warlock-vector.png"),
         warrior: require("@/assets/warrior-vector.png"),
       },
@@ -160,6 +161,23 @@ export default {
         return "mars";
       } else {
         return "venus";
+      }
+    },
+  },
+  methods: {
+    deleteCharacter: function () {
+      let vm = this;
+      console.log('deleting character...');
+      if (window.confirm("Do you really want to delete this character?")) {
+        this.$http.delete(`/api/characters/${vm.characterId}`)
+          .then(function (response) {
+            console.log(response);
+            vm.$emit("reload-roster");
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
       }
     },
   },

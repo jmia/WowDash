@@ -1,8 +1,12 @@
 <template>
   <div>
     <div class="flex justify-end items-center mb-2">
-      <router-link to="/add-character" class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow">
-          <font-awesome-icon icon="plus" /> Add New Character</router-link>
+      <router-link
+        to="/add-character"
+        class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
+      >
+        <font-awesome-icon icon="plus" /> Add New Character</router-link
+      >
     </div>
     <div class="flex flex-wrap justify-start cursor-default">
       <div
@@ -24,6 +28,7 @@
         :specialization="item.specialization"
         :race="item.race"
         :realm="item.realm"
+        @reload-roster="loadRoster"
       />
     </div>
   </div>
@@ -43,18 +48,23 @@ export default {
       characters: [],
     };
   },
-  mounted: function() {
-    let vm = this;
-    this.$http
-      .get(`/api/characters/roster/${vm.playerId}`)
-      .then(function (response) {
-        vm.characters = response.data.characters;
-      })
-      .catch(function (error) {
-        console.log("had an error");
-        console.log(error);
-      });
-  }
+  methods: {
+    loadRoster: function () {
+      let vm = this;
+      this.$http
+        .get(`/api/characters/roster/${vm.playerId}`)
+        .then(function (response) {
+          vm.characters = response.data.characters;
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
+    },
+  },
+  mounted: function () {
+    this.loadRoster();
+  },
 };
 </script>
 

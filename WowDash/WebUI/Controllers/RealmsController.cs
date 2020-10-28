@@ -20,7 +20,6 @@ namespace WowDash.WebUI.Controllers
         /// <summary>
         /// Get a realm by its game ID.
         /// </summary>
-        /// <param name="id">The game ID of the zone.</param>
         /// <response code="200">Returns the resource.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
         /// <response code="401">If the client failed to authorize an access token.</response>
