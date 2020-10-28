@@ -1,13 +1,16 @@
 <template>
   <div>
     <div class="flex justify-end items-center mb-2">
-      <a
-        class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
-        href="#"
-        ><font-awesome-icon icon="plus" /> Add New Character</a
-      >
+      <router-link to="/add-character" class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow">
+          <font-awesome-icon icon="plus" /> Add New Character</router-link>
     </div>
     <div class="flex flex-wrap justify-start cursor-default">
+      <div
+        v-if="characters.length == 0"
+        class="bg-gray-800 text-gray-500 text-xl p-2 pl-4 pr-4 flex flex-col justify-between leading-normal mb-3"
+      >
+        No characters found.
+      </div>
       <CharacterCard
         v-for="(item, index) in characters"
         :item="item"
