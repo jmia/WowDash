@@ -246,7 +246,7 @@ export default {
           })
           .then(function (response) {
               console.log(response);
-              vm.router.push('/roster');    // TODO: Find out what syntax I'm supposed to use here -- vm.$router? 
+              vm.$router.push('/roster');
           })
           .catch(function (error) {
               console.log('had an error');
