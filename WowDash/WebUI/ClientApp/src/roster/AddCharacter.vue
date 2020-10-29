@@ -15,21 +15,28 @@
 
       <FormulateForm @submit="addCharacter">
         <div
-          class="bg-gray-800 text-gray-500 text-lg p-2 pl-4 pr-4 mb-3 space-y-4"
+          class="bg-gray-800 text-gray-500 text-lg p-2 pl-4 pr-4 mb-3"
         >
+        <div class="w-3/4 space-y-4">
           <FormulateInput
             type="text"
             v-model="name"
             label="Name"
+            :outer-class="[]"
+            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
+            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
+            :element-class="['w-1/2']"
             :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-            :label-class="['font-bold', 'text-right']"
           />
           <FormulateInput
             type="number"
             v-model="level"
             label="Level"
+            :outer-class="[]"
+            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
+            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
+            :element-class="['w-1/2']"
             :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-            :label-class="['font-bold', 'text-right']"
           />
           <FormulateInput
             type="radio"
@@ -37,16 +44,21 @@
             label="Gender"
             :options="genders"
             placeholder="Select a gender"
-            :input-class="['inline-flex', 'pl-2']"
-            :label-class="['font-bold', 'text-right']"
+            :wrapper-class="['inline-flex','justify-around', 'w-full','items-center']"
+            :label-class="['font-bold', 'text-right', 'w-1/2','pr-8']"
+            :element-class="['w-1/2']"
+            :input-class="['text-gray-500']"
           />
           <FormulateInput
             type="select"
             v-model="playableClass"
             :options="playableClasses"
             label="Class"
+:outer-class="[]"
+            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
+            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
+            :element-class="['w-1/2']"
             :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-            :label-class="['font-bold', 'text-right']"
           />
           <FormulateInput
             type="select"
@@ -54,25 +66,35 @@
             v-model="specialization"
             :option-groups="specializations"
             label="Specialization"
+            :outer-class="[]"
+            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
+            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
+            :element-class="['w-1/2']"
             :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-            :label-class="['font-bold', 'text-right']"
           />
           <FormulateInput
             type="select"
             v-model="race"
             :option-groups="playableRaces"
             label="Race"
+            :outer-class="[]"
+            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
+            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
+            :element-class="['w-1/2']"
             :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-            :label-class="['font-bold', 'text-right']"
           />
           <FormulateInput
             type="select"
             v-model="realm"
             :options="realms"
             label="Realm"
+            :outer-class="[]"
+            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
+            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
+            :element-class="['w-1/2']"
             :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-            :label-class="['font-bold', 'text-right']"
           />
+          </div>
         </div>
         <div class="flex justify-end mr-2">
         <button
@@ -273,11 +295,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .standard-input {
   @apply bg-gray-400;
   @apply text-gray-800;
   @apply rounded;
   @apply p-2;
+}
+
+.formulate-input-element--radio {
+  display: inline-block !important;
 }
 </style>

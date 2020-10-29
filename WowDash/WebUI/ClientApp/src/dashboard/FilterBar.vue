@@ -13,6 +13,7 @@
               <FormulateInput
                 type="checkbox"
                 name="taskType"
+                :outer-class="['formulate-block']"
                 :options="taskTypes"
               />
             </div>
@@ -286,7 +287,7 @@ export default {
   @apply text-gray-600;
 }
 
-.formulate-input-element {
+.formulate-input-element--checkbox {
   display: inline-block !important;
 }
 </style>
