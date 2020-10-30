@@ -80,7 +80,7 @@ export default {
   name: "UserProfile",
   data() {
     return {
-      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
+      playerId: localStorage.playerId,
       displayName: "",
       //  defaultTaskType: null,
       defaultRealm: "",
@@ -105,6 +105,9 @@ export default {
           defaultRealm: vm.defaultRealm,
         })
         .then(function () {
+          vm.$store.commit('updateDisplayName', {
+            playerDisplayName: vm.displayName
+          });
           vm.$router.push("/");
         })
         .catch(function (error) {
