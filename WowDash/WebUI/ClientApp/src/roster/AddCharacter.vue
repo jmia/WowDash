@@ -14,100 +14,123 @@
       </div>
 
       <FormulateForm @submit="addCharacter">
-        <div
-          class="bg-gray-800 text-gray-500 text-lg p-2 pl-4 pr-4 mb-3"
-        >
-        <div class="w-3/4 space-y-4">
-          <FormulateInput
-            type="text"
-            v-model="name"
-            label="Name"
-            :outer-class="[]"
-            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
-            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-          />
-          <FormulateInput
-            type="number"
-            v-model="level"
-            label="Level"
-            :outer-class="[]"
-            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
-            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-          />
-          <FormulateInput
-            type="radio"
-            v-model="gender"
-            label="Gender"
-            :options="genders"
-            placeholder="Select a gender"
-            :wrapper-class="['inline-flex','justify-around', 'w-full','items-center']"
-            :label-class="['font-bold', 'text-right', 'w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['text-gray-500']"
-          />
-          <FormulateInput
-            type="select"
-            v-model="playableClass"
-            :options="playableClasses"
-            label="Class"
-:outer-class="[]"
-            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
-            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-          />
-          <FormulateInput
-            type="select"
-            v-if="playableClass != ''"
-            v-model="specialization"
-            :option-groups="specializations"
-            label="Specialization"
-            :outer-class="[]"
-            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
-            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-          />
-          <FormulateInput
-            type="select"
-            v-model="race"
-            :option-groups="playableRaces"
-            label="Race"
-            :outer-class="[]"
-            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
-            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-          />
-          <FormulateInput
-            type="select"
-            v-model="realm"
-            :options="realms"
-            label="Realm"
-            :outer-class="[]"
-            :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
-            :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
-            :element-class="['w-1/2']"
-            :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-          />
+        <div class="bg-gray-800 text-gray-500 text-lg p-2 pl-4 pr-4 mb-3">
+          <div class="w-3/4 space-y-4">
+            <FormulateInput
+              type="text"
+              v-model="name"
+              label="Name"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+            />
+            <FormulateInput
+              type="number"
+              v-model="level"
+              label="Level"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+            />
+            <FormulateInput
+              type="radio"
+              v-model="gender"
+              label="Gender"
+              :options="genders"
+              placeholder="Select a gender"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['text-gray-500']"
+            />
+            <FormulateInput
+              type="select"
+              v-model="playableClass"
+              :options="playableClasses"
+              label="Class"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+            />
+            <FormulateInput
+              type="select"
+              v-if="playableClass != ''"
+              v-model="specialization"
+              :option-groups="specializations"
+              label="Specialization"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+            />
+            <FormulateInput
+              type="select"
+              v-model="race"
+              :option-groups="playableRaces"
+              label="Race"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+            />
+            <FormulateInput
+              type="select"
+              v-model="realm"
+              :options="realms"
+              label="Realm"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-around',
+                'w-full',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
+              :element-class="['w-1/2']"
+              :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+            />
           </div>
         </div>
         <div class="flex justify-end mr-2">
-        <button
+          <button
             class="bg-blue-400 text-gray-800 p-2 mb-3 font-bold text-center border-gray-800 rounded shadow"
           >
-            Add to Roster</button
-          >
-          </div>
+            Add to Roster
+          </button>
+        </div>
       </FormulateForm>
-    </div>
-    <div id="debug" class="text-white text-xl">
-      {{ name }} {{ gender }} {{ level }} {{ playableClass }}
-      {{ specialization }} {{ race }} {{ realm }}
     </div>
   </div>
 </template>
@@ -120,7 +143,7 @@ export default {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
       name: "",
       gender: 1,
-      level: 10,
+      level: 0,
       playableClass: "",
       specialization: "",
       race: "",
@@ -242,28 +265,28 @@ export default {
     };
   },
   methods: {
-      addCharacter: function() {
-          let vm = this;
+    addCharacter: function () {
+      let vm = this;
 
-          this.$http.post(`/api/characters/`, {
-              playerId: vm.playerId,
-              name: vm.name,
-              gender: Number(vm.gender),
-              level: Number(vm.level),
-              class: vm.playableClass,
-              specialization: vm.specialization,
-              race: vm.race,
-              realm: vm.realm
-          })
-          .then(function (response) {
-              console.log(response);
-              vm.$router.push('/roster');
-          })
-          .catch(function (error) {
-              console.log('had an error');
-              console.log(error);
-          });
-      }
+      this.$http
+        .post(`/api/characters/`, {
+          playerId: vm.playerId,
+          name: vm.name,
+          gender: Number(vm.gender),
+          level: Number(vm.level),
+          class: vm.playableClass,
+          specialization: vm.specialization,
+          race: vm.race,
+          realm: vm.realm,
+        })
+        .then(function (response) {
+          vm.$router.push("/roster");
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
+    },
   },
   mounted: function () {
     let vm = this;
@@ -271,7 +294,6 @@ export default {
     this.$http
       .get(`/api/realms`)
       .then(function (response) {
-        console.log(response);
         response.data.map((r) => {
           vm.realms.push({ value: r.slug, label: r.name });
         });

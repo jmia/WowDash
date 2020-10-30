@@ -13,7 +13,6 @@
               <FormulateInput
                 type="checkbox"
                 name="taskType"
-                :outer-class="['formulate-block']"
                 :options="taskTypes"
               />
             </div>
