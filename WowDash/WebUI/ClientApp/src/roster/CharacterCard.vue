@@ -17,11 +17,11 @@
             </div>
           </div>
           <div class="w-auto">
-            <button class="mr-4">
+            <router-link :to="{ name: 'edit-character', params: { id: characterId }}" class="mr-4">
               <span class="text-blue-400"
                 ><font-awesome-icon icon="edit"
               /></span>
-            </button>
+            </router-link>
             <button class="mr-4" @click="deleteCharacter">
               <span class="text-blue-400"
                 ><font-awesome-icon icon="trash"

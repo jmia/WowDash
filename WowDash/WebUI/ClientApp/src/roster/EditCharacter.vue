@@ -13,16 +13,15 @@
         <h5 class="table-title">Add a Character</h5>
       </div>
 
-      <FormulateForm @submit="addCharacter">
+      <FormulateForm @submit="updateCharacter" v-model="characterValues">
         <div
           class="bg-gray-800 text-gray-500 text-lg p-2 pl-4 pr-4 mb-3"
         >
         <div class="w-3/4 space-y-4">
           <FormulateInput
             type="text"
-            v-model="name"
+            name="name"
             label="Name"
-            :outer-class="[]"
             :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
             :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -30,9 +29,8 @@
           />
           <FormulateInput
             type="number"
-            v-model="level"
+            name="level"
             label="Level"
-            :outer-class="[]"
             :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
             :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -40,10 +38,9 @@
           />
           <FormulateInput
             type="radio"
-            v-model="gender"
+            name="gender"
             label="Gender"
             :options="genders"
-            placeholder="Select a gender"
             :wrapper-class="['inline-flex','justify-around', 'w-full','items-center']"
             :label-class="['font-bold', 'text-right', 'w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -51,10 +48,10 @@
           />
           <FormulateInput
             type="select"
-            v-model="playableClass"
+            name="playableClass"
             :options="playableClasses"
             label="Class"
-:outer-class="[]"
+            placeholder="Select a Class"
             :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
             :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -62,11 +59,11 @@
           />
           <FormulateInput
             type="select"
-            v-if="playableClass != ''"
-            v-model="specialization"
+            v-if="characterValues.playableClass != ''"
+            name="specialization"
             :option-groups="specializations"
             label="Specialization"
-            :outer-class="[]"
+            placeholder="Select a Specialization"
             :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
             :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -74,10 +71,10 @@
           />
           <FormulateInput
             type="select"
-            v-model="race"
+            name="race"
             :option-groups="playableRaces"
             label="Race"
-            :outer-class="[]"
+            placeholder="Select a Race"
             :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
             :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -85,10 +82,10 @@
           />
           <FormulateInput
             type="select"
-            v-model="realm"
+            name="realm"
             :options="realms"
             label="Realm"
-            :outer-class="[]"
+            placeholder="Select a Realm"
             :wrapper-class="['inline-flex', 'justify-around','w-full', 'items-center']"
             :label-class="['font-bold', 'text-right','w-1/2','pr-8']"
             :element-class="['w-1/2']"
@@ -100,31 +97,35 @@
         <button
             class="bg-blue-400 text-gray-800 p-2 mb-3 font-bold text-center border-gray-800 rounded shadow"
           >
-            Add to Roster</button
+            Update Roster</button
           >
           </div>
       </FormulateForm>
     </div>
     <div id="debug" class="text-white text-xl">
-      {{ name }} {{ gender }} {{ level }} {{ playableClass }}
-      {{ specialization }} {{ race }} {{ realm }}
+      {{ characterValues.name }} {{ characterValues.gender }} {{ characterValues.level }} {{ characterValues.playableClass }}
+      {{ characterValues.specialization }} {{ characterValues.race }} {{ characterValues.realm }}
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "AddCharacter",
+  name: "EditCharacter",
+  props: ["id"],
   data() {
     return {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
-      name: "",
-      gender: 1,
-      level: 10,
-      playableClass: "",
-      specialization: "",
-      race: "",
-      realm: "",
+      characterId: this.id,
+      characterValues: {
+        name: "",
+        gender: 1,
+        level: 0,
+        playableClass: "",
+        specialization: "",
+        race: "",
+        realm: "",
+      },
 
       // select list values
       genders: {
@@ -242,18 +243,18 @@ export default {
     };
   },
   methods: {
-      addCharacter: function() {
+      updateCharacter: function() {
           let vm = this;
 
-          this.$http.post(`/api/characters/`, {
-              playerId: vm.playerId,
-              name: vm.name,
-              gender: Number(vm.gender),
-              level: Number(vm.level),
-              class: vm.playableClass,
-              specialization: vm.specialization,
-              race: vm.race,
-              realm: vm.realm
+          this.$http.put(`/api/characters/`, {
+              characterId: vm.characterId,
+              name: vm.characterValues.name,
+              gender: Number(vm.characterValues.gender),
+              level: Number(vm.characterValues.level),
+              class: vm.characterValues.playableClass,
+              specialization: vm.characterValues.specialization,
+              race: vm.characterValues.race,
+              realm: vm.characterValues.realm
           })
           .then(function (response) {
               console.log(response);
@@ -268,10 +269,24 @@ export default {
   mounted: function () {
     let vm = this;
 
+    this.$http.get(`/api/characters/${vm.characterId}`)
+        .then(function (character) {
+            vm.characterValues.name = character.data.name;
+            vm.characterValues.gender = Number(character.data.gender);
+            vm.characterValues.level = Number(character.data.level);
+            vm.characterValues.playableClass = character.data.class;
+            vm.characterValues.specialization = character.data.specialization;
+            vm.characterValues.race = character.data.race;
+            vm.characterValues.realm = character.data.realm;
+        })
+        .catch(function (error) {
+            console.log('had an error');
+            console.log(error);
+        });
+
     this.$http
       .get(`/api/realms`)
       .then(function (response) {
-        console.log(response);
         response.data.map((r) => {
           vm.realms.push({ value: r.slug, label: r.name });
         });
