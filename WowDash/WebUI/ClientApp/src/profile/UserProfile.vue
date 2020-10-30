@@ -82,15 +82,15 @@ export default {
     return {
       playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
       displayName: "",
-    //  defaultTaskType: null,
+      //  defaultTaskType: null,
       defaultRealm: "",
       realms: [],
-    //   taskTypes: [
-    //     { value: null, label: "No default (always ask)"},
-    //     { value: "0", label: "General" },
-    //     { value: "1", label: "Achievement" },
-    //     { value: "2", label: "Collectible" },
-    //   ],
+      //   taskTypes: [
+      //     { value: null, label: "No default (always ask)"},
+      //     { value: "0", label: "General" },
+      //     { value: "1", label: "Achievement" },
+      //     { value: "2", label: "Collectible" },
+      //   ],
     };
   },
   methods: {
@@ -101,7 +101,7 @@ export default {
         .put(`/api/players/`, {
           playerId: vm.playerId,
           displayName: vm.displayName,
-         // defaultTaskType: vm.defaultTaskType,
+          // defaultTaskType: vm.defaultTaskType,
           defaultRealm: vm.defaultRealm,
         })
         .then(function () {
@@ -118,10 +118,10 @@ export default {
     this.$http
       .get(`/api/players/${vm.playerId}`)
       .then(function (profile) {
-          console.log(profile);
+        console.log(profile);
         vm.displayName = profile.data.displayName;
         vm.defaultRealm = profile.data.defaultRealm;
-       // vm.defaultTaskType = Number(profile.data.defaultTaskType);
+        // vm.defaultTaskType = Number(profile.data.defaultTaskType);
       })
       .catch(function (error) {
         console.log("had an error");
