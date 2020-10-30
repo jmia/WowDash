@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f",
+      playerId: localStorage.playerId,
       characters: [],
     };
   },

@@ -67,7 +67,7 @@ export default {
   props: ["query"],
   data() {
     return {
-      playerId: "d8a57467-008e-4ebb-286a-08d86586cf0f", // will eventually be replaced with logged-in user
+      playerId: localStorage.playerId, // will eventually be replaced with logged-in user
       tasks: [],
     };
   },
