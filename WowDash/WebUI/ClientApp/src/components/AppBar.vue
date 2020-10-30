@@ -28,7 +28,10 @@
                 <font-awesome-icon icon="user" />
               </div>
               <span class="hidden lg:inline-block text-gray-100"
-                >Hi, Nerd.</span
+                >Hi,
+                {{
+                  playerDisplayName ? playerDisplayName : localDisplayName
+                }}.</span
               >
               <!-- Caret, possibly replace? -->
               <svg
@@ -259,17 +262,23 @@ export default {
   name: "AppBar",
   data() {
     return {
+      playerId: localStorage.playerId,
+      localDisplayName: "Nerd",
       helpfulLinksShow: false,
       navContentShow: false,
       lgBreakPoint: Number(tailwindConfig.theme.screens.lg.replace("px", "")),
       userMenuShow: false,
       windowWidth: 0,
       wowheadSearchTerm: "",
+      ready: false,
     };
   },
   computed: {
-    menuVisible() {
+    menuVisible: function () {
       return this.windowWidth > this.lgBreakPoint ? true : this.navContentShow;
+    },
+    playerDisplayName: function () {
+      return this.$store.state.playerDisplayName;
     },
   },
   methods: {
@@ -303,13 +312,39 @@ export default {
     toggleNavContent: function () {
       this.navContentShow = !this.navContentShow;
     },
-    updateWindowSize() {
+    updateWindowSize: function () {
       this.windowWidth = window.innerWidth;
     },
+  },
+  watch: {
+    // I admit that I don't understand Vuex at all
+    // which is why I'm trying not to use it if I can avoid it
+    ready: function() {
+      let vm = this;
+      this.$http
+        .get(`/api/players/${vm.playerId}`)
+        .then(function (profile) {
+          vm.$store.commit('updateDisplayName', profile.data.displayName);
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
+    }
   },
   mounted: function () {
     this.updateWindowSize();
     window.addEventListener("resize", this.updateWindowSize);
+    let vm = this;
+      this.$http
+        .get(`/api/players/${vm.playerId}`)
+        .then(function (profile) {
+          vm.localDisplayName = profile.data.displayName;
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
   },
   beforeDestroyed: function () {
     window.removeEventListener("resize", this.updateWindowSize);

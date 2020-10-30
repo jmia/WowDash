@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WowDash.ApplicationCore.Entities;
+using WowDash.ApplicationCore.DTO.Requests;
+using WowDash.ApplicationCore.DTO.Responses;
 using WowDash.Infrastructure;
 
 namespace WowDash.WebUI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/players")]
     [ApiController]
     public class PlayersController : ControllerBase
     {
@@ -20,90 +18,52 @@ namespace WowDash.WebUI.Controllers
             _context = context;
         }
 
-        // GET: api/Players
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
-        {
-            return await _context.Players.ToListAsync();
-        }
-
-        // GET: api/Players/5
+        /// <summary>
+        /// Gets a player's profile.
+        /// </summary>
+        /// <param name="id">The ID of the player.</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource is not found.</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(Guid id)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GetPlayerProfileResponse> GetPlayerProfile(Guid id)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = _context.Players.Find(id);
 
-            if (player == null)
-            {
+            if (player is null)
                 return NotFound();
-            }
 
-            return player;
+            return new GetPlayerProfileResponse(player.Id, player.DisplayName, player.DefaultTaskType, player.DefaultRealm);
         }
 
-        // PUT: api/Players/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(Guid id, Player player)
+        /// <summary>
+        /// Gets a player's profile.
+        /// </summary>
+        /// <param name="request">The collection of values to update on the profile (display name and defaults).</param>
+        /// <response code="200">Returns the resource.</response>
+        /// <response code="400">If the request is null or missing required fields.</response>
+        /// <response code="404">If the resource is not found.</response>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Guid> SetPlayerProfile(SetPlayerProfileRequest request)
         {
-            if (id != player.Id)
-            {
-                return BadRequest();
-            }
+            var player = _context.Players.Find(request.PlayerId);
 
-            _context.Entry(player).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Players
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
-        {
-            _context.Players.Add(player);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
-        }
-
-        // DELETE: api/Players/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Player>> DeletePlayer(Guid id)
-        {
-            var player = await _context.Players.FindAsync(id);
-            if (player == null)
-            {
+            if (player is null)
                 return NotFound();
-            }
 
-            _context.Players.Remove(player);
-            await _context.SaveChangesAsync();
+            player.DisplayName = request.DisplayName;
+            player.DefaultRealm = request.DefaultRealm;
+            player.DefaultTaskType = request.DefaultTaskType;
 
-            return player;
-        }
+            _context.SaveChanges();
 
-        private bool PlayerExists(Guid id)
-        {
-            return _context.Players.Any(e => e.Id == id);
+            return player.Id;
         }
     }
 }
