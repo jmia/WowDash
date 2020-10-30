@@ -1,13 +1,20 @@
 <template>
   <div>
     <div class="flex justify-end items-center mb-2">
-      <a
+      <router-link
+        to="/add-character"
         class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
-        href="#"
-        ><font-awesome-icon icon="plus" /> Add New Character</a
+      >
+        <font-awesome-icon icon="plus" /> Add New Character</router-link
       >
     </div>
     <div class="flex flex-wrap justify-start cursor-default">
+      <div
+        v-if="characters.length == 0"
+        class="bg-gray-800 text-gray-500 text-xl p-2 pl-4 pr-4 flex flex-col justify-between leading-normal mb-3"
+      >
+        No characters found.
+      </div>
       <CharacterCard
         v-for="(item, index) in characters"
         :item="item"
@@ -21,6 +28,7 @@
         :specialization="item.specialization"
         :race="item.race"
         :realm="item.realm"
+        @reload-roster="loadRoster"
       />
     </div>
   </div>
@@ -40,18 +48,23 @@ export default {
       characters: [],
     };
   },
-  mounted: function() {
-    let vm = this;
-    this.$http
-      .get(`/api/characters/roster/${vm.playerId}`)
-      .then(function (response) {
-        vm.characters = response.data.characters;
-      })
-      .catch(function (error) {
-        console.log("had an error");
-        console.log(error);
-      });
-  }
+  methods: {
+    loadRoster: function () {
+      let vm = this;
+      this.$http
+        .get(`/api/characters/roster/${vm.playerId}`)
+        .then(function (response) {
+          vm.characters = response.data.characters;
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
+    },
+  },
+  mounted: function () {
+    this.loadRoster();
+  },
 };
 </script>
 
