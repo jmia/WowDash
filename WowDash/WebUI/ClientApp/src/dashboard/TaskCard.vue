@@ -35,7 +35,7 @@
           <button class="mr-4">
             <span class="text-blue-400"><font-awesome-icon icon="edit" /></span>
           </button>
-          <button class="mr-4">
+          <button class="mr-4" @click="deleteTask">
             <span class="text-blue-400"
               ><font-awesome-icon icon="trash"
             /></span>
@@ -297,6 +297,20 @@ export default {
                   console.log(error);
                 });
             }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
+    deleteTask: function () {
+      let vm = this;
+      if (window.confirm("Do you really want to delete this task?")) {
+        this.$http.delete(`/api/tasks/${vm.taskId}`)
+          .then(function (response) {
+            console.log(response);
+            vm.$emit("reload-task-list");
           })
           .catch(function (error) {
             console.log("had an error");
