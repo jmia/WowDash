@@ -185,7 +185,6 @@ namespace WowDash.WebUI.Controllers
             var task = new Task(request.PlayerId, request.TaskType)
             {
                 Description = request.Description,
-                IsFavourite = request.IsFavourite,
                 Notes = request.Notes,
                 CollectibleType = request.CollectibleType,
                 Source = request.Source,
@@ -198,6 +197,13 @@ namespace WowDash.WebUI.Controllers
                 .ToList();
 
             _context.Tasks.Add(task);
+            _context.SaveChanges();
+
+            foreach (var c in request.Characters)
+            {
+                _context.TaskCharacters.Add(new TaskCharacter(c, task.Id));
+            }
+
             _context.SaveChanges();
 
             return task.Id;
@@ -220,7 +226,6 @@ namespace WowDash.WebUI.Controllers
 
             task.TaskType = request.TaskType;
             task.Description = request.Description;
-            task.IsFavourite = request.IsFavourite;
             task.Notes = request.Notes;
             task.CollectibleType = request.CollectibleType;
             task.Source = request.Source;

@@ -12,8 +12,6 @@ namespace WowDash.ApplicationCore.DTO.Requests
         public Guid PlayerId { get; set; }
         public string Description { get; set; }
         public ICollection<GameDataReferenceItem> GameDataReferenceItems { get; set; }
-        [Required]
-        public bool IsFavourite { get; set; }
         public string Notes { get; set; }
         [Required]
         public TaskType TaskType { get; set; }
@@ -23,10 +21,12 @@ namespace WowDash.ApplicationCore.DTO.Requests
         public Priority Priority { get; set; }
         [Required]
         public RefreshFrequency RefreshFrequency { get; set; }
+        public ICollection<Guid> Characters { get; set; }
 
         public AddTaskRequest()
         {
             GameDataReferenceItems = new List<GameDataReferenceItem>();
+            Characters = new List<Guid>();
         }
     }
 }
