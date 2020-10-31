@@ -13,7 +13,7 @@
       @keydown.up.prevent="decrement"
       @blur="context.blurHandler"
     />
-    <ul v-if="filteredOptions.length" class="formulate-input-dropdown">
+    <ul v-if="filteredOptions.length" class="z-10 absolute h-48 overflow-auto formulate-input-dropdown text-md bg-gray-200 text-gray-700 rounded p-2">
       <li
         v-for="(option, index) in filteredOptions"
         :key="option.value"
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-
 export default {
   name: "AutocompleteFormElement",
   props: {
