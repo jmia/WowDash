@@ -57,10 +57,11 @@
 
             <!-- Achievement Description -->
             <FormulateInput
-              type="text"
+              type="autocomplete"
               name="description"
               key="achievementDescription"
               label="Achievement Name"
+              :options="achievementNames"
               v-if="formInput.taskType == '1'"
               placeholder="Start typing..."
               :wrapper-class="[
@@ -72,6 +73,8 @@
               :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
               :element-class="['w-1/2']"
               :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
+              @input="updateAchievementNames"
+              @add-game-data-reference="appendGameDataReference"
             />
 
             <!-- Collectible Type -->
@@ -112,6 +115,35 @@
               :element-class="['w-1/2']"
               :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
             />
+
+            <!-- Game Data References -->
+            <!-- <FormulateInput
+                  type="autocomplete"
+                  name="gameDataReferenceItems"
+                  label="Search for a user"
+                  :options="[
+                    { value: 1, label: 'Jon Doe'},
+                    { value: 2, label: 'Jane Roe'},
+                    { value: 3, label: 'Bob Foe'},
+                    { value: 4, label: 'Ben Cho'},
+                  ]"
+                /> -->
+            <!-- <FormulateInput
+              type="group"
+              name="gameDataReferenceItems"
+              :repeatable="true"
+              label="Add References"
+              add-label="+ Add Reference"
+            >
+              <div class="attendee">
+                <FormulateInput
+                  type="select"
+                  name="type"
+                  :options="gameDataTypes"
+                  label="Data Type"
+                />
+              </div>
+            </FormulateInput> -->
 
             <!-- Add Characters -->
             <FormulateInput
@@ -219,7 +251,9 @@ export default {
         source: null,
         notes: "",
         characters: [],
-        isFavourite: false
+        gameDataReferenceItems: [
+          // { gameId: X, type: X, subclass: X, description: X }
+        ],
       },
 
       // Form values
@@ -228,6 +262,17 @@ export default {
         { value: "1", label: "Dungeon Sets" },
         { value: "2", label: "Mounts" },
         { value: "3", label: "Battle Pets" },
+      ],
+      gameDataTypes: [
+        { value: "0", label: "achievement"},
+        { value: "1", label: "item"},
+        { value: "2", label: "item set"},
+        { value: "3", label: "dungeon"},
+        { value: "4", label: "boss"},
+        { value: "5", label: "npc"},
+        { value: "6", label: "pet"},
+        { value: "7", label: "quest"},
+        { value: "8", label: "zone"},
       ],
       priorities: [
         { value: "0", label: "Lowest" },
@@ -254,6 +299,8 @@ export default {
         { value: "2", label: "Collectible" },
       ],
       characterList: [],
+
+      achievementNames: [],
     };
   },
   methods: {
@@ -269,15 +316,41 @@ export default {
             source: (vm.formInput.source == null) ? null: Number(vm.formInput.source),
             priority: Number(vm.formInput.priority),
             refreshFrequency: Number(vm.formInput.refreshFrequency),
-            characters: vm.formInput.characters
+            characters: vm.formInput.characters,
+            gameDataReferenceItems: vm.formInput.gameDataReferenceItems
           })
-          .then(function (response) {
+          .then(function () {
             vm.$router.push("/");
           })
           .catch(function (error) {
             console.log('had an error');
             console.log(error);
           });
+      },
+      updateAchievementNames: function(event) {
+        console.log('event emitted');
+        console.log(event);
+        let vm = this;
+        this.$http.get(`/api/achievements/search/${event}`)
+        .then(function (response) {
+          console.log(response);
+          // { gameId: X, type: X, subclass: X, description: X }
+          vm.achievementNames = [];
+          response.data.forEach((a) => {
+            vm.achievementNames.push({ value: `{ "gameId": ${Number(a.id)}, "type": 0, "subclass": null, "description": "${a.name}" }`, label: a.name })
+          })
+          console.log(vm.achievementNames);
+        })
+        .catch(function (error) {
+          console.log('had an error');
+          console.log(error);
+        });
+      },
+      appendGameDataReference: function(event) {
+        console.log('event received by add task form');
+        let parsedGdr = JSON.parse(event);
+        console.log(parsedGdr);
+        this.formInput.gameDataReferenceItems.push(parsedGdr);
       }
   },
   mounted: function() {

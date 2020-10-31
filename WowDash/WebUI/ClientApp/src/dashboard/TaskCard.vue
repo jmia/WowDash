@@ -182,12 +182,15 @@ export default {
     descriptionHref: function () {
       var baseUrl = "https://www.wowhead.com/";
 
+      console.log(this.gameDataReferences);
+
       var matchingDescriptions = this.gameDataReferences.filter(
         (g) => g.description.toLowerCase() == this.description.toLowerCase()
       );
 
       if (matchingDescriptions.length) {
         var match = matchingDescriptions[0];
+        console.log(match);
         switch (match.type) {
           case 0: // achievement
             return (

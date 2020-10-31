@@ -7,6 +7,7 @@ import App from "./App.vue";
 
 // Form imports
 import VueFormulate from "@braid/vue-formulate";
+import AutocompleteFormElement from './components/AutocompleteFormElement';
 
 // Utility imports
 import "./_common/whtooltips";
@@ -75,7 +76,18 @@ Vue.prototype.$http = axios;
 Vue.use(GSignInButton);
 
 // Use vue-formulate
-Vue.use(VueFormulate);
+Vue.component('AutocompleteFormElement', AutocompleteFormElement)
+Vue.use(VueFormulate, {
+  library: {
+    autocomplete: {
+      classification: 'text',
+      component: 'AutocompleteFormElement',
+      slotProps: {
+        component: ['url']
+      }
+    }
+  }
+});
 
 Vue.use(Vuex);
 

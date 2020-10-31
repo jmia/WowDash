@@ -16,6 +16,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "eslint-plugin-tailwind": "^0.2.0",
+    "lodash": "^4.17.20",
     "popper.js": "1.16.1",
     "tailwindcss": "^1.8.10",
     "vue": "^2.6.11",

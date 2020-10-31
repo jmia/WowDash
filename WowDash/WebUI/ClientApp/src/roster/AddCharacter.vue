@@ -279,7 +279,7 @@ export default {
           race: vm.race,
           realm: vm.realm,
         })
-        .then(function (response) {
+        .then(function () {
           vm.$router.push("/roster");
         })
         .catch(function (error) {

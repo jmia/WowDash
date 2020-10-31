@@ -286,7 +286,7 @@ export default {
           race: vm.characterValues.race,
           realm: vm.characterValues.realm,
         })
-        .then(function (response) {
+        .then(function () {
           vm.$router.push("/roster");
         })
         .catch(function (error) {
