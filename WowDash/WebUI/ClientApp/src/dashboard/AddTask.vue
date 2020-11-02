@@ -115,51 +115,63 @@
               :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
             />
 
+            </div>
+
             <!-- Game Data References -->
             <FormulateInput
               v-if="formInput.taskType == '2'"
               type="group"
               name="gameDataReferenceItems"
-              label="Add some game data"
+              label="Game Data"
+              remove-label="X"
               :repeatable="true"
               add-label="+ Another reference"
+              :outer-class="['pt-4']"
+              :wrapper-class="[
+                'inline-flex',
+                'justify-center',
+                'w-3/4',
+                'items-center',
+              ]"
+              :label-class="['font-bold', 'w-1/2', 'text-right', 'mr-8', 'pr-2']"
+              :grouping-class="[]"
+              :group-repeatable-class="['mb-4']"
+              :group-add-more-class="['inline-flex', 'bg-green-400', 'text-center', 'font-bold', 'pl-2', 'pr-2', 'rounded', 'text-gray-800']"
+              :group-repeatable-remove-class="['inline-flex', 'bg-red-400', 'text-center', 'font-bold', 'pl-2', 'pr-2', 'rounded', 'text-gray-800']"
             >
               <template v-slot:default="groupProps">
+                <div class="space-y-4">
                 <FormulateInput
                   type="select"
                   name="type"
                   label="Data Type"
                   :options="gameDataTypes"
                   :wrapper-class="[
-                    'inline-flex',
-                    'justify-around',
-                    'w-full',
-                    'items-center',
-                  ]"
-                  :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
-                  :element-class="['w-1/2']"
+                'inline-flex',
+                'justify-between',
+                'w-full',
+                'items-center',
+              ]"
                   :input-class="[
                     'bg-gray-200',
                     'text-gray-700',
                     'rounded',
                     'p-2',
                   ]"
+                  :label-class="[]"
                 />
                 <FormulateInput
                   type="autocomplete"
                   name="description"
-                  label="Name"
                   :options="gameDataReferences"
                   v-if="formInput.taskType == '2'"
-                  placeholder="Start typing..."
+                  placeholder="Type a name..."
                   :wrapper-class="[
-                    'inline-flex',
-                    'justify-around',
-                    'w-full',
-                    'items-center',
-                  ]"
-                  :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
-                  :element-class="['w-1/2']"
+                'inline-flex',
+                'justify-between',
+                'w-full',
+                'items-center',
+              ]"
                   :input-class="[
                     'bg-gray-200',
                     'text-gray-700',
@@ -171,8 +183,11 @@
                     formatGameDataReference(groupProps.index)
                   "
                 />
+                </div>
               </template>
             </FormulateInput>
+
+            <div class="w-3/4 space-y-4">
 
             <!-- Add Characters -->
             <FormulateInput
@@ -213,8 +228,7 @@
               type="select"
               name="refreshFrequency"
               :options="refreshFrequencies"
-              label="Refresh Frequency"
-              placeholder="How often does this repeat?"
+              label="Repeats"
               :wrapper-class="[
                 'inline-flex',
                 'justify-around',
@@ -273,7 +287,7 @@ export default {
       formInput: {
         playerId: localStorage.playerId,
         description: "",
-        taskType: null,
+        taskType: "2",
         collectibleType: null,
         priority: "2",
         refreshFrequency: null,
@@ -293,11 +307,11 @@ export default {
         { value: "3", label: "Battle Pets" },
       ],
       gameDataTypes: [
-        { value: "1", label: "item" },
-        { value: "2", label: "item set" },
-        { value: "3", label: "dungeon" },
-        { value: "4", label: "boss" },
-        { value: "8", label: "zone" },
+        { value: "1", label: "Item" },
+        { value: "2", label: "Item Set" },
+        { value: "3", label: "Dungeon" },
+        { value: "4", label: "Boss" },
+        { value: "8", label: "Zone" },
       ],
       priorities: [
         { value: "0", label: "Lowest" },
@@ -323,7 +337,11 @@ export default {
         { value: "1", label: "Achievement" },
         { value: "2", label: "Collectible" },
       ],
-      characterList: [],
+      characterList: [
+        { value: "fake1", label: "Scully" },
+        { value: "fake2", label: "Chakwas" },
+        { value: "fake3", label: "Temperance" }
+      ],
       achievementNames: [],
       gameDataReferences: [],
     };
@@ -489,11 +507,7 @@ export default {
   @apply p-2;
 }
 
-.formulate-input-element--radio {
+/* .formulate-input-element--checkbox {
   display: inline-block !important;
-}
-
-.formulate-input-element--checkbox {
-  display: inline-block !important;
-}
+} */
 </style>

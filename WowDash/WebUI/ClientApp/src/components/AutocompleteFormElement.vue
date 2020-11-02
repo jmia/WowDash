@@ -7,7 +7,7 @@
       type="text"
       v-model="context.model"
       v-bind="context.attributes"
-      autocomplete="no"
+      autocomplete="off"
       @keydown.enter.prevent="context.model = selection.label"
       @keydown.down.prevent="increment"
       @keydown.up.prevent="decrement"
