@@ -163,7 +163,7 @@
                 <FormulateInput
                   type="autocomplete"
                   name="description"
-                  :options="gameDataReferences"
+                  :options="gameDataReferences[groupProps.index]"
                   v-if="formInput.taskType == '2'"
                   placeholder="Type a name..."
                   :wrapper-class="[
@@ -178,7 +178,7 @@
                     'rounded',
                     'p-2',
                   ]"
-                  @input="debouncedUpdateGameDataReference"
+                  @input="debouncedUpdateGameDataReference($event, groupProps.index)"
                   @add-game-data-reference="
                     formatGameDataReference($event, groupProps.index)
                   "
@@ -343,7 +343,7 @@ export default {
         { value: "fake3", label: "Temperance" }
       ],
       achievementNames: [],
-      gameDataReferences: [],
+      gameDataReferences: [[]],
     };
   },
   methods: {
@@ -438,11 +438,10 @@ export default {
         });
     },
     // Hack the hell out of this application for science
-    updateGameDataReference: function (event) {
-      console.log("we made it to update game data reference");
+    updateGameDataReference: function (event, index) {
+      console.log("we made it to update game data reference at index " + index);
       console.log(event);
       let vm = this;
-      vm.gameDataReferences = [];
       // find the gdr with matching description
       // find the type associated with it
       let match = vm.formInput.gameDataReferenceItems.find(
@@ -477,8 +476,10 @@ export default {
       vm.$http.get(url)
       .then(function (response) {
         console.log(response.data);
+        vm.gameDataReferences.splice(index, 1, []);   // have to do this instead of gdr[index] = [];
+        console.log(vm.gameDataReferences);
          response.data.forEach((a) => {
-            vm.gameDataReferences.push({
+            vm.gameDataReferences[index].push({
               value: `{ "gameId": ${Number(
                 a.id
               )}, "subclass": "${a.subclass}", "description": "${a.name}" }`,
@@ -491,14 +492,13 @@ export default {
         console.log(error);
       });
     },
+    // Called by achievement name
     appendGameDataReference: function (event) {
       console.log("event received by add task form");
       let parsedGdr = JSON.parse(event);
       console.log(parsedGdr);
       this.formInput.gameDataReferenceItems.push(parsedGdr);
     },
-
-    // TODO: Find a way to get the form value in here
     formatGameDataReference: function (event, index) {
       console.log("modifying data for " + index);
       console.log(event);
@@ -511,9 +511,6 @@ export default {
       this.formInput.gameDataReferenceItems[index].subclass = parsedGdr.subclass == "undefined" ? null : parsedGdr.subclass;
       console.log('now after adding stuff, the item looks like');
       console.log(this.formInput.gameDataReferenceItems[index]);
-      // find the gdr with the matching description
-      // append its gameId and subclass
-      //this.formInput.gameDataReferenceItems[index].gameId = 
     },
   },
   created: function () {
@@ -523,7 +520,7 @@ export default {
     );
     this.debouncedUpdateGameDataReference = this.$_.debounce(
       this.updateGameDataReference,
-      500
+      400
     );
   },
   mounted: function () {

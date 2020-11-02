@@ -62,8 +62,7 @@ export default {
       if (Array.isArray(this.context.options) && this.context.model) {
         const isAlreadySelected = this.context.options.find(option => option.label === this.context.model)
         if (!isAlreadySelected) {
-          return this.context.options
-            .filter(option => option.label.toLowerCase().includes(this.context.model.toLowerCase()))
+          return this.context.options;
         }
       }
       return []
