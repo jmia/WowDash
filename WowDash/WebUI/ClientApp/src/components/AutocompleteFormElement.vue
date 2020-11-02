@@ -13,7 +13,10 @@
       @keydown.up.prevent="decrement"
       @blur="context.blurHandler"
     />
-    <ul v-if="filteredOptions.length" class="z-10 absolute h-48 overflow-auto formulate-input-dropdown text-md bg-gray-200 text-gray-700 rounded p-2">
+    <ul
+      v-if="filteredOptions.length"
+      class="z-10 absolute h-48 overflow-auto formulate-input-dropdown text-md bg-gray-200 text-gray-700 rounded p-2"
+    >
       <li
         v-for="(option, index) in filteredOptions"
         :key="option.value"
@@ -35,8 +38,8 @@ export default {
       required: true,
     },
     url: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -44,12 +47,12 @@ export default {
     };
   },
   watch: {
-    model: function() {
+    model: function () {
       this.selectedIndex = 0;
     },
   },
   computed: {
-    model: function() {
+    model: function () {
       return this.context.model;
     },
     selection() {
@@ -58,18 +61,20 @@ export default {
       }
       return false;
     },
-    filteredOptions: function() {
+    filteredOptions: function () {
       if (Array.isArray(this.context.options) && this.context.model) {
-        const isAlreadySelected = this.context.options.find(option => option.label === this.context.model)
+        const isAlreadySelected = this.context.options.find(
+          (option) => option.label === this.context.model
+        );
         if (!isAlreadySelected) {
           return this.context.options;
         }
       }
-      return []
-    }
+      return [];
+    },
   },
   methods: {
-    increment: function() {
+    increment: function () {
       const length = this.context.options.length;
       if (this.selectedIndex + 1 < length) {
         this.selectedIndex++;
@@ -77,7 +82,7 @@ export default {
         this.selectedIndex = 0;
       }
     },
-    decrement: function() {
+    decrement: function () {
       const length = this.context.options.length;
       if (this.selectedIndex - 1 >= 0) {
         this.selectedIndex--;
@@ -85,10 +90,10 @@ export default {
         this.selectedIndex = length - 1;
       }
     },
-    markSelection: function() {
+    markSelection: function () {
       this.context.model = this.selection.label;
-      this.context.rootEmit('add-game-data-reference', this.selection.value);
-    }
+      this.context.rootEmit("add-game-data-reference", this.selection.value);
+    },
   },
 };
 </script>

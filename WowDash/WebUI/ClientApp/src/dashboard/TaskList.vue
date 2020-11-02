@@ -2,9 +2,9 @@
   <div>
     <!-- Action Buttons -->
     <div class="flex justify-end items-center mb-2">
-      <router-link to="/add-task"
+      <router-link
+        to="/add-task"
         class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
-        
         ><font-awesome-icon icon="plus" /> Add New Task</router-link
       >
       <button
@@ -74,8 +74,8 @@ export default {
     };
   },
   methods: {
-    loadTasks: function() {
-        let vm = this;
+    loadTasks: function () {
+      let vm = this;
 
       // If they cleared filters, set it back to everything
       if (this.query == "") {
@@ -130,7 +130,7 @@ export default {
           console.log(error);
         });
     },
-    refreshWeeklies: function() {
+    refreshWeeklies: function () {
       this.$http
         .post(`/api/task-characters/refresh/weekly`)
         .then(function (response) {

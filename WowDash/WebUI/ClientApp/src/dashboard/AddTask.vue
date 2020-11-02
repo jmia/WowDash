@@ -114,44 +114,61 @@
               :element-class="['w-1/2']"
               :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
             />
+          </div>
 
-            </div>
-
-            <!-- Game Data References -->
-            <FormulateInput
-              v-if="formInput.taskType == '2'"
-              type="group"
-              name="gameDataReferenceItems"
-              label="Game Data"
-              remove-label="X"
-              :repeatable="true"
-              add-label="+ Another reference"
-              :outer-class="['pt-4']"
-              :wrapper-class="[
-                'inline-flex',
-                'justify-center',
-                'w-3/4',
-                'items-center',
-              ]"
-              :label-class="['font-bold', 'w-1/2', 'text-right', 'mr-8', 'pr-2']"
-              :grouping-class="[]"
-              :group-repeatable-class="['mb-4']"
-              :group-add-more-class="['inline-flex', 'bg-green-400', 'text-center', 'font-bold', 'pl-2', 'pr-2', 'rounded', 'text-gray-800']"
-              :group-repeatable-remove-class="['inline-flex', 'bg-red-400', 'text-center', 'font-bold', 'pl-2', 'pr-2', 'rounded', 'text-gray-800']"
-            >
-              <template v-slot:default="groupProps">
-                <div class="space-y-4">
+          <!-- Game Data References -->
+          <FormulateInput
+            v-if="formInput.taskType == '2'"
+            type="group"
+            name="gameDataReferenceItems"
+            label="Game Data"
+            remove-label="X"
+            :repeatable="true"
+            add-label="+ Another reference"
+            :outer-class="['pt-4']"
+            :wrapper-class="[
+              'inline-flex',
+              'justify-center',
+              'w-3/4',
+              'items-center',
+            ]"
+            :label-class="['font-bold', 'w-1/2', 'text-right', 'mr-8', 'pr-2']"
+            :grouping-class="[]"
+            :group-repeatable-class="['mb-4']"
+            :group-add-more-class="[
+              'inline-flex',
+              'bg-green-400',
+              'text-center',
+              'font-bold',
+              'pl-2',
+              'pr-2',
+              'rounded',
+              'text-gray-800',
+            ]"
+            :group-repeatable-remove-class="[
+              'inline-flex',
+              'bg-red-400',
+              'text-center',
+              'font-bold',
+              'pl-2',
+              'pr-2',
+              'rounded',
+              'text-gray-800',
+            ]"
+          >
+            <template v-slot:default="groupProps">
+              <div class="space-y-4">
                 <FormulateInput
                   type="select"
                   name="type"
                   label="Data Type"
                   :options="gameDataTypes"
                   :wrapper-class="[
-                'inline-flex',
-                'justify-between',
-                'w-full',
-                'items-center',
-              ]"
+                    'inline-flex',
+                    'justify-between',
+                    'w-full',
+                    'items-center',
+                  ]"
                   :input-class="[
                     'bg-gray-200',
                     'text-gray-700',
@@ -167,28 +184,29 @@
                   v-if="formInput.taskType == '2'"
                   placeholder="Type a name..."
                   :wrapper-class="[
-                'inline-flex',
-                'justify-between',
-                'w-full',
-                'items-center',
-              ]"
+                    'inline-flex',
+                    'justify-between',
+                    'w-full',
+                    'items-center',
+                  ]"
                   :input-class="[
                     'bg-gray-200',
                     'text-gray-700',
                     'rounded',
                     'p-2',
                   ]"
-                  @input="debouncedUpdateGameDataReference($event, groupProps.index)"
+                  @input="
+                    debouncedUpdateGameDataReference($event, groupProps.index)
+                  "
                   @add-game-data-reference="
                     formatGameDataReference($event, groupProps.index)
                   "
                 />
-                </div>
-              </template>
-            </FormulateInput>
+              </div>
+            </template>
+          </FormulateInput>
 
-            <div class="w-3/4 space-y-4">
-
+          <div class="w-3/4 space-y-4">
             <!-- Add Characters -->
             <FormulateInput
               type="checkbox"
@@ -340,7 +358,7 @@ export default {
       characterList: [
         { value: "fake1", label: "Scully" },
         { value: "fake2", label: "Chakwas" },
-        { value: "fake3", label: "Temperance" }
+        { value: "fake3", label: "Temperance" },
       ],
       achievementNames: [],
       gameDataReferences: [[]],
@@ -349,33 +367,47 @@ export default {
   methods: {
     addTask: function () {
       let vm = this;
-      console.log(this.formInput);
 
       // Set description value before sending for collectible types
       if (this.formInput.taskType == "2") {
         let newDescription;
         // If there's an item in here, set that as the desc
         if (this.formInput.gameDataReferenceItems.some((r) => r.type == "1")) {
-          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "1").description;
+          newDescription = this.formInput.gameDataReferenceItems.find(
+            (r) => r.type == "1"
+          ).description;
         }
         // Else if there's an item set, set THAT as the desc
-        else if (this.formInput.gameDataReferenceItems.some((r) => r.type == "2")) {
-          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "2").description;
+        else if (
+          this.formInput.gameDataReferenceItems.some((r) => r.type == "2")
+        ) {
+          newDescription = this.formInput.gameDataReferenceItems.find(
+            (r) => r.type == "2"
+          ).description;
         }
         // Else if there's a boss, set THAT
-        else if (this.formInput.gameDataReferenceItems.some((r) => r.type == "3")) {
-          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "3").description;
+        else if (
+          this.formInput.gameDataReferenceItems.some((r) => r.type == "3")
+        ) {
+          newDescription = this.formInput.gameDataReferenceItems.find(
+            (r) => r.type == "3"
+          ).description;
         }
         // Else if there's a dungeon, set THAT
-        else if (this.formInput.gameDataReferenceItems.some((r) => r.type == "4")) {
-          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "4").description;
+        else if (
+          this.formInput.gameDataReferenceItems.some((r) => r.type == "4")
+        ) {
+          newDescription = this.formInput.gameDataReferenceItems.find(
+            (r) => r.type == "4"
+          ).description;
         }
         // Else set the first thing in the list
         else {
           if (this.formInput.gameDataReferenceItems[0] != null) {
-            newDescription = this.formInput.gameDataReferenceItems[0].description;
+            newDescription = this.formInput.gameDataReferenceItems[0]
+              .description;
           } else {
-            newDescription = "Untitled Task"
+            newDescription = "Untitled Task";
           }
         }
 
@@ -383,13 +415,10 @@ export default {
       }
 
       // Change number string values to ints
-      this.formInput.gameDataReferenceItems.forEach(gdr => {
+      this.formInput.gameDataReferenceItems.forEach((gdr) => {
         gdr.type = Number(gdr.type);
         gdr.gameId = Number(gdr.gameId);
       });
-
-      console.log(this.formInput.gameDataReferenceItems);
-      console.log(this.formInput);
 
       this.$http
         .post(`api/tasks/`, {
@@ -439,15 +468,13 @@ export default {
     },
     // Hack the hell out of this application for science
     updateGameDataReference: function (event, index) {
-      console.log("we made it to update game data reference at index " + index);
-      console.log(event);
       let vm = this;
       // find the gdr with matching description
       // find the type associated with it
       let match = vm.formInput.gameDataReferenceItems.find(
         (gdr) => gdr.description == event
       );
-      console.log(match.type);
+
       let url = "";
       switch (Number(match.type)) {
         // pick the right api endpoint based on type
@@ -470,47 +497,35 @@ export default {
           // anything else
           break;
       }
-
-      console.log(url);
       // send it off and assign it to the list
-      vm.$http.get(url)
-      .then(function (response) {
-        console.log(response.data);
-        vm.gameDataReferences.splice(index, 1, []);   // have to do this instead of gdr[index] = [];
-        console.log(vm.gameDataReferences);
-         response.data.forEach((a) => {
+      vm.$http
+        .get(url)
+        .then(function (response) {
+          vm.gameDataReferences.splice(index, 1, []); // have to do this instead of gdr[index] = [];
+          response.data.forEach((a) => {
             vm.gameDataReferences[index].push({
-              value: `{ "gameId": ${Number(
-                a.id
-              )}, "subclass": "${a.subclass}", "description": "${a.name}" }`,
+              value: `{ "gameId": ${Number(a.id)}, "subclass": "${
+                a.subclass
+              }", "description": "${a.name}" }`,
               label: a.name,
             });
           });
-      })
-      .catch(function (error) {
-        console.log('had an error');
-        console.log(error);
-      });
+        })
+        .catch(function (error) {
+          console.log("had an error");
+          console.log(error);
+        });
     },
     // Called by achievement name
     appendGameDataReference: function (event) {
-      console.log("event received by add task form");
       let parsedGdr = JSON.parse(event);
-      console.log(parsedGdr);
       this.formInput.gameDataReferenceItems.push(parsedGdr);
     },
     formatGameDataReference: function (event, index) {
-      console.log("modifying data for " + index);
-      console.log(event);
-      console.log('the gdr at that index is');
-      console.log(this.formInput.gameDataReferenceItems[index]);
       let parsedGdr = JSON.parse(event);
-      console.log('the parsed gdr at that index is');
-      console.log(parsedGdr);
       this.formInput.gameDataReferenceItems[index].gameId = parsedGdr.gameId;
-      this.formInput.gameDataReferenceItems[index].subclass = parsedGdr.subclass == "undefined" ? null : parsedGdr.subclass;
-      console.log('now after adding stuff, the item looks like');
-      console.log(this.formInput.gameDataReferenceItems[index]);
+      this.formInput.gameDataReferenceItems[index].subclass =
+        parsedGdr.subclass == "undefined" ? null : parsedGdr.subclass;
     },
   },
   created: function () {
