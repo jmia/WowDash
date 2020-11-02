@@ -53,7 +53,7 @@ namespace WowDash.WebUI.Controllers
                     Race = c.Race,
                     Realm = c.Realm
                 }
-            ));
+            ).OrderBy(c => c.Name));
 
             return new GetCharacterRosterResponse(playerId, characterList);
         }

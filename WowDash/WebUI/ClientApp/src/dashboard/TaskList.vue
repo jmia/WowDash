@@ -118,6 +118,7 @@ export default {
       }
     },
     refreshDailies: function () {
+      if (window.confirm("Re-enable all character attempts for daily tasks?")) {
       this.$http
         .post(`/api/task-characters/refresh/daily`)
         .then(function (response) {
@@ -129,8 +130,10 @@ export default {
           console.log("had an error");
           console.log(error);
         });
+      }
     },
     refreshWeeklies: function () {
+      if (window.confirm("Re-enable all character attempts for weekly tasks?")) {
       this.$http
         .post(`/api/task-characters/refresh/weekly`)
         .then(function (response) {
@@ -142,6 +145,7 @@ export default {
           console.log("had an error");
           console.log(error);
         });
+      }
     },
     setFavourite: function (task, index) {
       let vm = this;

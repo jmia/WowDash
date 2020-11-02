@@ -183,15 +183,12 @@ export default {
     descriptionHref: function () {
       var baseUrl = "https://www.wowhead.com/";
 
-      console.log(this.gameDataReferences);
-
       var matchingDescriptions = this.gameDataReferences.filter(
         (g) => g.description.toLowerCase() == this.description.toLowerCase()
       );
 
       if (matchingDescriptions.length) {
         var match = matchingDescriptions[0];
-        console.log(match);
         switch (match.type) {
           case 0: // achievement
             return (
@@ -314,7 +311,6 @@ export default {
         this.$http
           .delete(`/api/tasks/${vm.taskId}`)
           .then(function (response) {
-            console.log(response);
             vm.$emit("reload-task-list");
           })
           .catch(function (error) {
@@ -329,7 +325,6 @@ export default {
         this.$http
           .delete(`/api/tasks/${vm.taskId}`)
           .then(function (response) {
-            console.log(response);
             vm.$emit("reload-task-list");
           })
           .catch(function (error) {
