@@ -180,7 +180,7 @@
                   ]"
                   @input="debouncedUpdateGameDataReference"
                   @add-game-data-reference="
-                    formatGameDataReference(groupProps.index)
+                    formatGameDataReference($event, groupProps.index)
                   "
                 />
                 </div>
@@ -287,7 +287,7 @@ export default {
       formInput: {
         playerId: localStorage.playerId,
         description: "",
-        taskType: "2",
+        taskType: null,
         collectibleType: null,
         priority: "2",
         refreshFrequency: null,
@@ -351,7 +351,45 @@ export default {
       let vm = this;
       console.log(this.formInput);
 
-      // TODO: Change game data reference types to numbers before sending
+      // Set description value before sending for collectible types
+      if (this.formInput.taskType == "2") {
+        let newDescription;
+        // If there's an item in here, set that as the desc
+        if (this.formInput.gameDataReferenceItems.some((r) => r.type == "1")) {
+          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "1").description;
+        }
+        // Else if there's an item set, set THAT as the desc
+        else if (this.formInput.gameDataReferenceItems.some((r) => r.type == "2")) {
+          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "2").description;
+        }
+        // Else if there's a boss, set THAT
+        else if (this.formInput.gameDataReferenceItems.some((r) => r.type == "3")) {
+          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "3").description;
+        }
+        // Else if there's a dungeon, set THAT
+        else if (this.formInput.gameDataReferenceItems.some((r) => r.type == "4")) {
+          newDescription = this.formInput.gameDataReferenceItems.find((r) => r.type == "4").description;
+        }
+        // Else set the first thing in the list
+        else {
+          if (this.formInput.gameDataReferenceItems[0] != null) {
+            newDescription = this.formInput.gameDataReferenceItems[0].description;
+          } else {
+            newDescription = "Untitled Task"
+          }
+        }
+
+        this.formInput.description = newDescription;
+      }
+
+      // Change number string values to ints
+      this.formInput.gameDataReferenceItems.forEach(gdr => {
+        gdr.type = Number(gdr.type);
+        gdr.gameId = Number(gdr.gameId);
+      });
+
+      console.log(this.formInput.gameDataReferenceItems);
+      console.log(this.formInput);
 
       this.$http
         .post(`api/tasks/`, {
@@ -464,6 +502,14 @@ export default {
     formatGameDataReference: function (event, index) {
       console.log("modifying data for " + index);
       console.log(event);
+      console.log('the gdr at that index is');
+      console.log(this.formInput.gameDataReferenceItems[index]);
+      let parsedGdr = JSON.parse(event);
+      console.log('the parsed gdr at that index is');
+      console.log(parsedGdr);
+      this.formInput.gameDataReferenceItems[index].gameId = parsedGdr.gameId;
+      this.formInput.gameDataReferenceItems[index].subclass = parsedGdr.subclass == "undefined" ? null : parsedGdr.subclass;
+      console.log('now after adding stuff, the item looks like');
       console.log(this.formInput.gameDataReferenceItems[index]);
       // find the gdr with the matching description
       // append its gameId and subclass
@@ -486,6 +532,7 @@ export default {
       .get(`/api/tasks/character-index/${vm.formInput.playerId}`)
       .then(function (response) {
         if (response.status == 200) {
+          vm.characterList = [];
           response.data.forEach((ch) =>
             vm.characterList.push({ value: ch.characterId, label: ch.name })
           );
