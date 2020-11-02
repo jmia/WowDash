@@ -42,6 +42,7 @@
           </button>
           <button
             class="bg-green-400 text-gray-800 font-bold text-center p-1 border-gray-800 rounded shadow"
+            @click="completeTask"
           >
             Got it!
           </button>
@@ -307,10 +308,26 @@ export default {
           });
       }
     },
+    completeTask: function () {
+      let vm = this;
+      if (window.confirm("Mark this task complete? This cannot be undone.")) {
+        this.$http
+          .delete(`/api/tasks/${vm.taskId}`)
+          .then(function (response) {
+            console.log(response);
+            vm.$emit("reload-task-list");
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
     deleteTask: function () {
       let vm = this;
       if (window.confirm("Do you really want to delete this task?")) {
-        this.$http.delete(`/api/tasks/${vm.taskId}`)
+        this.$http
+          .delete(`/api/tasks/${vm.taskId}`)
           .then(function (response) {
             console.log(response);
             vm.$emit("reload-task-list");
