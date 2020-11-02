@@ -7,6 +7,7 @@ import AddCharacter from '../roster/AddCharacter'
 import EditCharacter from '../roster/EditCharacter'
 import UserProfile from '../profile/UserProfile'
 import AddTask from '../dashboard/AddTask'
+import EditTask from '../dashboard/EditTask'
 
 Vue.use(Router);
 
@@ -19,6 +20,7 @@ export const router = new Router({
     { path: '/add-character', component: AddCharacter },
     { path: '/edit-character/:id', component: EditCharacter, name: 'edit-character', props: true },
     { path: '/add-task', component: AddTask },
+    { path: '/edit-task/:id', component: EditTask, name: 'edit-task', props: true },
 
     // otherwise redirect to dashboard
     { path: '*', redirect: '/' }
