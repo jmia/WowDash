@@ -7,10 +7,12 @@ import App from "./App.vue";
 
 // Form imports
 import VueFormulate from "@braid/vue-formulate";
+import AutocompleteFormElement from './components/AutocompleteFormElement';
 
 // Utility imports
 import "./_common/whtooltips";
 import GSignInButton from "vue-google-signin-button";
+import _ from 'lodash'; 
 
 // Styling imports
 import "@/assets/css/tailwind.css";
@@ -70,12 +72,22 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 // Assign axios to global
 Vue.prototype.$http = axios;
+   
+Object.defineProperty(Vue.prototype, '$_', { value: _ });
 
 // Use google sign-in
 Vue.use(GSignInButton);
 
 // Use vue-formulate
-Vue.use(VueFormulate);
+Vue.component('AutocompleteFormElement', AutocompleteFormElement)
+Vue.use(VueFormulate, {
+  library: {
+    autocomplete: {
+      classification: 'text',
+      component: 'AutocompleteFormElement',
+    }
+  }
+});
 
 Vue.use(Vuex);
 

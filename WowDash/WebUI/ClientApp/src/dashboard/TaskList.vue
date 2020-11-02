@@ -2,10 +2,10 @@
   <div>
     <!-- Action Buttons -->
     <div class="flex justify-end items-center mb-2">
-      <a
+      <router-link
+        to="/add-task"
         class="bg-green-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
-        href="task-start.html"
-        ><font-awesome-icon icon="plus" /> Add New Task</a
+        ><font-awesome-icon icon="plus" /> Add New Task</router-link
       >
       <button
         class="bg-blue-400 p-2 mr-2 font-bold text-center border-gray-800 rounded shadow"
@@ -50,6 +50,7 @@
         :priority="item.priority"
         :refreshFrequency="item.refreshFrequency"
         @set-favourite="setFavourite(item, index)"
+        @reload-task-list="loadTasks"
       />
     </div>
     <!--/Card List-->
@@ -57,6 +58,7 @@
 </template>
 
 <script>
+// TODO: Reduce code duplication in this script
 import TaskCard from "./TaskCard";
 
 export default {
@@ -72,7 +74,51 @@ export default {
     };
   },
   methods: {
+    loadTasks: function () {
+      let vm = this;
+
+      // If they cleared filters, set it back to everything
+      if (this.query == "") {
+        this.$http
+          .get("/api/tasks", {
+            params: {
+              playerId: vm.playerId,
+            },
+          })
+          .then(function (response) {
+            vm.tasks = response.data.tasks;
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      } else {
+        this.$http
+          .get("/api/tasks", {
+            params: {
+              playerId: vm.playerId,
+              characterId: vm.query.characterId ?? null,
+              collectibleType: vm.query.collectibleType ?? null,
+              dungeonId: vm.query.dungeonId ?? null,
+              isFavourite: vm.query.isFavourite ?? false,
+              onlyActiveAttempts: vm.query.onlyActiveAttempts ?? false,
+              refreshFrequency: vm.query.refreshFrequency ?? null,
+              sortBy: vm.query.sortBy ?? null,
+              taskType: vm.query.taskType ?? null,
+              zoneId: vm.query.zoneId ?? null,
+            },
+          })
+          .then(function (response) {
+            vm.tasks = response.data.tasks;
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
     refreshDailies: function () {
+      if (window.confirm("Re-enable all character attempts for daily tasks?")) {
       this.$http
         .post(`/api/task-characters/refresh/daily`)
         .then(function (response) {
@@ -84,8 +130,10 @@ export default {
           console.log("had an error");
           console.log(error);
         });
+      }
     },
-    refreshWeeklies() {
+    refreshWeeklies: function () {
+      if (window.confirm("Re-enable all character attempts for weekly tasks?")) {
       this.$http
         .post(`/api/task-characters/refresh/weekly`)
         .then(function (response) {
@@ -97,6 +145,7 @@ export default {
           console.log("had an error");
           console.log(error);
         });
+      }
     },
     setFavourite: function (task, index) {
       let vm = this;
@@ -154,65 +203,13 @@ export default {
     // I'm trying to avoid using Vuex as long as possible
     // while also properly composing components.
     // I'm aware this sucks. I promise.
-    query: function (value) {
-      let vm = this;
 
-      // If they cleared filters, set it back to everything
-      if (value == "") {
-        this.$http
-          .get("/api/tasks", {
-            params: {
-              playerId: vm.playerId,
-            },
-          })
-          .then(function (response) {
-            vm.tasks = response.data.tasks;
-          })
-          .catch(function (error) {
-            console.log("had an error");
-            console.log(error);
-          });
-      } else {
-        this.$http
-          .get("/api/tasks", {
-            params: {
-              playerId: vm.playerId,
-              characterId: value.characterId ?? null,
-              collectibleType: value.collectibleType ?? null,
-              dungeonId: value.dungeonId ?? null,
-              isFavourite: value.isFavourite ?? false,
-              onlyActiveAttempts: value.onlyActiveAttempts ?? false,
-              refreshFrequency: value.refreshFrequency ?? null,
-              sortBy: value.sortBy ?? null,
-              taskType: value.taskType ?? null,
-              zoneId: value.zoneId ?? null,
-            },
-          })
-          .then(function (response) {
-            vm.tasks = response.data.tasks;
-          })
-          .catch(function (error) {
-            console.log("had an error");
-            console.log(error);
-          });
-      }
+    query: function () {
+      this.loadTasks();
     },
   },
   mounted: function () {
-    let vm = this;
-    this.$http
-      .get("/api/tasks", {
-        params: {
-          playerId: vm.playerId, // will eventually be replaced with logged-in user
-        },
-      })
-      .then(function (response) {
-        vm.tasks = response.data.tasks;
-      })
-      .catch(function (error) {
-        console.log("had an error");
-        console.log(error);
-      });
+    this.loadTasks();
   },
 };
 </script>

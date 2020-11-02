@@ -70,8 +70,4 @@ export default {
   @apply w-4;
   @apply h-4;
 }
-
-.checkbox-space:before {
-  content: "\200B";
-}
 </style>

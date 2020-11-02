@@ -60,7 +60,6 @@ namespace WowDash.UnitTests.Tasks
                 TaskId = task.Id,
                 TaskType = TaskType.Achievement,
                 Description = "Secret Fish and Where To Find Them",
-                IsFavourite = true,
                 Notes = null,
                 CollectibleType = null,
                 Source = null,
@@ -88,7 +87,6 @@ namespace WowDash.UnitTests.Tasks
             foundTask.Id.Should().Be(dto.TaskId);
             foundTask.TaskType.Should().Be(dto.TaskType);
             foundTask.Description.Should().Be(dto.Description);
-            foundTask.IsFavourite.Should().Be(dto.IsFavourite);
             foundTask.Notes.Should().BeNull();
             foundTask.CollectibleType.Should().BeNull();
             foundTask.Source.Should().BeNull();

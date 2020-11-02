@@ -35,13 +35,14 @@
           <button class="mr-4">
             <span class="text-blue-400"><font-awesome-icon icon="edit" /></span>
           </button>
-          <button class="mr-4">
+          <button class="mr-4" @click="deleteTask">
             <span class="text-blue-400"
               ><font-awesome-icon icon="trash"
             /></span>
           </button>
           <button
             class="bg-green-400 text-gray-800 font-bold text-center p-1 border-gray-800 rounded shadow"
+            @click="completeTask"
           >
             Got it!
           </button>
@@ -297,6 +298,34 @@ export default {
                   console.log(error);
                 });
             }
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
+    completeTask: function () {
+      let vm = this;
+      if (window.confirm("Mark this task complete? This cannot be undone.")) {
+        this.$http
+          .delete(`/api/tasks/${vm.taskId}`)
+          .then(function (response) {
+            vm.$emit("reload-task-list");
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
+          });
+      }
+    },
+    deleteTask: function () {
+      let vm = this;
+      if (window.confirm("Do you really want to delete this task?")) {
+        this.$http
+          .delete(`/api/tasks/${vm.taskId}`)
+          .then(function (response) {
+            vm.$emit("reload-task-list");
           })
           .catch(function (error) {
             console.log("had an error");

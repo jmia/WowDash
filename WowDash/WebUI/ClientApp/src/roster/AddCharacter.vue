@@ -279,7 +279,7 @@ export default {
           race: vm.race,
           realm: vm.realm,
         })
-        .then(function (response) {
+        .then(function () {
           vm.$router.push("/roster");
         })
         .catch(function (error) {
@@ -300,6 +300,17 @@ export default {
       })
       .catch(function (error) {
         console.log("had an error");
+        console.log(error);
+      });
+
+      this.$http.get(`/api/players/${vm.playerId}`)
+      .then(function (response) {
+        if (response.data.defaultRealm != null) {
+          vm.realm = response.data.defaultRealm;
+        }
+      })
+      .catch(function (error) {
+        console.log('had an error');
         console.log(error);
       });
   },
