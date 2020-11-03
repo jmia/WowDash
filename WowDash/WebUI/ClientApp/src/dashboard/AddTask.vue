@@ -415,7 +415,7 @@ export default {
       });
 
       this.$http
-        .post(`api/tasks/`, {
+        .post(`/api/tasks/`, {
           playerId: vm.formInput.playerId,
           description: vm.formInput.description,
           notes: vm.formInput.notes,
@@ -547,12 +547,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.standard-input {
-  @apply bg-gray-400;
-  @apply text-gray-800;
-  @apply rounded;
-  @apply p-2;
-}
-</style>
