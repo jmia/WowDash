@@ -11,7 +11,6 @@ import AutocompleteFormElement from './components/AutocompleteFormElement';
 
 // Utility imports
 import "./_common/whtooltips";
-import GSignInButton from "vue-google-signin-button";
 import _ from 'lodash'; 
 
 // Styling imports
@@ -74,9 +73,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.prototype.$http = axios;
    
 Object.defineProperty(Vue.prototype, '$_', { value: _ });
-
-// Use google sign-in
-Vue.use(GSignInButton);
 
 // Use vue-formulate
 Vue.component('AutocompleteFormElement', AutocompleteFormElement)

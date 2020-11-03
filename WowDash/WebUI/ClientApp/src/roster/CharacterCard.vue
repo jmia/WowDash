@@ -169,7 +169,7 @@ export default {
       let vm = this;
       if (window.confirm("Do you really want to delete this character?")) {
         this.$http.delete(`/api/characters/${vm.characterId}`)
-          .then(function (response) {
+          .then(function () {
             vm.$emit("reload-roster");
           })
           .catch(function (error) {
