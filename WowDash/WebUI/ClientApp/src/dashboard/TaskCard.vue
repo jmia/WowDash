@@ -32,9 +32,9 @@
                 v-else
             /></span>
           </button>
-          <button class="mr-4">
+          <router-link :to="{ name: 'edit-task', params: { id: taskId }}" class="mr-4">
             <span class="text-blue-400"><font-awesome-icon icon="edit" /></span>
-          </button>
+          </router-link>
           <button class="mr-4" @click="deleteTask">
             <span class="text-blue-400"
               ><font-awesome-icon icon="trash"
