@@ -195,8 +195,12 @@
                     'rounded',
                     'p-2',
                   ]"
-                  @append-references="updateGameDataReference($event, groupProps.index)"
-                  @refresh-options="refreshGameDataReferences($event, groupProps.index)"
+                  @append-references="
+                    updateGameDataReference($event, groupProps.index)
+                  "
+                  @refresh-options="
+                    refreshGameDataReferences($event, groupProps.index)
+                  "
                 />
               </div>
             </template>
@@ -286,9 +290,6 @@
           </button>
         </div>
       </FormulateForm>
-    </div>
-    <div id="debug" class="text-lg text-white">
-      {{ formInput }}
     </div>
   </div>
 </template>
@@ -411,7 +412,7 @@ export default {
       // Change number string values to ints
       this.formInput.gameDataReferenceItems.forEach((gdr) => {
         gdr.type = Number(gdr.type);
-        gdr.gameId = Number(gdr.gameId);  // TODO: this is likely already formatted properly
+        gdr.gameId = Number(gdr.gameId); // TODO: this is likely already formatted properly
       });
 
       this.$http
@@ -524,9 +525,10 @@ export default {
     },
     updateGameDataReference: function (event, index) {
       // add incoming event to game data references
-      this.formInput.gameDataReferenceItems[index].description = event.description;
+      this.formInput.gameDataReferenceItems[index].description =
+        event.description;
       this.formInput.gameDataReferenceItems[index].gameId = event.gameId;
-    }
+    },
   },
   mounted: function () {
     let vm = this;

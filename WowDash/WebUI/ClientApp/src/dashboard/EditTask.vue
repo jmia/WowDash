@@ -293,10 +293,6 @@
         </div>
       </FormulateForm>
     </div>
-    <div class="text-white">
-      playerId: {{ playerId }} taskId: {{ formInput.taskId }}<br />
-      initialCharacterList: {{ initialCharacterList }}<br />{{ formInput }}
-    </div>
   </div>
 </template>
 
@@ -544,7 +540,6 @@ export default {
     this.$http
       .get(`/api/tasks/character-index/${vm.playerId}`)
       .then(function (response) {
-        console.log(response);
         if (response.status == 200) {
           vm.characterList.splice(0, vm.characterList.length);
           response.data.forEach((ch) =>
@@ -560,17 +555,13 @@ export default {
   mounted: function () {
     let vm = this;
 
-    // axios all
-    // task characters, characters, task
     this.$http
       .all([
         vm.$http.get(`/api/task-characters/task/${vm.formInput.taskId}`),
         vm.$http.get(`/api/tasks/${vm.formInput.taskId}`),
       ])
       .then((responseArr) => {
-        console.log(responseArr);
         if (responseArr[0].status == 200) {
-          console.log(responseArr[0]);
           vm.formInput.characters.splice(0, vm.formInput.characters.length);
           responseArr[0].data.characters.forEach((ch) => {
             vm.formInput.characters.push(ch.characterId);
@@ -578,7 +569,6 @@ export default {
         }
         // task comes back
         if (responseArr[1].status == 200) {
-          console.log(responseArr[1].data);
           let taskData = responseArr[1].data;
           vm.formInput.description = taskData.description;
           vm.formInput.taskType = taskData.taskType.toString();
