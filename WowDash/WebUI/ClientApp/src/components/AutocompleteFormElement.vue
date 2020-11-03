@@ -8,22 +8,20 @@
       v-model="context.model"
       v-bind="context.attributes"
       autocomplete="off"
-      @keydown.enter.prevent="context.model = selection.label"
-      @keydown.down.prevent="increment"
-      @keydown.up.prevent="decrement"
       @blur="context.blurHandler"
     />
     <ul
       v-if="filteredOptions.length"
-      class="z-10 absolute h-48 overflow-auto formulate-input-dropdown text-md bg-gray-200 text-gray-700 rounded p-2"
+      class="z-10 absolute h-48 overflow-auto formulate-input-dropdown text-md rounded p-2 bg-gray-200 text-gray-700"
     >
       <li
+        class="cursor-default"
+        :class="{ highlight: selectedIndex == index }"
         v-for="(option, index) in filteredOptions"
         :key="option.value"
         v-text="option.label"
-        :data-is-selected="selection && selection.value === option.value"
         @mouseenter="selectedIndex = index"
-        @click="markSelection"
+        @click="sendValues"
       />
     </ul>
   </div>
@@ -37,25 +35,27 @@ export default {
       type: Object,
       required: true,
     },
-    url: {
-      type: String,
-    },
   },
   data() {
     return {
       selectedIndex: 0,
+      selectedModelValue: "",
     };
   },
   watch: {
     model: function () {
       this.selectedIndex = 0;
+      // need to check if we should refresh values
+      if (this.selectedModelValue != this.context.model) {
+        this.debouncedRefreshOptions();
+      }
     },
   },
   computed: {
     model: function () {
       return this.context.model;
     },
-    selection() {
+    selection: function () {
       if (this.context.options[this.selectedIndex]) {
         return this.context.options[this.selectedIndex];
       }
@@ -63,6 +63,8 @@ export default {
     },
     filteredOptions: function () {
       if (Array.isArray(this.context.options) && this.context.model) {
+        // BUG: This will not show any results if
+        // the text input exactly matches any result
         const isAlreadySelected = this.context.options.find(
           (option) => option.label === this.context.model
         );
@@ -74,26 +76,29 @@ export default {
     },
   },
   methods: {
-    increment: function () {
-      const length = this.context.options.length;
-      if (this.selectedIndex + 1 < length) {
-        this.selectedIndex++;
-      } else {
-        this.selectedIndex = 0;
-      }
-    },
-    decrement: function () {
-      const length = this.context.options.length;
-      if (this.selectedIndex - 1 >= 0) {
-        this.selectedIndex--;
-      } else {
-        this.selectedIndex = length - 1;
-      }
-    },
-    markSelection: function () {
+    sendValues: function () {
+      this.selectedModelValue = this.selection.label;
       this.context.model = this.selection.label;
-      this.context.rootEmit("add-game-data-reference", this.selection.value);
+      this.context.rootEmit("append-references", {
+        gameId: this.selection.value,
+        description: this.selection.label,
+      });
     },
+    refreshOptions: function () {
+      this.context.rootEmit("refresh-options", this.context.model);
+    },
+  },
+  mounted: function () {
+    // BUG: This will sometimes overlap with returns from previous calls
+    // and cause the options list to double-up
+    this.debouncedRefreshOptions = this.$_.debounce(this.refreshOptions, 1000);
   },
 };
 </script>
+
+<style scoped>
+.highlight {
+  @apply bg-gray-700;
+  @apply text-gray-300;
+}
+</style>
