@@ -121,7 +121,6 @@ export default {
     this.$http
       .get(`/api/players/${vm.playerId}`)
       .then(function (profile) {
-        console.log(profile);
         vm.displayName = profile.data.displayName;
         vm.defaultRealm = profile.data.defaultRealm;
         // vm.defaultTaskType = Number(profile.data.defaultTaskType);

@@ -310,7 +310,7 @@ export default {
       if (window.confirm("Mark this task complete? This cannot be undone.")) {
         this.$http
           .delete(`/api/tasks/${vm.taskId}`)
-          .then(function (response) {
+          .then(function () {
             vm.$emit("reload-task-list");
           })
           .catch(function (error) {
@@ -324,7 +324,7 @@ export default {
       if (window.confirm("Do you really want to delete this task?")) {
         this.$http
           .delete(`/api/tasks/${vm.taskId}`)
-          .then(function (response) {
+          .then(function () {
             vm.$emit("reload-task-list");
           })
           .catch(function (error) {
