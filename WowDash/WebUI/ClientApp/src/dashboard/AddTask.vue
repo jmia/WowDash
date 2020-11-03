@@ -60,7 +60,7 @@
               name="description"
               key="achievementDescription"
               label="Achievement Name"
-              :options="achievementNames"
+              :options="achievementList"
               v-if="formInput.taskType == '1'"
               placeholder="Start typing..."
               :wrapper-class="[
@@ -72,8 +72,8 @@
               :label-class="['font-bold', 'text-right', 'w-1/2', 'pr-8']"
               :element-class="['w-1/2']"
               :input-class="['bg-gray-200', 'text-gray-700', 'rounded', 'p-2']"
-              @input="debouncedUpdateAchievementNames"
-              @add-game-data-reference="appendGameDataReference"
+              @append-references="appendAchievementGameDataReference"
+              @refresh-options="refreshAchievementList"
             />
 
             <!-- Collectible Type -->
@@ -195,12 +195,8 @@
                     'rounded',
                     'p-2',
                   ]"
-                  @input="
-                    debouncedUpdateGameDataReference($event, groupProps.index)
-                  "
-                  @add-game-data-reference="
-                    formatGameDataReference($event, groupProps.index)
-                  "
+                  @append-references="updateGameDataReference($event, groupProps.index)"
+                  @refresh-options="refreshGameDataReferences($event, groupProps.index)"
                 />
               </div>
             </template>
@@ -312,9 +308,7 @@ export default {
         source: null,
         notes: "",
         characters: [],
-        gameDataReferenceItems: [
-          // { gameId: X, type: X, subclass: X, description: X }
-        ],
+        gameDataReferenceItems: [],
       },
 
       // Form values
@@ -360,7 +354,7 @@ export default {
         { value: "fake2", label: "Chakwas" },
         { value: "fake3", label: "Temperance" },
       ],
-      achievementNames: [],
+      achievementList: [],
       gameDataReferences: [[]],
     };
   },
@@ -417,7 +411,7 @@ export default {
       // Change number string values to ints
       this.formInput.gameDataReferenceItems.forEach((gdr) => {
         gdr.type = Number(gdr.type);
-        gdr.gameId = Number(gdr.gameId);
+        gdr.gameId = Number(gdr.gameId);  // TODO: this is likely already formatted properly
       });
 
       this.$http
@@ -445,29 +439,30 @@ export default {
           console.log(error);
         });
     },
-    updateAchievementNames: function (event) {
-      let vm = this;
-      vm.$http
-        .get(`/api/achievements/search/${event}`)
-        .then(function (response) {
-          // { gameId: X, type: X, subclass: X, description: X }
-          vm.achievementNames = [];
-          response.data.forEach((a) => {
-            vm.achievementNames.push({
-              value: `{ "gameId": ${Number(
-                a.id
-              )}, "type": 0, "subclass": null, "description": "${a.name}" }`,
-              label: a.name,
+    refreshAchievementList: function (event) {
+      this.achievementList.splice(0, this.achievementList.length);
+      if (event == "") {
+        return;
+      } else {
+        let vm = this;
+        vm.$http
+          .get(`/api/achievements/search/${event}`)
+          .then(function (response) {
+            response.data.forEach((a) => {
+              vm.achievementList.push({
+                value: a.id,
+                label: a.name,
+              });
             });
+          })
+          .catch(function (error) {
+            console.log("had an error");
+            console.log(error);
           });
-        })
-        .catch(function (error) {
-          console.log("had an error");
-          console.log(error);
-        });
+      }
     },
     // Hack the hell out of this application for science
-    updateGameDataReference: function (event, index) {
+    refreshGameDataReferences: function (event, index) {
       let vm = this;
       // find the gdr with matching description
       // find the type associated with it
@@ -502,12 +497,10 @@ export default {
         .get(url)
         .then(function (response) {
           vm.gameDataReferences.splice(index, 1, []); // have to do this instead of gdr[index] = [];
-          response.data.forEach((a) => {
+          response.data.forEach((r) => {
             vm.gameDataReferences[index].push({
-              value: `{ "gameId": ${Number(a.id)}, "subclass": "${
-                a.subclass
-              }", "description": "${a.name}" }`,
-              label: a.name,
+              value: r.id,
+              label: r.name,
             });
           });
         })
@@ -516,27 +509,24 @@ export default {
           console.log(error);
         });
     },
-    // Called by achievement name
-    appendGameDataReference: function (event) {
-      let parsedGdr = JSON.parse(event);
-      this.formInput.gameDataReferenceItems.push(parsedGdr);
+    appendAchievementGameDataReference: function (event) {
+      if (this.formInput.gameDataReferenceItems.some((gdr) => gdr.type == 0)) {
+        // clear out pre-existing achievements
+        this.formInput.gameDataReferenceItems = this.formInput.gameDataReferenceItems.filter(
+          (gdr) => gdr.type !== 0
+        );
+      }
+      this.formInput.gameDataReferenceItems.push({
+        gameId: event.gameId,
+        type: 0,
+        description: event.description,
+      });
     },
-    formatGameDataReference: function (event, index) {
-      let parsedGdr = JSON.parse(event);
-      this.formInput.gameDataReferenceItems[index].gameId = parsedGdr.gameId;
-      this.formInput.gameDataReferenceItems[index].subclass =
-        parsedGdr.subclass == "undefined" ? null : parsedGdr.subclass;
-    },
-  },
-  created: function () {
-    this.debouncedUpdateAchievementNames = this.$_.debounce(
-      this.updateAchievementNames,
-      400
-    );
-    this.debouncedUpdateGameDataReference = this.$_.debounce(
-      this.updateGameDataReference,
-      400
-    );
+    updateGameDataReference: function (event, index) {
+      // add incoming event to game data references
+      this.formInput.gameDataReferenceItems[index].description = event.description;
+      this.formInput.gameDataReferenceItems[index].gameId = event.gameId;
+    }
   },
   mounted: function () {
     let vm = this;
@@ -565,8 +555,4 @@ export default {
   @apply rounded;
   @apply p-2;
 }
-
-/* .formulate-input-element--checkbox {
-  display: inline-block !important;
-} */
 </style>
