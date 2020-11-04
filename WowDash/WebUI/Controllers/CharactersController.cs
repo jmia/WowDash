@@ -35,6 +35,13 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetCharacterRosterResponse> GetCharacterRoster(Guid playerId)
         {
+            var player = _context.Players.Find(playerId);
+
+            if (player is null)
+            {
+                return NotFound();
+            }
+
             var characters = _context.Characters.Where(c => c.PlayerId == playerId);
 
             if (!characters.Any())
