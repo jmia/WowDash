@@ -24,8 +24,7 @@ export default {
   },
   mounted() {
     // Add default player ID to localStorage
-    //localStorage.playerId = "d8a57467-008e-4ebb-286a-08d86586cf0f";
-    localStorage.playerId = "EE2A0E11-CE5E-40E9-A788-E1E2497A20A2";
+    localStorage.playerId = "d8a57467-008e-4ebb-286a-08d86586cf0f";
 
     // Add Google Sign-In JavaScript CDN
     let googleScript = document.createElement("script");
