@@ -563,9 +563,11 @@ export default {
       .then((responseArr) => {
         if (responseArr[0].status == 200) {
           vm.formInput.characters.splice(0, vm.formInput.characters.length);
-          responseArr[0].data.characters.forEach((ch) => {
+          if (responseArr[0].data.characters.length > 0) {
+            responseArr[0].data.characters.forEach((ch) => {
             vm.formInput.characters.push(ch.characterId);
           });
+          }
         }
         // task comes back
         if (responseArr[1].status == 200) {

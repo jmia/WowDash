@@ -98,6 +98,7 @@ const store = new Vuex.Store({
   },
 });
 
+Vue.config.devtools = true;
 Vue.config.productionTip = false;
 
 new Vue({

@@ -206,9 +206,10 @@
             </template>
           </FormulateInput>
 
-          <div class="w-3/4 space-y-4">
+          <div class="w-3/4 space-y-4 pt-4">
             <!-- Add Characters -->
             <FormulateInput
+            v-if="characterList.length"
               type="checkbox"
               name="characters"
               :options="characterList"
