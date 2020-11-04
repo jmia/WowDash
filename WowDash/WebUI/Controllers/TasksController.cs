@@ -238,6 +238,47 @@ namespace WowDash.WebUI.Controllers
 
             _context.SaveChanges();
 
+            // If there are any existing entries
+            if (task.TaskCharacters.Any())
+            {
+                foreach (var c in request.Characters)
+                {
+                    if (!task.TaskCharacters.Any(tc => tc.CharacterId == c))
+                    {
+                        // If there aren't any matching existing ones
+                        // Add them
+                        task.TaskCharacters.Add(new TaskCharacter(c, task.Id));
+                        _context.SaveChanges();
+                    }
+
+                    // If there ARE existing matching ones
+                    // Ignore them
+                }
+            } else
+            {
+                // If there are no existing entries
+                // Add everything
+                foreach (var c in request.Characters)
+                {
+                    task.TaskCharacters.Add(new TaskCharacter(c, task.Id));
+                    _context.SaveChanges();
+                }
+            }
+
+            // If there are existing matching ones that AREN'T in the request
+            // Delete them
+            if (request.Characters.Any())
+            {
+                foreach (var tc in task.TaskCharacters)     // System.InvalidOperationException : Collection was modified; enumeration operation may not execute.
+                {
+                    if (!request.Characters.Any(c => c == tc.CharacterId))
+                    {
+                        task.TaskCharacters.Remove(tc);
+                        _context.SaveChanges();
+                    }
+                }
+            }
+
             return task.Id;
         }
 
