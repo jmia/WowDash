@@ -10,7 +10,7 @@
     </div>
     <div class="w-1/2 mx-auto dark-rounded">
       <div class="border-b border-gray-800 p-3">
-        <h5 class="table-title">Add a Task</h5>
+        <h5 class="table-title">Update a Task</h5>
       </div>
 
       <FormulateForm>
@@ -288,7 +288,7 @@
             class="bg-blue-400 text-gray-800 p-2 mb-3 font-bold text-center border-gray-800 rounded shadow"
             @click="updateTask"
           >
-            Add Task
+            Update Task
           </button>
         </div>
       </FormulateForm>
@@ -460,6 +460,17 @@ export default {
                 label: a.name,
               });
             });
+            vm.achievementList.sort(function (a, b) {
+            var nameA = a.label.toUpperCase();
+            var nameB = b.label.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
           })
           .catch(function (error) {
             console.log("had an error");
@@ -508,6 +519,17 @@ export default {
               value: r.id,
               label: r.name,
             });
+          });
+          vm.gameDataReferences[index].sort(function (a, b) {
+            var nameA = a.label.toUpperCase();
+            var nameB = b.label.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
           });
         })
         .catch(function (error) {
