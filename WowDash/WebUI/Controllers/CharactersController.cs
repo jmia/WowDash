@@ -38,7 +38,7 @@ namespace WowDash.WebUI.Controllers
             var characters = _context.Characters.Where(c => c.PlayerId == playerId);
 
             if (!characters.Any())
-                return NotFound();
+                return new GetCharacterRosterResponse(playerId, new List<CharacterResponse>());
 
             var characterList = new List<CharacterResponse>(characters.Select(c =>
                 new CharacterResponse()
