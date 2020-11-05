@@ -86,7 +86,7 @@
         {{ notes }}
       </div>
 
-      <template v-if="characters.length">
+      <div v-if="characters.length > 0">
         <hr class="border-b-1 border-gray-700 my-2 mx-4" />
 
         <div class="text-xs uppercase">Character Attempts</div>
@@ -107,7 +107,7 @@
             @mark-attempt="markAttempt(item)"
           />
         </div>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -187,7 +187,7 @@ export default {
         (g) => g.description.toLowerCase() == this.description.toLowerCase()
       );
 
-      if (matchingDescriptions.length) {
+      if (matchingDescriptions.length > 0) {
         var match = matchingDescriptions[0];
         switch (match.type) {
           case 0: // achievement
@@ -267,7 +267,9 @@ export default {
               vm.$http
                 .get(`/api/task-characters/task/${vm.taskId}`)
                 .then(function (response) {
-                  vm.characters = response.data.characters;
+                  if (response.status == 200) {
+                    vm.characters = response.data.characters;
+                  }
                 })
                 .catch(function (error) {
                   console.log("had an error");
@@ -291,7 +293,9 @@ export default {
               vm.$http
                 .get(`/api/task-characters/task/${vm.taskId}`)
                 .then(function (response) {
-                  vm.characters = response.data.characters;
+                  if (response.status == 200) {
+                    vm.characters = response.data.characters;
+                  }
                 })
                 .catch(function (error) {
                   console.log("had an error");
