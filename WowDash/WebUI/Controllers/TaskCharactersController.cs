@@ -54,7 +54,7 @@ namespace WowDash.WebUI.Controllers
         /// <param name="taskId">The ID of the task.</param>
         /// <returns></returns>
         [HttpGet("task/{taskId}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<GetCharactersForTaskResponse> GetCharactersForTask(Guid taskId)
