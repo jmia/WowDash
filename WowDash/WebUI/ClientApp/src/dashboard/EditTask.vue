@@ -583,7 +583,8 @@ export default {
         vm.$http.get(`/api/tasks/${vm.formInput.taskId}`),
       ])
       .then((responseArr) => {
-        if (responseArr[0].status == 200) {
+          if (responseArr[0].status == 200) {
+              console.log(responseArr[0]);
           vm.formInput.characters.splice(0, vm.formInput.characters.length);
           if (responseArr[0].data.characters.length > 0) {
             responseArr[0].data.characters.forEach((ch) => {

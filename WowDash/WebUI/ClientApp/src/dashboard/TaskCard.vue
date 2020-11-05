@@ -102,7 +102,7 @@
             :taskId="taskId"
             :characterId="item.characterId"
             :name="item.name"
-            :playableClass="item.class"
+            :playableClass="item.playableClass"
             :isActive="item.isActive"
             @mark-attempt="markAttempt(item)"
           />
@@ -345,7 +345,9 @@ export default {
       .then(function (response) {
         if (response.status == 200) {
           console.log(response);
-          vm.characters = response.data.characters;
+            response.data.characters.forEach(ch => {
+                vm.characters.push(ch);
+            });
         }
       })
       .catch(function (error) {
