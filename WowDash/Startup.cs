@@ -75,7 +75,7 @@ namespace WowDash.WebUI
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -108,14 +108,14 @@ namespace WowDash.WebUI
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
 
-                //if (env.IsDevelopment())
-                //{
-                //    endpoints.MapToVueCliProxy(
-                //    "{*path}",
-                //    new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
-                //    npmScript: "serve",
-                //    regex: "Compiled Successfully");
-                //}
+                if (env.IsDevelopment())
+                {
+                   endpoints.MapToVueCliProxy(
+                   "{*path}",
+                   new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
+                   npmScript: "serve",
+                   regex: "Compiled Successfully");
+                }
             });
 
             app.UseSpa(spa =>

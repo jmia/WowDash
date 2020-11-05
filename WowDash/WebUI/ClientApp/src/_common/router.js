@@ -22,10 +22,8 @@ export const router = new Router({
     { path: '/add-task', component: AddTask },
     { path: '/edit-task/:id', component: EditTask, name: 'edit-task', props: true },
     { path: '/api/*' },
-    { path: '/api/*/*'},
-    { path: '/api/*/*/*'}
 
     // otherwise redirect to dashboard
-    //{ path: '*', redirect: '/' }
+    { path: '*', redirect: '/' }
   ]
 });
