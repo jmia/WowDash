@@ -219,7 +219,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> UpdateTask(UpdateTaskRequest request)
         {
-            var task = _context.Tasks.Find(request.TaskId);
+            var task = _context.Tasks.Include(t => t.TaskCharacters).Where(t => t.Id == request.TaskId).FirstOrDefault();
 
             if (task is null)
                 return NotFound();
@@ -261,7 +261,9 @@ namespace WowDash.WebUI.Controllers
             task.TaskCharacters.Clear();
             _context.SaveChanges();
 
-            _context.TaskCharacters.AddRange(taskCharacterList);
+            foreach (var tc in taskCharacterList)
+                task.TaskCharacters.Add(tc);
+
             _context.SaveChanges();
 
             return task.Id;
