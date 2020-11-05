@@ -579,7 +579,7 @@ export default {
 
     this.$http
       .all([
-        vm.$http.get(`/api/task-characters/task/${vm.formInput.taskId}`),
+        vm.$http.get(`/api/task-characters/${vm.formInput.taskId}`),
         vm.$http.get(`/api/tasks/${vm.formInput.taskId}`),
       ])
       .then((responseArr) => {

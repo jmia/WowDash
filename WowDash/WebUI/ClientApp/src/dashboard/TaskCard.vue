@@ -265,7 +265,7 @@ export default {
           .then(function (response) {
             if (response.status == 204) {
               vm.$http
-                .get(`/api/task-characters/task/${vm.taskId}`)
+                .get(`/api/task-characters/${vm.taskId}`)
                 .then(function (response) {
                   if (response.status == 200) {
                     vm.characters = response.data.characters;
@@ -291,7 +291,7 @@ export default {
           .then(function (response) {
             if (response.status == 204) {
               vm.$http
-                .get(`/api/task-characters/task/${vm.taskId}`)
+                .get(`/api/task-characters/${vm.taskId}`)
                 .then(function (response) {
                   if (response.status == 200) {
                     vm.characters = response.data.characters;
@@ -341,7 +341,7 @@ export default {
   mounted: function () {
     let vm = this;
     this.$http
-      .get(`/api/task-characters/task/${vm.taskId}`)
+      .get(`/api/task-characters/${vm.taskId}`)
       .then(function (response) {
         if (response.status == 200) {
           console.log(response);

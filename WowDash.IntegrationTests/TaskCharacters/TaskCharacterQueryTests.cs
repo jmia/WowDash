@@ -58,7 +58,7 @@ namespace WowDash.IntegrationTests.TaskCharacters
             var taskCharacter = await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
 
             // Act
-            var httpResponse = await Client.GetAsync($"/api/task-characters/task/{defaultTaskId}");
+            var httpResponse = await Client.GetAsync($"/api/task-characters/{defaultTaskId}");
 
             httpResponse.EnsureSuccessStatusCode();
 
