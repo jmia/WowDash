@@ -219,7 +219,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Guid> UpdateTask(UpdateTaskRequest request)
         {
-            var task = _context.Tasks.Find(request.TaskId);
+            var task = _context.Tasks.Include(t => t.TaskCharacters).Where(t => t.Id == request.TaskId).FirstOrDefault();
 
             if (task is null)
                 return NotFound();
@@ -235,6 +235,34 @@ namespace WowDash.WebUI.Controllers
             task.GameDataReferences = request.GameDataReferenceItems.Select(ri =>
                     new GameDataReference(ri.GameId, ri.Type, ri.Subclass, ri.Description))
                 .ToList();
+
+            _context.SaveChanges();
+
+            var taskCharacterList = new List<TaskCharacter>();
+
+            // Of all incoming entries
+            foreach (var c in request.Characters)
+            {
+                var tc = task.TaskCharacters.Where(tc => tc.CharacterId == c).FirstOrDefault();
+
+                // If there is a match, add it
+                if (tc != null)
+                {
+                    taskCharacterList.Add(tc);
+                }
+                // If there isn't a match, create it
+                else
+                {
+                    taskCharacterList.Add(new TaskCharacter(c, task.Id));
+                }
+            }
+
+            // Overwrite the original list (purge extras)
+            task.TaskCharacters.Clear();
+            _context.SaveChanges();
+
+            foreach (var tc in taskCharacterList)
+                task.TaskCharacters.Add(tc);
 
             _context.SaveChanges();
 

@@ -209,7 +209,7 @@
           <div class="w-3/4 space-y-4 pt-4">
             <!-- Add Characters -->
             <FormulateInput
-            v-if="characterList.length"
+              v-if="characterList.length"
               type="checkbox"
               name="characters"
               :options="characterList"
@@ -456,6 +456,17 @@ export default {
                 label: a.name,
               });
             });
+            vm.achievementList.sort(function (a, b) {
+            var nameA = a.label.toUpperCase();
+            var nameB = b.label.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
           })
           .catch(function (error) {
             console.log("had an error");
@@ -504,6 +515,17 @@ export default {
               value: r.id,
               label: r.name,
             });
+          });
+          vm.gameDataReferences[index].sort(function (a, b) {
+            var nameA = a.label.toUpperCase();
+            var nameB = b.label.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
           });
         })
         .catch(function (error) {
