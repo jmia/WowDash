@@ -69,8 +69,7 @@ namespace WowDash.WebUI.Controllers
                 characterList.Add(new CharacterForTaskResponse(character.Id, character.Name, character.Class, tc.IsActive));
             }
 
-            // I have no idea
-            return Ok(new GetCharactersForTaskResponse(taskId, characterList));
+            return new GetCharactersForTaskResponse(taskId, characterList);
         }
 
         /// <summary>

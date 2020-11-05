@@ -51,13 +51,14 @@ namespace WowDash.IntegrationTests.TaskCharacters
             result.TaskId.Should().Be(taskCharacter.TaskId);
         }
 
+        [Test]
         public async System.Threading.Tasks.Task GetCharactersForTask_ReturnsCharacters()
         {
             // Arrange
             var taskCharacter = await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
 
             // Act
-            var httpResponse = await Client.GetAsync($"/api/task-characters/task/{taskCharacter.TaskId}");
+            var httpResponse = await Client.GetAsync($"/api/task-characters/task/{defaultTaskId}");
 
             httpResponse.EnsureSuccessStatusCode();
 
