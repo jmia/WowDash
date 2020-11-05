@@ -86,7 +86,7 @@
         {{ notes }}
       </div>
 
-      <div v-if="characters.length > 0">
+      <div v-if="characters.length != 0">
         <hr class="border-b-1 border-gray-700 my-2 mx-4" />
 
         <div class="text-xs uppercase">Character Attempts</div>
@@ -343,7 +343,10 @@ export default {
     this.$http
       .get(`/api/task-characters/task/${vm.taskId}`)
       .then(function (response) {
-        vm.characters = response.data.characters;
+        if (response.status == 200) {
+          console.log(response);
+          vm.characters = response.data.characters;
+        }
       })
       .catch(function (error) {
         console.log("had an error");
