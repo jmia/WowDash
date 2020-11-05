@@ -258,8 +258,10 @@ namespace WowDash.WebUI.Controllers
             }
 
             // Overwrite the original list (purge extras)
-            task.TaskCharacters = taskCharacterList;
+            task.TaskCharacters.Clear();
+            _context.SaveChanges();
 
+            _context.TaskCharacters.AddRange(taskCharacterList);
             _context.SaveChanges();
 
             return task.Id;

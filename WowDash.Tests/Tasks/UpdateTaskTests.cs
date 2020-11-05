@@ -193,6 +193,8 @@ namespace WowDash.UnitTests.Tasks
             // Assert
             var foundTask = Context.Tasks.Find(result.Value);
 
+            var taskCharacters = Context.TaskCharacters;
+
             foundTask.Id.Should().Be(dto.TaskId);
             foundTask.TaskType.Should().Be(dto.TaskType);
             foundTask.TaskCharacters.Count.Should().Be(1);
@@ -203,13 +205,73 @@ namespace WowDash.UnitTests.Tasks
         [Test]
         public void GivenExistingTaskCharacters_AndExtraRequestCharacters_AddsRequestCharacters()
         {
+            var task = new Task(DefaultPlayer.Id, TaskType.Achievement);
+            var firstCharacter = new Character();
+            var secondCharacter = new Character();
 
+            Context.Tasks.Add(task);
+            Context.Characters.AddRange(firstCharacter, secondCharacter);
+            Context.SaveChanges();
+
+            task.TaskCharacters.Add(new TaskCharacter(firstCharacter.Id, task.Id) { IsActive = false });
+
+            Context.SaveChanges();
+
+            // Arrange
+            var dto = new UpdateTaskRequest()
+            {
+                TaskId = task.Id,
+                Characters = new List<Guid>() { firstCharacter.Id, secondCharacter.Id }
+            };
+
+            // Act
+            var result = _controller.UpdateTask(dto);
+
+            // Assert
+            var foundTask = Context.Tasks.Find(result.Value);
+
+            var taskCharacters = Context.TaskCharacters;
+
+            foundTask.Id.Should().Be(dto.TaskId);
+            foundTask.TaskType.Should().Be(dto.TaskType);
+            foundTask.TaskCharacters.Count.Should().Be(2);
+            foundTask.TaskCharacters.Any(tc => tc.CharacterId == secondCharacter.Id).Should().BeTrue();
         }
 
         [Test]
         public void GivenExistingTaskCharacters_AndExtraRequestCharacters_IgnoresExistingCharacters()
         {
+            var task = new Task(DefaultPlayer.Id, TaskType.Achievement);
+            var firstCharacter = new Character();
+            var secondCharacter = new Character();
 
+            Context.Tasks.Add(task);
+            Context.Characters.AddRange(firstCharacter, secondCharacter);
+            Context.SaveChanges();
+
+            task.TaskCharacters.Add(new TaskCharacter(firstCharacter.Id, task.Id) { IsActive = false });
+
+            Context.SaveChanges();
+
+            // Arrange
+            var dto = new UpdateTaskRequest()
+            {
+                TaskId = task.Id,
+                Characters = new List<Guid>() { firstCharacter.Id, secondCharacter.Id }
+            };
+
+            // Act
+            var result = _controller.UpdateTask(dto);
+
+            // Assert
+            var foundTask = Context.Tasks.Find(result.Value);
+
+            var taskCharacters = Context.TaskCharacters;
+
+            foundTask.Id.Should().Be(dto.TaskId);
+            foundTask.TaskType.Should().Be(dto.TaskType);
+            foundTask.TaskCharacters.Count.Should().Be(2);
+            foundTask.TaskCharacters.Where(tc => tc.CharacterId == firstCharacter.Id).FirstOrDefault().IsActive.Should().BeFalse();
         }
 
 
