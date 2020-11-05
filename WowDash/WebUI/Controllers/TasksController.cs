@@ -238,46 +238,29 @@ namespace WowDash.WebUI.Controllers
 
             _context.SaveChanges();
 
-            // If there are any existing entries
-            if (task.TaskCharacters.Any())
-            {
-                foreach (var c in request.Characters)
-                {
-                    if (!task.TaskCharacters.Any(tc => tc.CharacterId == c))
-                    {
-                        // If there aren't any matching existing ones
-                        // Add them
-                        task.TaskCharacters.Add(new TaskCharacter(c, task.Id));
-                        _context.SaveChanges();
-                    }
+            var taskCharacterList = new List<TaskCharacter>();
 
-                    // If there ARE existing matching ones
-                    // Ignore them
-                }
-            } else
+            // Of all incoming entries
+            foreach (var c in request.Characters)
             {
-                // If there are no existing entries
-                // Add everything
-                foreach (var c in request.Characters)
+                var tc = task.TaskCharacters.Where(tc => tc.CharacterId == c).FirstOrDefault();
+
+                // If there is a match, add it
+                if (tc != null)
                 {
-                    task.TaskCharacters.Add(new TaskCharacter(c, task.Id));
-                    _context.SaveChanges();
+                    taskCharacterList.Add(tc);
+                }
+                // If there isn't a match, create it
+                else
+                {
+                    taskCharacterList.Add(new TaskCharacter(c, task.Id));
                 }
             }
 
-            // If there are existing matching ones that AREN'T in the request
-            // Delete them
-            if (request.Characters.Any())
-            {
-                foreach (var tc in task.TaskCharacters)     // System.InvalidOperationException : Collection was modified; enumeration operation may not execute.
-                {
-                    if (!request.Characters.Any(c => c == tc.CharacterId))
-                    {
-                        task.TaskCharacters.Remove(tc);
-                        _context.SaveChanges();
-                    }
-                }
-            }
+            // Overwrite the original list (purge extras)
+            task.TaskCharacters = taskCharacterList;
+
+            _context.SaveChanges();
 
             return task.Id;
         }
