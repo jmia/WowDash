@@ -31,22 +31,22 @@ namespace WowDash.WebUI.Controllers
         /// <response code="200">Returns the resource.</response>
         /// <response code="400">If the request is null or missing required fields.</response>
         /// <response code="404">If the resource was not found in the database.</response>
-        [HttpGet("{characterId}:{taskId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TaskCharacterResponse> GetTaskCharacterById(Guid characterId, Guid taskId)
-        {
-            var taskCharacter = _context.TaskCharacters.Find(characterId, taskId);
+        //[HttpGet("{characterId}:{taskId}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public ActionResult<TaskCharacterResponse> GetTaskCharacterById(Guid characterId, Guid taskId)
+        //{
+        //    var taskCharacter = _context.TaskCharacters.Find(characterId, taskId);
 
-            if (taskCharacter is null)
-                return NotFound();
+        //    if (taskCharacter is null)
+        //        return NotFound();
 
-            var response = new TaskCharacterResponse(taskCharacter.CharacterId, taskCharacter.TaskId,
-                taskCharacter.IsActive);
+        //    var response = new TaskCharacterResponse(taskCharacter.CharacterId, taskCharacter.TaskId,
+        //        taskCharacter.IsActive);
 
-            return response;
-        }
+        //    return response;
+        //}
 
         /// <summary>
         /// Gets all characters for a given task.
