@@ -24,6 +24,6 @@ export const router = new Router({
     { path: '/api/*' },
 
     // otherwise redirect to dashboard
-    { path: '*', redirect: '/' }
+    //{ path: '*', redirect: '/' }
   ]
 });
