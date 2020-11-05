@@ -21,6 +21,7 @@ export const router = new Router({
     { path: '/edit-character/:id', component: EditCharacter, name: 'edit-character', props: true },
     { path: '/add-task', component: AddTask },
     { path: '/edit-task/:id', component: EditTask, name: 'edit-task', props: true },
+    { path: '/api' },
 
     // otherwise redirect to dashboard
     { path: '*', redirect: '/' }
