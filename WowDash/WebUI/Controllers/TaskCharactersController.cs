@@ -72,36 +72,36 @@ namespace WowDash.WebUI.Controllers
             return new GetCharactersForTaskResponse(taskId, characterList);
         }
 
-        /// <summary>
-        /// Adds a character to a task.
-        /// </summary>
-        /// <param name="request">The ID of the character and task.</param>
-        /// <response code="204">If the request successfully adds the resource.</response>
-        /// <response code="400">If the request is null or missing required fields.</response>
-        /// <response code="404">If the task or character was not found in the database.</response>
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult AddCharacterToTask(AddCharacterToTaskRequest request)
-        {
-            var task = _context.Tasks.Find(request.TaskId);
+        ///// <summary>
+        ///// Adds a character to a task.
+        ///// </summary>
+        ///// <param name="request">The ID of the character and task.</param>
+        ///// <response code="204">If the request successfully adds the resource.</response>
+        ///// <response code="400">If the request is null or missing required fields.</response>
+        ///// <response code="404">If the task or character was not found in the database.</response>
+        //[HttpPut]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public ActionResult AddCharacterToTask(AddCharacterToTaskRequest request)
+        //{
+        //    var task = _context.Tasks.Find(request.TaskId);
 
-            if (task is null)
-                return NotFound();
+        //    if (task is null)
+        //        return NotFound();
 
-            var character = _context.Characters.Find(request.CharacterId);
+        //    var character = _context.Characters.Find(request.CharacterId);
 
-            if (character is null)
-                return NotFound();
+        //    if (character is null)
+        //        return NotFound();
 
-            var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
+        //    var taskCharacter = new TaskCharacter(request.CharacterId, request.TaskId);
 
-            _context.TaskCharacters.Add(taskCharacter);
-            _context.SaveChanges();
+        //    _context.TaskCharacters.Add(taskCharacter);
+        //    _context.SaveChanges();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         /// <summary>
         /// Removes a character from a task.

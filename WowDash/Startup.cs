@@ -104,9 +104,7 @@ namespace WowDash.WebUI
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapControllers();
 
                 if (env.IsDevelopment())
                 {
