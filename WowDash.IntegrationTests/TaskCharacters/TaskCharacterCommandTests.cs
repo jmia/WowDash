@@ -28,47 +28,47 @@ namespace WowDash.IntegrationTests.TaskCharacters
             defaultCharacterId = defaultCharacter.Id;
         }
 
-        //[Test]
-        //public async System.Threading.Tasks.Task AddCharacterToTask_CreatesNewTaskCharacter()
-        //{
-        //    // {
-        //    //    "characterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //    //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        //    // };
+        [Test]
+        public async System.Threading.Tasks.Task AddCharacterToTask_CreatesNewTaskCharacter()
+        {
+            // {
+            //    "characterId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //    "taskId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            // };
 
-        //    // Arrange
-        //    string json;
+            // Arrange
+            string json;
 
-        //    var options = new JsonWriterOptions
-        //    {
-        //        Indented = true
-        //    };
+            var options = new JsonWriterOptions
+            {
+                Indented = true
+            };
 
-        //    using (var stream = new MemoryStream())
-        //    {
-        //        using (var writer = new Utf8JsonWriter(stream, options))
-        //        {
-        //            writer.WriteStartObject();
-        //            writer.WriteString("characterId", defaultCharacterId);
-        //            writer.WriteString("taskId", defaultTaskId);
-        //            writer.WriteEndObject();
-        //        }
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream, options))
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("characterId", defaultCharacterId);
+                    writer.WriteString("taskId", defaultTaskId);
+                    writer.WriteEndObject();
+                }
 
-        //        json = Encoding.UTF8.GetString(stream.ToArray());
-        //    }
+                json = Encoding.UTF8.GetString(stream.ToArray());
+            }
 
-        //    var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        //    // Act
-        //    var httpResponse = await Client.PutAsync($"/api/task-characters/", content);
+            // Act
+            var httpResponse = await Client.PutAsync($"/api/task-characters/", content);
 
-        //    httpResponse.EnsureSuccessStatusCode();
+            httpResponse.EnsureSuccessStatusCode();
 
-        //    var foundTaskCharacter = await FindAsync<TaskCharacter>(defaultCharacterId, defaultTaskId);
+            var foundTaskCharacter = await FindAsync<TaskCharacter>(defaultCharacterId, defaultTaskId);
 
-        //    // Assert
-        //    foundTaskCharacter.Should().NotBeNull();
-        //}
+            // Assert
+            foundTaskCharacter.Should().NotBeNull();
+        }
 
         [Test]
         public async System.Threading.Tasks.Task RemoveCharacterFromTask_DeletesTaskCharacter()

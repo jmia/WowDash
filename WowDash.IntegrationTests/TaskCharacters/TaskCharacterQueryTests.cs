@@ -26,30 +26,30 @@ namespace WowDash.IntegrationTests.TaskCharacters
             defaultCharacterId = defaultCharacter.Id;
         }
 
-        //[Test]
-        //public async System.Threading.Tasks.Task GetTaskCharacterById_ReturnsTaskCharacter()
-        //{
-        //    // Arrange
-        //    var taskCharacter = await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
+        [Test]
+        public async System.Threading.Tasks.Task GetTaskCharacterById_ReturnsTaskCharacter()
+        {
+            // Arrange
+            var taskCharacter = await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
 
-        //    // Act
-        //    var httpResponse = await Client.GetAsync($"/api/task-characters/{taskCharacter.CharacterId}:{taskCharacter.TaskId}");
+            // Act
+            var httpResponse = await Client.GetAsync($"/api/task-characters/{taskCharacter.CharacterId}:{taskCharacter.TaskId}");
 
-        //    httpResponse.EnsureSuccessStatusCode();
+            httpResponse.EnsureSuccessStatusCode();
 
-        //    var response = await httpResponse.Content.ReadAsStreamAsync();
+            var response = await httpResponse.Content.ReadAsStreamAsync();
 
-        //    var options = new JsonSerializerOptions
-        //    {
-        //        PropertyNameCaseInsensitive = true,
-        //    };
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
 
-        //    var result = await JsonSerializer.DeserializeAsync<TaskCharacterResponse>(response, options);
+            var result = await JsonSerializer.DeserializeAsync<TaskCharacterResponse>(response, options);
 
-        //    // Assert
-        //    result.CharacterId.Should().Be(taskCharacter.CharacterId);
-        //    result.TaskId.Should().Be(taskCharacter.TaskId);
-        //}
+            // Assert
+            result.CharacterId.Should().Be(taskCharacter.CharacterId);
+            result.TaskId.Should().Be(taskCharacter.TaskId);
+        }
 
         [Test]
         public async System.Threading.Tasks.Task GetCharactersForTask_ReturnsCharacters()
@@ -58,7 +58,7 @@ namespace WowDash.IntegrationTests.TaskCharacters
             var taskCharacter = await AddAsync(new TaskCharacter(defaultCharacterId, defaultTaskId));
 
             // Act
-            var httpResponse = await Client.GetAsync($"/api/task-characters/{defaultTaskId}");
+            var httpResponse = await Client.GetAsync($"/api/task-characters/task/{defaultTaskId}");
 
             httpResponse.EnsureSuccessStatusCode();
 

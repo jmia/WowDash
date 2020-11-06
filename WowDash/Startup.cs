@@ -32,6 +32,7 @@ namespace WowDash.WebUI
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
+            // Not currently working; for reimplementation later
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
@@ -75,6 +76,7 @@ namespace WowDash.WebUI
             }
             else
             {
+                // The offending redirect
                 //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -95,6 +97,7 @@ namespace WowDash.WebUI
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                // Prevents database schema from appearing at the bottom of the docs
                 //c.DefaultModelsExpandDepth(-1);
             });
 
@@ -106,14 +109,14 @@ namespace WowDash.WebUI
             {
                 endpoints.MapControllers();
 
-                if (env.IsDevelopment())
-                {
-                   endpoints.MapToVueCliProxy(
-                   "{*path}",
-                   new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
-                   npmScript: "serve",
-                   regex: "Compiled Successfully");
-                }
+                //if (env.IsDevelopment())
+                //{
+                //   endpoints.MapToVueCliProxy(
+                //   "{*path}",
+                //   new Microsoft.AspNetCore.SpaServices.SpaOptions { SourcePath = "WebUI/ClientApp" },
+                //   npmScript: "serve",
+                //   regex: "Compiled Successfully");
+                //}
             });
 
             app.UseSpa(spa =>
