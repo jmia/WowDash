@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,28 +59,12 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<GetCharactersForTaskResponse> GetCharactersForTask(Guid taskId)
-        {
-            try
-            {
-                var taskCharacters = _context.TaskCharacters.Where(tc => tc.TaskId == taskId);
-
-                var characterList = new List<CharacterForTaskResponse>();
-
-                foreach (var tc in taskCharacters)
-                {
-                    var character = _context.Characters.Find(tc.CharacterId);
-                    characterList.Add(new CharacterForTaskResponse(character.Id, character.Name, 
-                        character.Class, tc.IsActive));
-                }
-
-                return new GetCharactersForTaskResponse(taskId, characterList);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        public ActionResult<GetCharactersForTaskResponse> GetCharactersForTask(Guid taskId) =>
+            new GetCharactersForTaskResponse(taskId, 
+                _context.TaskCharacters.Include(tc => tc.Character)
+                    .Where(tc => tc.TaskId == taskId)
+                    .Select(tc => new CharacterForTaskResponse(tc.CharacterId, tc.Character.Name,
+                        tc.Character.Class, tc.IsActive)).ToList());
 
         /// <summary>
         /// Adds a character to a task.
