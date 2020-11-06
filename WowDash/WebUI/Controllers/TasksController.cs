@@ -548,7 +548,7 @@ namespace WowDash.WebUI.Controllers
             if (!string.IsNullOrWhiteSpace(filterModel.RefreshFrequency))
             {
                 // Creates array with up to 3 elements (0, 1, 2)
-                var refreshFrequencies = filterModel.RefreshFrequency.Split('|').Select(tt => int.Parse(tt)).ToList();
+                var refreshFrequencies = filterModel.RefreshFrequency.Split('|').Select(rf => int.Parse(rf)).ToList();
 
                 // Filters the list with OR clauses
                 switch (refreshFrequencies.Count)
@@ -570,7 +570,7 @@ namespace WowDash.WebUI.Controllers
             if (!string.IsNullOrWhiteSpace(filterModel.CollectibleType))
             {
                 // Creates array with up to 4 elements (0, 1, 2, 3)
-                var collectibleTypes = filterModel.CollectibleType.Split('|').Select(tt => int.Parse(tt)).ToList();
+                var collectibleTypes = filterModel.CollectibleType.Split('|').Select(ct => int.Parse(ct)).ToList();
 
                 // Filters the list with OR clauses
                 switch (collectibleTypes.Count)
@@ -589,6 +589,39 @@ namespace WowDash.WebUI.Controllers
                         break;
                     default:
                         // If it has 4 or 0, we're sending back everything
+                        break;
+                }
+            }
+
+            // Source
+            if (!string.IsNullOrWhiteSpace(filterModel.Source))
+            {
+                // Creates array with up to 4 elements (0, 1, 2, 3)
+                var sources = filterModel.Source.Split('|').Select(s => int.Parse(s)).ToList();
+
+                // Filters the list with OR clauses
+                switch (sources.Count)
+                {
+                    case 1:
+                        tasks = tasks.Where(t => t.Source == (Source)sources[0]);
+                        break;
+                    case 2:
+                        tasks = tasks.Where(t => t.Source == (Source)sources[0] ||
+                            t.Source == (Source)sources[1]);
+                        break;
+                    case 3:
+                        tasks = tasks.Where(t => t.Source == (Source)sources[0] ||
+                            t.Source == (Source)sources[1] ||
+                            t.Source == (Source)sources[2]);
+                        break;
+                    case 4:
+                        tasks = tasks.Where(t => t.Source == (Source)sources[0] ||
+                            t.Source == (Source)sources[1] ||
+                            t.Source == (Source)sources[2] ||
+                            t.Source == (Source)sources[3]);
+                        break;
+                    default:
+                        // If it has 5 or 0, we're sending back everything
                         break;
                 }
             }
@@ -620,7 +653,7 @@ namespace WowDash.WebUI.Controllers
                 {
                     // Try parsing every string to an int
                     int dungeonId = 0;
-                    var dungeonIds = dungeonIdStrings.Where(c => int.TryParse(c, out dungeonId))
+                    var dungeonIds = dungeonIdStrings.Where(d => int.TryParse(d, out dungeonId))
                                                          .Select(x => dungeonId).ToList();
 
                     // Filter to all tasks that have game references that are dungeons and match the supplied dungeonId list
@@ -639,7 +672,7 @@ namespace WowDash.WebUI.Controllers
                 {
                     // Try parsing every string to an int
                     int zoneId = 0;
-                    var zoneIds = zoneIdStrings.Where(c => int.TryParse(c, out zoneId))
+                    var zoneIds = zoneIdStrings.Where(z => int.TryParse(z, out zoneId))
                                                          .Select(x => zoneId).ToList();
 
                     // Filter to all tasks that have game references that are zones and match the supplied zoneId list
@@ -685,8 +718,7 @@ namespace WowDash.WebUI.Controllers
             }
             else
             {
-                // Is this what I actually want as default?
-                tasks = tasks.OrderByDescending(t => t.Priority).ThenBy(t => t.Description);
+                tasks = tasks.OrderBy(t => t.Description).ThenByDescending(t => t.Priority);
             }
         }
     }
