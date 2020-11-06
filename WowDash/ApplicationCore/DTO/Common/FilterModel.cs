@@ -38,6 +38,10 @@ namespace WowDash.ApplicationCore.DTO.Common
         /// The refresh frequencies to filter on, separated by "|".
         /// </summary>
         public string RefreshFrequency { get; set; }
+        /// <summary>
+        /// The sources to filter on, separated by "|".
+        /// </summary>
+        public string Source { get; set; }
         public bool IsFavourite { get; set; } = false;
         /// <summary>
         /// Whether the filter should return only tasks with assigned

@@ -103,6 +103,7 @@ export default {
               isFavourite: vm.query.isFavourite ?? false,
               onlyActiveAttempts: vm.query.onlyActiveAttempts ?? false,
               refreshFrequency: vm.query.refreshFrequency ?? null,
+              source: vm.query.source ?? null,
               sortBy: vm.query.sortBy ?? null,
               taskType: vm.query.taskType ?? null,
               zoneId: vm.query.zoneId ?? null,

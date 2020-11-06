@@ -51,7 +51,6 @@
               />
             </div>
           </div>
-          <!-- You get the gist... have to build out logic using Vue Formulate later anyway, it'll all be gutted -->
           <div>
             <h3 v-show="zoneList.length > 0" class="filter-bar-category">
               Zone
@@ -147,6 +146,7 @@ export default {
         dungeonId: [], // int
         zoneId: [], // int
         refreshFrequency: [], // int
+        source: [],
         isFavourite: false,
         onlyActiveAttempts: false,
         sortBy: "", // priority_asc priority_desc alpha_asc alpha_desc
@@ -198,6 +198,9 @@ export default {
       if (this.formModel.zoneId.length) {
         model.zoneId = this.formModel.zoneId.join("|");
       }
+      if (this.formModel.source.length) {
+        model.source = this.formModel.source.join("|");
+      }
       if (this.formModel.refreshFrequency.length) {
         model.refreshFrequency = this.formModel.refreshFrequency.join("|");
       }
@@ -224,6 +227,7 @@ export default {
         dungeonId: [], // int
         zoneId: [], // int
         refreshFrequency: [], // int
+        source: [],
         isFavourite: false,
         onlyActiveAttempts: false,
         sortBy: "", // priority_asc priority_desc alpha_asc alpha_desc
