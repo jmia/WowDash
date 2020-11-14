@@ -20,6 +20,7 @@
               type="text"
               name="name"
               label="Name"
+              validation="required"
               :wrapper-class="[
                 'inline-flex',
                 'justify-around',
@@ -63,6 +64,7 @@
               type="select"
               name="playableClass"
               :options="playableClasses"
+              validation="required"
               label="Class"
               placeholder="Select a Class"
               :wrapper-class="[

@@ -20,6 +20,7 @@
               type="text"
               v-model="name"
               label="Name"
+              validation="required"
               :wrapper-class="[
                 'inline-flex',
                 'justify-around',
@@ -65,6 +66,7 @@
               v-model="playableClass"
               :options="playableClasses"
               label="Class"
+              validation="required"
               :wrapper-class="[
                 'inline-flex',
                 'justify-around',

@@ -24,7 +24,7 @@ namespace WowDash.UnitTests.Tasks
         }
 
         [Test]
-        public void GivenNoSortParam_SortsByPriorityDescending()
+        public void GivenNoSortParam_SortsByAlphaAscending()
         {
             // Arrange
             var firstTask = new Task(DefaultPlayer.Id, TaskType.General)
@@ -59,7 +59,7 @@ namespace WowDash.UnitTests.Tasks
             _controller.ApplySort(ref taskList, filterModel);
 
             // Assert
-            taskList.Should().BeInDescendingOrder(t => t.Priority);
+            taskList.Should().BeInAscendingOrder(t => t.Description);
         }
 
         [Test]

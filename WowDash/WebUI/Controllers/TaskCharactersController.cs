@@ -178,7 +178,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult RefreshDailyTaskCharacters()
         {
-            var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Daily);
+            var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Daily).ToList();
 
             foreach (var task in tasks)
             {
@@ -203,7 +203,7 @@ namespace WowDash.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult RefreshWeeklyTaskCharacters()
         {
-            var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Weekly);
+            var tasks = _context.Tasks.Where(t => t.RefreshFrequency == RefreshFrequency.Weekly).ToList();
 
             foreach (var task in tasks)
             {
