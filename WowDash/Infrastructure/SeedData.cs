@@ -20,7 +20,7 @@ namespace WowDash.Infrastructure
             if (!context.Players.Any())
             {
                 var result = context.Players.Add(
-                    new Player() { DisplayName = "Jen" });
+                    new Player() { Id = Guid.Parse("d8a57467-008e-4ebb-286a-08d86586cf0f"), DisplayName = "Jen" });
 
                 defaultUser = result.Entity.Id;
             }
