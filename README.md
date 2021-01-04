@@ -1,5 +1,7 @@
 ## About WowDash
 
+https://wowdash-jmia.azurewebsites.net/
+
 created by [jmia](https://github.com/jmia)
 
 WowDash is a web dashboard for World of Warcraft players to track static or recurring in-game goals and tasks. It provides character assignment, one-click lockout refreshes, and up-to-date and dynamic game data provided by [Blizzard](https://develop.battle.net/documentation/world-of-warcraft/game-data-apis) APIs and [Wowhead](https://www.wowhead.com/).
