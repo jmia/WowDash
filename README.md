@@ -28,6 +28,14 @@ WowDash is a web dashboard for World of Warcraft players to track static or recu
 
 -----
 
+### Screenshots
+
+![Screenshot 2020-11-12 135236](https://user-images.githubusercontent.com/14793878/112339856-6c023880-8c96-11eb-83cf-d266ce129a7d.png)
+
+![Screenshot 2020-11-12 140530](https://user-images.githubusercontent.com/14793878/112339935-7b818180-8c96-11eb-921f-03226d29c8a3.png)
+
+-----
+
 ### References
 Some code snippets and concepts were lifted from the following sources.
 
