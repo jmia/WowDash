@@ -42,14 +42,5 @@ Some code snippets and concepts were lifted from the following sources.
 - [Admin Template Night](https://github.com/tailwindtoolbox/Admin-Template-Night)
 - [Tailwind Starter Kit](https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/vue/alerts)
 
------
-
-### Scripts
-
-```
-Add-Migration <ImperativeMigrationName> -OutputDir ./Infrastructure/Migrations
-```
-```
-netstat -ano | findstr :<PORT>
-taskkill /PID <PID> /F
-```
+#### Testing
+- [Kent Beck Style TDD with Ian Cooper](https://www.youtube.com/watch?v=EZ05e7EMOLM&ab_channel=DevTernity)
