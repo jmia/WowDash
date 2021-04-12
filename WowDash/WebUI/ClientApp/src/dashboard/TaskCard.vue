@@ -344,7 +344,6 @@ export default {
       .get(`/api/task-characters/task/${vm.taskId}`)
       .then(function (response) {
         if (response.status == 200) {
-          console.log(response);
             response.data.characters.forEach(ch => {
                 vm.characters.push(ch);
             });
