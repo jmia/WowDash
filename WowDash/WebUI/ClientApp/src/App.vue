@@ -26,14 +26,6 @@ export default {
     // Add default player ID to localStorage
     localStorage.playerId = "d8a57467-008e-4ebb-286a-08d86586cf0f";
 
-    // Add Google Sign-In JavaScript CDN
-    let googleScript = document.createElement("script");
-    googleScript.setAttribute(
-      "src",
-      "https://apis.google.com/js/api:client.js"
-    );
-    document.head.appendChild(googleScript);
-
     // Add Wowhead Tooltips JavaScript
     let wowheadScript = document.createElement("script");
     wowheadScript.setAttribute(
